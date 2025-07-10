@@ -114,17 +114,27 @@
     "href": "index.html",
     "title": "Climate Vulnerability Assessment 2.0",
     "section": "",
-    "text": "The Climate Vulnerability Assessment (CVA) was originally performed by the Northeast Fisheries Science Center in 2015. This original work, which was later replicated by all the National Marine Fisheries Service regions, used expert opinions to rank how target species would be impacted by future climate change using both exposure and sensitivity attributes. For the original CVA in the northeast US, experts ranked how much change species would be exposed to using large glocal ocean model forecasts and how sensitive they would be to these changes. This resulted in a single exposure and sensitivity score for each species, which was combined to give an overall vulnerability score. Experts were also asked to rank the directionality of climate impacts. The original methods are described in Morrison et al 2015 and Hare et al 2016, and the original results for the northeast shelf can be found in Hare et al 2016. CVA results for all regions can be explored using the NOAA CVA Tool.",
+    "text": "The Climate Vulnerability Assessment (CVA) was originally performed by the Northeast Fisheries Science Center in 2015. This original work, which was later replicated by all the National Marine Fisheries Service (NMFS) regions, used expert opinions to rank how target species would be impacted by future climate change using both exposure and sensitivity attributes. For the original CVA in the northeast US, experts ranked how much change species would be exposed to using large glocal ocean model forecasts and how sensitive they would be to these changes. This resulted in a single exposure and sensitivity score for each species, which was combined to give an overall vulnerability score. Experts were also asked to rank the directionality of climate impacts. The original methods are described in Morrison et al 2015 and Hare et al 2016, and the original results for the northeast shelf can be found in Hare et al 2016. CVA results for all regions can be explored using the NOAA CVA Tool.",
     "crumbs": [
       "Home"
     ]
   },
   {
-    "objectID": "index.html#about-the-cva2.0",
-    "href": "index.html#about-the-cva2.0",
+    "objectID": "index.html#history-of-the-climate-vulnerability-assessment",
+    "href": "index.html#history-of-the-climate-vulnerability-assessment",
     "title": "Climate Vulnerability Assessment 2.0",
     "section": "",
-    "text": "The Climate Vulnerability Assessment (CVA) was originally performed by the Northeast Fisheries Science Center in 2015. This original work, which was later replicated by all the National Marine Fisheries Service regions, used expert opinions to rank how target species would be impacted by future climate change using both exposure and sensitivity attributes. For the original CVA in the northeast US, experts ranked how much change species would be exposed to using large glocal ocean model forecasts and how sensitive they would be to these changes. This resulted in a single exposure and sensitivity score for each species, which was combined to give an overall vulnerability score. Experts were also asked to rank the directionality of climate impacts. The original methods are described in Morrison et al 2015 and Hare et al 2016, and the original results for the northeast shelf can be found in Hare et al 2016. CVA results for all regions can be explored using the NOAA CVA Tool.",
+    "text": "The Climate Vulnerability Assessment (CVA) was originally performed by the Northeast Fisheries Science Center in 2015. This original work, which was later replicated by all the National Marine Fisheries Service (NMFS) regions, used expert opinions to rank how target species would be impacted by future climate change using both exposure and sensitivity attributes. For the original CVA in the northeast US, experts ranked how much change species would be exposed to using large glocal ocean model forecasts and how sensitive they would be to these changes. This resulted in a single exposure and sensitivity score for each species, which was combined to give an overall vulnerability score. Experts were also asked to rank the directionality of climate impacts. The original methods are described in Morrison et al 2015 and Hare et al 2016, and the original results for the northeast shelf can be found in Hare et al 2016. CVA results for all regions can be explored using the NOAA CVA Tool.",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#why-cva2.0",
+    "href": "index.html#why-cva2.0",
+    "title": "Climate Vulnerability Assessment 2.0",
+    "section": "Why CVA2.0?",
+    "text": "Why CVA2.0?\nThe original CVA produced single metrics for each species across their entire range. However, in the past decade, it has become clear that climate change is not uniform worldwide. Therefore, species or stocks may be more or less vulnerable in different portions of their range. As a result, there is a need for a spatially explicit CVA. In addition, the development of high resolution regional ocean models such as the MOM6 model also allow changes to be predicted on fine spatial and temporal scales. The availability of the MOM6 hindcast and forecast on both decadal and long-term scales, plus new information on life history attributes for species, will allow us to update the existing CVA.",
     "crumbs": [
       "Home"
     ]
@@ -134,7 +144,7 @@
     "href": "index.html#how-to-use-this-book",
     "title": "Climate Vulnerability Assessment 2.0",
     "section": "How to Use this Book",
-    "text": "How to Use this Book\n\nClick the green “use template” button to make a repository with this content. Make sure to make your repo public (since GitHub Pages doesn’t work on private repos unless you have a paid account) and check box to include all the branches (so that you get the gh-pages branch). \nTurn on GitHub Pages under Settings &gt; Pages . You will set pages to be made from the gh-pages branch and root directory. \nTurn on GitHub Actions under Settings &gt; Actions &gt; General \nEdit the repo description and Readme to add a link to the webpage. When you edit the description, you will see the link url in the url box or you can click on the Actions tab or the Settings &gt; Pages page to find the url.",
+    "text": "How to Use this Book\nThe purpose of this book is to document the methods and capture the decisions made in the development of the CVA2.0 for the Northeast Shelf, so that these methods could be broadly applied to other NMFS regions or management bodies. This book will also outline the R package that is actively in development to assist in reproducability across regions. Automatic reporting methods and any future RShiny application development to assist in gathering expert opinons will also be outlined here.",
     "crumbs": [
       "Home"
     ]
