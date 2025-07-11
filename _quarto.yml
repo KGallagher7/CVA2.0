@@ -27,7 +27,7 @@ website:
         href: https://github.com/nmfs-opensci
         text: "NMFS OpenSci"
 
-    style: "Floating"
+    style: "floating"
     search: true
     collapse-level: 1
     contents:
