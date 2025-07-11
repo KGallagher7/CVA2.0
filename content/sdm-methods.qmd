@@ -19,11 +19,12 @@ To account for some of these differences between models, model ensembles can be 
 
 #### In the CVA2.0...
 We use an ensemble modeling approach for the CVA2.0, following the work of the Alaska Fisheries Science Center (AFSC)'s Groundfish program, recently implimented an [ensemble modeling framework](https://github.com/alaska-groundfish-efh/EFHSDM) for their [Essential Fish Habitat work](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/1365-2664.14559). Here, we use the following models: 
-* Generalized Additive Model (GAM)
-* MAXimum ENTropy (MAXENT)
-* [Random Forest with Spatial Interpolation (RFSI)](https://www.mdpi.com/2072-4292/12/10/1687)
-* Boosted Regression Trees (BRTs)
-* Spatio-temporal Generalized Linear Mixed Models (GLMMs) with [sdmTMB](https://pbs-assess.github.io/sdmTMB/) 
+
+1. Generalized Additive Model (GAM)
+2. MAXimum ENTropy (MAXENT)
+3. 1[Random Forest with Spatial Interpolation (RFSI)](https://www.mdpi.com/2072-4292/12/10/1687)
+4. Boosted Regression Trees (BRTs)
+5. Spatio-temporal Generalized Linear Mixed Models (GLMMs) with [sdmTMB](https://pbs-assess.github.io/sdmTMB/) 
 
 All of these models accept presence/absence data; can be made spatially and temporally explicit, which was important for our analysis; and combine more "traditional" SDM methods such as GAM and MAXENT included in the AFSC's ensemble with machine learning/decision tree-based models such as RFSI and BRTs. sdmTMB models are similar to other SDM methods common in fisheries work like [VAST](https://academic.oup.com/icesjms/article/74/5/1311/2907795#186891657) and [tinyVAST](https://arxiv.org/pdf/2401.10193).
 
