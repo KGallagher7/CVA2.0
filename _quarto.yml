@@ -27,14 +27,17 @@ website:
         href: https://github.com/nmfs-opensci
         text: "NMFS OpenSci"
 
-    style: "docked"
+    style: "Floating"
     search: true
     collapse-level: 1
     contents:
       - href: index.qmd
         text: Home
+      - section: 'Methods' 
       - href: content/methods-overview.qmd
-        text: Methods Overview
+        contents: 
+          - publishing.qmd
+          - rendering.qmd
       - href: content/acknowledgements.qmd
         text: Acknowledgements
 
