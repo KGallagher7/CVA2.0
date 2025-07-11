@@ -1,5 +1,13 @@
 ---
 title: Acknowledgments
 ---
+The CVA2.0 project is funded by the Inflation Reduction Act. 
 
-This repo and GitHub Action was based on the tutorial by Openscapes [quarto-website-tutorial](https://github.com/Openscapes/quarto-website-tutorial) by Julia Lowndes and Stefanie Butland.
+Many thanks to the following programs for contributing data:
+- Northeast Area Monitoring and Assessment Program (NEAMAP)
+- Maine-New Hampshire Inshore Trawl Survey
+- Massachusetts Division of Marine Fisheries Bottom Trawl Survey
+- New Jersey Ocean Stock Assessment Survey
+
+
+This website is based on the tutorial by Openscapes [quarto-website-tutorial](https://github.com/Openscapes/quarto-website-tutorial) by Julia Lowndes and Stefanie Butland.
