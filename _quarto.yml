@@ -34,10 +34,9 @@ website:
       - href: index.qmd
         text: Home
       - section: 'Methods' 
-      - href: content/methods-overview.qmd
+        href: content/methods-overview.qmd
         contents: 
-          - publishing.qmd
-          - rendering.qmd
+          - sdm-methods.qmd
       - href: content/acknowledgements.qmd
         text: Acknowledgements
 
