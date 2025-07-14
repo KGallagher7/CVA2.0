@@ -36,6 +36,7 @@ website:
       - section: 'Methods' 
         href: content/methods-overview.qmd
         contents: 
+          - content/data.qmd
           - content/sdm-methods.qmd
       - href: content/acknowledgements.qmd
         text: Acknowledgements
