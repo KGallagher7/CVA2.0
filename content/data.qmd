@@ -12,8 +12,10 @@ Fisheries independent data comes from sources outside of the fishing industry. T
 + [Massachusetts Division of Marine Fisheries Bottom Trawl Survey](https://www.neamap.net/madmf-bottom-trawl/)
 + [New Jersey Ocean Stock Assessment Survey](https://dep.nj.gov/njfw/fishing/marine/ocean-stock-assessment-program/#:~:text=The%20New%20Jersey%20Ocean%20Stock,times%20throughout%20a%20calendar%20year.)
 
+We thank all of the federal and state employees and volunteers who collect all of this data and made it available for this project! 
+
 ### Fisheries Dependent Data 
-Fisheries dependent data is data collected by the fishing industry. In the United States, this data is collected by fisheries observers in the [National Observer Program](https://www.fisheries.noaa.gov/national/fisheries-observers/national-observer-program). These are trained individuals who accomany fishing boats on their trips to collect data on the species caught. 
+Fisheries dependent data is data collected by the fishing industry. In the United States, this data is collected by fisheries observers in the [National Observer Program](https://www.fisheries.noaa.gov/national/fisheries-observers/national-observer-program). These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. 
 
 ## Environmental Data
 
