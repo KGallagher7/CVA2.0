@@ -1,1 +1,13 @@
+---
+title: Data
+---
+
+## Fisheries Independent vs Dependent Data 
+
+We utilized two different data types for this work - fisheries independent and dependent data. 
+
+Fisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these occur in the spring and fall. 
+
+Fisheries dependent data comes from the 
+
 
