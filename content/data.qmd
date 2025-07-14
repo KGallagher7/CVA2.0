@@ -20,5 +20,22 @@ Fisheries dependent data is data collected by the fishing industry. In the Unite
 Fisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is espeically true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.
 
 ## Environmental Data
+We will be using [species distribution modeling](/content/sdm-methods.qmd) to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the [Changing Fisheries and Ecosystem Initiative](https://psl.noaa.gov/cefi_portal/) and includes both a physical ocean model and a coupled biogeochemical model. 
 
+### For the CVA2.0
+We are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6. 
+
+Covariates used to build the species distribution models include: 
+
+* Sea Surface Temperature & Salinity 
+* Bottom Temperature & Salinity
+* Surface pH
+* Bottom Aragonite Solubility
+* Mixed Layer Depth
+* Diazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)
+* Small, medium, and large zooplankton biomass (integrated in the top 100 m)
+* Downward particulate organic carbon (POC) flux
+* Water column net primary productivity (NPP)
+
+Covariates will be matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP. 
 
