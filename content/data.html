@@ -329,7 +329,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#fisheries-dependent-data" id="toc-fisheries-dependent-data" class="nav-link" data-scroll-target="#fisheries-dependent-data">Fisheries Dependent Data</a></li>
   <li><a href="#combining-fisheries-independent-and-dependent-data" id="toc-combining-fisheries-independent-and-dependent-data" class="nav-link" data-scroll-target="#combining-fisheries-independent-and-dependent-data">Combining Fisheries Independent and Dependent Data</a></li>
   </ul></li>
-  <li><a href="#environmental-data" id="toc-environmental-data" class="nav-link" data-scroll-target="#environmental-data">Environmental Data</a></li>
+  <li><a href="#environmental-data" id="toc-environmental-data" class="nav-link" data-scroll-target="#environmental-data">Environmental Data</a>
+  <ul class="collapse">
+  <li><a href="#for-the-cva2.0" id="toc-for-the-cva2.0" class="nav-link" data-scroll-target="#for-the-cva2.0">For the CVA2.0</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/data.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -381,8 +384,26 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="environmental-data" class="level2">
 <h2 class="anchored" data-anchor-id="environmental-data">Environmental Data</h2>
+<p>We will be using <a href="../content/sdm-methods.html">species distribution modeling</a> to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the <a href="https://psl.noaa.gov/cefi_portal/">Changing Fisheries and Ecosystem Initiative</a> and includes both a physical ocean model and a coupled biogeochemical model.</p>
+<section id="for-the-cva2.0" class="level3">
+<h3 class="anchored" data-anchor-id="for-the-cva2.0">For the CVA2.0</h3>
+<p>We are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.</p>
+<p>Covariates used to build the species distribution models include:</p>
+<ul>
+<li>Sea Surface Temperature &amp; Salinity</li>
+<li>Bottom Temperature &amp; Salinity</li>
+<li>Surface pH</li>
+<li>Bottom Aragonite Solubility</li>
+<li>Mixed Layer Depth</li>
+<li>Diazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)</li>
+<li>Small, medium, and large zooplankton biomass (integrated in the top 100 m)</li>
+<li>Downward particulate organic carbon (POC) flux</li>
+<li>Water column net primary productivity (NPP)</li>
+</ul>
+<p>Covariates will be matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

@@ -171,7 +171,7 @@
     "href": "content/data.html#environmental-data",
     "title": "Data",
     "section": "Environmental Data",
-    "text": "Environmental Data",
+    "text": "Environmental Data\nWe will be using species distribution modeling to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the Changing Fisheries and Ecosystem Initiative and includes both a physical ocean model and a coupled biogeochemical model.\n\nFor the CVA2.0\nWe are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.\nCovariates used to build the species distribution models include:\n\nSea Surface Temperature & Salinity\nBottom Temperature & Salinity\nSurface pH\nBottom Aragonite Solubility\nMixed Layer Depth\nDiazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)\nSmall, medium, and large zooplankton biomass (integrated in the top 100 m)\nDownward particulate organic carbon (POC) flux\nWater column net primary productivity (NPP)\n\nCovariates will be matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.",
     "crumbs": [
       "Methods",
       "Data"
