@@ -1,18 +1,20 @@
 ---
 title: Data
 ---
-
-## Fisheries Independent vs Dependent Data 
-
+## Fisheries Data
 We utilized two different data types for this work - fisheries independent and dependent data. 
 
+### Fisheries Independent Data
 Fisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys: 
-- [NOAA Northeast Ecosystems Surveys](https://www.fisheries.noaa.gov/about/northeast-ecosystems-surveys)
-- [Northeast Area Monitoring and Assessment Program](https://www.neamap.net/)
-- [Maine-New Hampshire Inshore Trawl Survey](https://www.neamap.net/menh-inshore-trawl/)
-- [Massachusetts Division of Marine Fisheries Bottom Trawl Survey](https://www.neamap.net/madmf-bottom-trawl/)
-- [New Jersey Ocean Stock Assessment Survey](https://dep.nj.gov/njfw/fishing/marine/ocean-stock-assessment-program/#:~:text=The%20New%20Jersey%20Ocean%20Stock,times%20throughout%20a%20calendar%20year.)
++ [NOAA Northeast Ecosystems Surveys](https://www.fisheries.noaa.gov/about/northeast-ecosystems-surveys)
++ [Northeast Area Monitoring and Assessment Program](https://www.neamap.net/)
++ [Maine-New Hampshire Inshore Trawl Survey](https://www.neamap.net/menh-inshore-trawl/)
++ [Massachusetts Division of Marine Fisheries Bottom Trawl Survey](https://www.neamap.net/madmf-bottom-trawl/)
++ [New Jersey Ocean Stock Assessment Survey](https://dep.nj.gov/njfw/fishing/marine/ocean-stock-assessment-program/#:~:text=The%20New%20Jersey%20Ocean%20Stock,times%20throughout%20a%20calendar%20year.)
 
+### Fisheries Dependent Data 
 Fisheries dependent data is data collected by the fishing industry. In the United States, this data is collected by fisheries observers in the [National Observer Program](https://www.fisheries.noaa.gov/national/fisheries-observers/national-observer-program). These are trained individuals who accomany fishing boats on their trips to collect data on the species caught. 
+
+## Environmental Data
 
 
