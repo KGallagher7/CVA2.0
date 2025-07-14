@@ -6,8 +6,9 @@ title: Data
 
 We utilized two different data types for this work - fisheries independent and dependent data. 
 
-Fisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these occur in the spring and fall. 
+Fisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys: 
 
-Fisheries dependent data comes from the 
+
+Fisheries dependent data is data collected by the fishing industry. In the United States, this data is collected by fisheries observers in the NOAA observer program. Thesea re trained individuals who accomany fishing boats on their trips to collect data on the species caught. 
 
 
