@@ -40,7 +40,7 @@ website:
           - content/sdm-methods.qmd
           - content/exposure.qmd
           - content/sensitivity.qmd
-          - vulnerability_directionality.qmd
+          - content/vulnerability_directionality.qmd
       - href: content/acknowledgements.qmd
         text: Acknowledgements
 
