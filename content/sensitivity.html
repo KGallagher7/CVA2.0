@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Species Distribution Modeling – Climate Vulnerability Assessment 2.0</title>
+<title>Sensitivity – Climate Vulnerability Assessment 2.0</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -29,8 +29,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/exposure.html" rel="next">
-<link href="../content/data.html" rel="prev">
+<link href="../content/acknowledgements.html" rel="next">
+<link href="../content/exposure.html" rel="prev">
 <link href="../images/favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -248,7 +248,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/methods-overview.html">Methods</a></li><li class="breadcrumb-item"><a href="../content/sdm-methods.html">Species Distribution Modeling</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/methods-overview.html">Methods</a></li><li class="breadcrumb-item"><a href="../content/sensitivity.html">Sensitivity</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -301,7 +301,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/sdm-methods.html" class="sidebar-item-text sidebar-link active">
+  <a href="../content/sdm-methods.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Species Distribution Modeling</span></a>
   </div>
 </li>
@@ -313,7 +313,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/sensitivity.html" class="sidebar-item-text sidebar-link">
+  <a href="../content/sensitivity.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Sensitivity</span></a>
   </div>
 </li>
@@ -338,18 +338,17 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#presenceabsence-vs-abundance-data" id="toc-presenceabsence-vs-abundance-data" class="nav-link active" data-scroll-target="#presenceabsence-vs-abundance-data">Presence/Absence vs Abundance Data</a></li>
-  <li><a href="#statistical-modeling" id="toc-statistical-modeling" class="nav-link" data-scroll-target="#statistical-modeling">Statistical Modeling</a></li>
+  <li><a href="#sensitivity-vs-adaptability" id="toc-sensitivity-vs-adaptability" class="nav-link active" data-scroll-target="#sensitivity-vs-adaptability">Sensitivity vs Adaptability</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/sdm-methods.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/sdm-methods.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/sensitivity.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/sensitivity.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/methods-overview.html">Methods</a></li><li class="breadcrumb-item"><a href="../content/sdm-methods.html">Species Distribution Modeling</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/methods-overview.html">Methods</a></li><li class="breadcrumb-item"><a href="../content/sensitivity.html">Sensitivity</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Species Distribution Modeling</h1>
+<h1 class="title">Sensitivity</h1>
 </div>
 
 
@@ -366,35 +365,13 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>The first step in the CVA2.0 is the construction of species distribution models (SDMs). SDMs are statistical models that describe the relationships between species presence or abundance and environmental attributes or covariates. There are many different types of SDMs that use different data types and statistical methods. There is an abundance of scientific literature that both describe and compare different model types. We will provide a brief overview below and describe the methods selected for the CVA2.0.</p>
-<section id="presenceabsence-vs-abundance-data" class="level2">
-<h2 class="anchored" data-anchor-id="presenceabsence-vs-abundance-data">Presence/Absence vs Abundance Data</h2>
-<p>Species distribution models can be built with primarily two different kinds of species data - presence/absence or abundance data. Presence/absence data describes when a species was present or absent, usually in binary with 0s representing absences and 1s representing presences. SDMs built with presence/absence data predict how likely it is that a species will be found there - often called habitat suitability - but does not consider how many individuals will be present.</p>
-<p>Abundance data on the other hand uses count or species density estimates. SDMS built with abundance data can predict the abundance or density of species in a given area or at a given time, but must deal with often irregular data.</p>
-<section id="in-the-cva2.0" class="level4">
-<h4 class="anchored" data-anchor-id="in-the-cva2.0">In the CVA2.0…</h4>
-<p>For the CVA2.0, we use presence/absence data from a variety of sources. Using presence/absence data will allow us to combine multiple datasets across fisheries independent and dependent surveys.</p>
-</section>
-</section>
-<section id="statistical-modeling" class="level2">
-<h2 class="anchored" data-anchor-id="statistical-modeling">Statistical Modeling</h2>
-<p>There are many statistical models that we could have chosen for our SDMs. Options included generalized linear models (GLMs), generalized additive models (GAMs), uni (single) or multi-variate state-space models, machine learning methods, decision tree methods, and more! Many models have been used to describe species distributions along the Northeast Shelf. Each model type has pros and cons, and different models use different assumptions, statistical methods, etc to define habitat preferences.</p>
-<p>To account for some of these differences between models, model ensembles can be generated by combining different model outputs together. Ensembles are usually built by averaging the outputs of different component models. Weighted averages can also be used to weight the averages based on model performance.</p>
-<section id="in-the-cva2.0-1" class="level4">
-<h4 class="anchored" data-anchor-id="in-the-cva2.0-1">In the CVA2.0…</h4>
-<p>We use an ensemble modeling approach for the CVA2.0, following the work of the Alaska Fisheries Science Center (AFSC)’s Groundfish program, recently implimented an <a href="https://github.com/alaska-groundfish-efh/EFHSDM">ensemble modeling framework</a> for their <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/1365-2664.14559">Essential Fish Habitat work</a>. Here, we use the following models:</p>
-<ol type="1">
-<li>Generalized Additive Model (GAM)</li>
-<li>MAXimum ENTropy (MAXENT)</li>
-<li><a href="https://www.mdpi.com/2072-4292/12/10/1687">Random Forest with Spatial Interpolation (RFSI)</a></li>
-<li>Boosted Regression Trees (BRTs)</li>
-<li>Spatio-temporal Generalized Linear Mixed Models (GLMMs) with <a href="https://pbs-assess.github.io/sdmTMB/">sdmTMB</a></li>
-</ol>
-<p>All of these models accept presence/absence data; can be made spatially and temporally explicit, which was important for our analysis; and combine more “traditional” SDM methods such as GAM and MAXENT included in the AFSC’s ensemble with machine learning/decision tree-based models such as RFSI and BRTs. sdmTMB models are similar to other SDM methods common in fisheries work like <a href="https://academic.oup.com/icesjms/article/74/5/1311/2907795#186891657">VAST</a> and <a href="https://arxiv.org/pdf/2401.10193">tinyVAST</a>.</p>
-<p>We will generate our ensemble model by performing a weighted average on our components’ outputs. Weights will be calculated using the same methods as the AFSC. However, we will use Area under the Curve (AUC) rather than root mean squared error (RMSE) because AUC is a better accuracy metric for presence/absence models than RMSE.</p>
+<p>Species sensitivity to change will be measured qualitativly as in the original CVA. Experts will rank the impacts of different life history attributes on species sensitivity. A literature review is currently underway to determine the important life history traits that were both important to the original CVA and are important for target species.</p>
+<p>We are also currently exploring options to quantify sensitivity from the MOM6 output following some of the methods of Boyce et al 2022 and 2024 such as margins between predicted or current conditions and known maximum environmental limits.</p>
+<section id="sensitivity-vs-adaptability" class="level3">
+<h3 class="anchored" data-anchor-id="sensitivity-vs-adaptability">Sensitivity vs Adaptability</h3>
+<p>The Boyce et al 2022 and 2024 papers seperated species sensitivity and adaptability attributes. In the original CVA, sensitivity and adaptive attributes were grouped together, as removing one or the other significantly changed the results. Furthermore, Morrison et al 2015 considered sensitivity and adaptivity inverses of each other (ie higher sensitivity would mean that a species is less adaptive) and decided to group them.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -812,13 +789,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../content/data.html" class="pagination-link" aria-label="Data">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Data</span>
+      <a href="../content/exposure.html" class="pagination-link" aria-label="Species Exposure">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Species Exposure</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/exposure.html" class="pagination-link" aria-label="Species Exposure">
-        <span class="nav-page-text">Species Exposure</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/acknowledgements.html" class="pagination-link" aria-label="Acknowledgements">
+        <span class="nav-page-text">Acknowledgements</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -830,7 +807,7 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/sdm-methods.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/sdm-methods.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/sensitivity.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/sensitivity.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This page is built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>
