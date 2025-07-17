@@ -1,0 +1,5 @@
+---
+title: Species Exposure
+---
+
+Species exposure will be quantified using decadal and long term projections from the MOM6 model. We will be able to quantify changes in habitat suitability over time by projecting the ensemble species distribution model onto future climate conditions. The projections and the models themselves will allow us to examine the drivers of change, by looking at change in important envrionmental covariates. 
