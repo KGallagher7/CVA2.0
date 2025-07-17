@@ -106,7 +106,7 @@
     "href": "content/acknowledgements.html",
     "title": "Acknowledgments",
     "section": "",
-    "text": "The CVA2.0 project is funded by the Inflation Reduction Act.\nThis project would not have been possible without the dedication and hardwork of countless individuals aboard the federal and state-run survey programs and the NOAA Observer program.\nMany thanks to the following state-run programs for contributing data: * Northeast Area Monitoring and Assessment Program (NEAMAP) * Maine-New Hampshire Inshore Trawl Survey * Massachusetts Division of Marine Fisheries Bottom Trawl Survey * New Jersey Ocean Stock Assessment Survey\nThis website is based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
+    "text": "The CVA2.0 project is funded by the Inflation Reduction Act.\nThis project would not have been possible without the dedication and hardwork of countless individuals aboard the federal and state-run survey programs and the NOAA Observer program.\nMany thanks to the following state-run programs for contributing data:\n\nNortheast Area Monitoring and Assessment Program (NEAMAP)\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\n\nThis website is based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
     "crumbs": [
       "Acknowledgements"
     ]
