@@ -40,15 +40,86 @@
     ]
   },
   {
-    "objectID": "content/sensitivity.html",
-    "href": "content/sensitivity.html",
-    "title": "Sensitivity",
+    "objectID": "content/customizing.html",
+    "href": "content/customizing.html",
+    "title": "Customization",
     "section": "",
-    "text": "Species sensitivity to change will be measured qualitativly as in the original CVA. Experts will rank the impacts of different life history attributes on species sensitivity. A literature review is currently underway to determine the important life history traits that were both important to the original CVA and are important for target species.\nWe are also currently exploring options to quantify sensitivity from the MOM6 output following some of the methods of Boyce et al 2022 and 2024 such as margins between predicted or current conditions and known maximum environmental limits.\n\nSensitivity vs Adaptability\nThe Boyce et al 2022 and 2024 papers seperated species sensitivity and adaptability attributes. In the original CVA, sensitivity and adaptive attributes were grouped together, as removing one or the other significantly changed the results. Furthermore, Morrison et al 2015 considered sensitivity and adaptivity inverses of each other (ie higher sensitivity would mean that a species is less adaptive) and decided to group them.",
+    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
+  },
+  {
+    "objectID": "content/customizing.html#quarto-documentation",
+    "href": "content/customizing.html#quarto-documentation",
+    "title": "Customization",
+    "section": "",
+    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
+  },
+  {
+    "objectID": "content/customizing.html#examples",
+    "href": "content/customizing.html#examples",
+    "title": "Customization",
+    "section": "Examples",
+    "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
+  },
+  {
+    "objectID": "content/data.html",
+    "href": "content/data.html",
+    "title": "Data",
+    "section": "",
+    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by the fishing industry. In the United States, this data is collected by fisheries observers in the National Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
     "crumbs": [
       "Methods",
-      "Sensitivity"
+      "Data"
     ]
+  },
+  {
+    "objectID": "content/data.html#fisheries-data",
+    "href": "content/data.html#fisheries-data",
+    "title": "Data",
+    "section": "",
+    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by the fishing industry. In the United States, this data is collected by fisheries observers in the National Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
+    "crumbs": [
+      "Methods",
+      "Data"
+    ]
+  },
+  {
+    "objectID": "content/data.html#environmental-data",
+    "href": "content/data.html#environmental-data",
+    "title": "Data",
+    "section": "Environmental Data",
+    "text": "Environmental Data\nWe will be using species distribution modeling to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the Changing Fisheries and Ecosystem Initiative and includes both a physical ocean model and a coupled biogeochemical model.\n\nFor the CVA2.0\nWe are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.\nCovariates used to build the species distribution models include:\n\nSea Surface Temperature & Salinity\nBottom Temperature & Salinity\nSurface pH\nBottom Aragonite Solubility\nMixed Layer Depth\nDiazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)\nSmall, medium, and large zooplankton biomass (integrated in the top 100 m)\nDownward particulate organic carbon (POC) flux\nWater column net primary productivity (NPP)\n\nCovariates will be normalized to long term (1993 - 2019) averages and matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.",
+    "crumbs": [
+      "Methods",
+      "Data"
+    ]
+  },
+  {
+    "objectID": "content/rendering.html",
+    "href": "content/rendering.html",
+    "title": "Rendering",
+    "section": "",
+    "text": "The repo includes a GitHub Action that will render (build) the website automatically when you make changes to the files. It will be pushed to the gh-pages branch.\nBut when you are developing your content, you will want to render it locally."
+  },
+  {
+    "objectID": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
+    "href": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
+    "title": "Rendering",
+    "section": "Step 1. Make sure you have a recent RStudio",
+    "text": "Step 1. Make sure you have a recent RStudio\nHave you updated RStudio since about August 2022? No? Then update to a newer version of RStudio. In general, you want to keep RStudio updated and it is required to have a recent version to use Quarto."
+  },
+  {
+    "objectID": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
+    "href": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
+    "title": "Rendering",
+    "section": "Step 2. Clone and create RStudio project",
+    "text": "Step 2. Clone and create RStudio project\nFirst, clone the repo onto your local computer. How? You can click File &gt; New Project and then select “Version Control”. Paste in the url of the repository. That will clone the repo on to your local computer. When you make changes, you will need to push those up."
+  },
+  {
+    "objectID": "content/rendering.html#step-3.-render-within-rstudio",
+    "href": "content/rendering.html#step-3.-render-within-rstudio",
+    "title": "Rendering",
+    "section": "Step 3. Render within RStudio",
+    "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”."
   },
   {
     "objectID": "content/code.html",
@@ -80,6 +151,36 @@
     "crumbs": [
       "Methods",
       "Vulnerability & Directionality"
+    ]
+  },
+  {
+    "objectID": "content/methods-overview.html",
+    "href": "content/methods-overview.html",
+    "title": "Methods Overview",
+    "section": "",
+    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.\nExpert feedback will also be used to provide input on the individual model components used to build the species distribution model ensemble.",
+    "crumbs": [
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "content/methods-overview.html#overview",
+    "href": "content/methods-overview.html#overview",
+    "title": "Methods Overview",
+    "section": "",
+    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.\nExpert feedback will also be used to provide input on the individual model components used to build the species distribution model ensemble.",
+    "crumbs": [
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "content/acknowledgements.html",
+    "href": "content/acknowledgements.html",
+    "title": "Acknowledgments",
+    "section": "",
+    "text": "The CVA2.0 project is funded by the Inflation Reduction Act.\nThis project would not have been possible without the dedication and hardwork of countless individuals aboard the federal and state-run survey programs and the NOAA Observer program.\nMany thanks to the following state-run programs for contributing data:\n\nNortheast Area Monitoring and Assessment Program (NEAMAP)\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\n\nWe also thank all of the NOAA staff, members of the New England and Mid Atlantic Fisheries Management Councils, the Atlantic States Marine Fisheries Commission, and our academic partners for their feedback and assistance in developing the methods described here.\nThis website is based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
+    "crumbs": [
+      "Acknowledgements"
     ]
   },
   {
@@ -132,37 +233,47 @@
     "text": "Add your pages the project\n\nAdd the files to _quarto.yml"
   },
   {
-    "objectID": "content/data.html",
-    "href": "content/data.html",
-    "title": "Data",
+    "objectID": "content/sensitivity.html",
+    "href": "content/sensitivity.html",
+    "title": "Sensitivity",
     "section": "",
-    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\n\n\n\n\nFisheries dependent data is data collected by the fishing industry. In the United States, this data is collected by fisheries observers in the National Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is espeically true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
+    "text": "Species sensitivity to change will be measured qualitativly as in the original CVA. Experts will rank the impacts of different life history attributes on species sensitivity. A literature review is currently underway to determine the important life history traits that were both important to the original CVA and are important for target species.\nWe are also currently exploring options to quantify sensitivity from the MOM6 output following some of the methods of Boyce et al 2022 and 2024 such as margins between predicted or current conditions and known maximum environmental limits.\n\nSensitivity vs Adaptability\nThe Boyce et al 2022 and 2024 papers seperated species sensitivity and adaptability attributes. In the original CVA, sensitivity and adaptive attributes were grouped together, as removing one or the other significantly changed the results. Furthermore, Morrison et al 2015 considered sensitivity and adaptivity inverses of each other (ie higher sensitivity would mean that a species is less adaptive) and decided to group them.",
     "crumbs": [
       "Methods",
-      "Data"
+      "Sensitivity"
     ]
   },
   {
-    "objectID": "content/data.html#fisheries-data",
-    "href": "content/data.html#fisheries-data",
-    "title": "Data",
+    "objectID": "content/exposure.html",
+    "href": "content/exposure.html",
+    "title": "Species Exposure",
     "section": "",
-    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\n\n\n\n\nFisheries dependent data is data collected by the fishing industry. In the United States, this data is collected by fisheries observers in the National Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is espeically true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
+    "text": "Species exposure will be quantified using decadal and long term projections from the MOM6 model. We will be able to quantify changes in habitat suitability over time by projecting the ensemble species distribution model onto future climate conditions. The projections and the models themselves will allow us to examine the drivers of change, by looking at change in important envrionmental covariates.",
     "crumbs": [
       "Methods",
-      "Data"
+      "Species Exposure"
     ]
   },
   {
-    "objectID": "content/data.html#environmental-data",
-    "href": "content/data.html#environmental-data",
-    "title": "Data",
-    "section": "Environmental Data",
-    "text": "Environmental Data\nWe will be using species distribution modeling to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the Changing Fisheries and Ecosystem Initiative and includes both a physical ocean model and a coupled biogeochemical model.\n\nFor the CVA2.0\nWe are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.\nCovariates used to build the species distribution models include:\n\nSea Surface Temperature & Salinity\nBottom Temperature & Salinity\nSurface pH\nBottom Aragonite Solubility\nMixed Layer Depth\nDiazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)\nSmall, medium, and large zooplankton biomass (integrated in the top 100 m)\nDownward particulate organic carbon (POC) flux\nWater column net primary productivity (NPP)\n\nCovariates will be normalized to long term (1993 - 2019) averages and matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.",
-    "crumbs": [
-      "Methods",
-      "Data"
-    ]
+    "objectID": "content/rmarkdown.html",
+    "href": "content/rmarkdown.html",
+    "title": "R Markdown",
+    "section": "",
+    "text": "You can include R Markdown files in your project."
+  },
+  {
+    "objectID": "content/rmarkdown.html#r-markdown",
+    "href": "content/rmarkdown.html#r-markdown",
+    "title": "R Markdown",
+    "section": "R Markdown",
+    "text": "R Markdown\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\n\nsummary(cars)\n\n     speed           dist       \n Min.   : 4.0   Min.   :  2.00  \n 1st Qu.:12.0   1st Qu.: 26.00  \n Median :15.0   Median : 36.00  \n Mean   :15.4   Mean   : 42.98  \n 3rd Qu.:19.0   3rd Qu.: 56.00  \n Max.   :25.0   Max.   :120.00"
+  },
+  {
+    "objectID": "content/rmarkdown.html#including-plots",
+    "href": "content/rmarkdown.html#including-plots",
+    "title": "R Markdown",
+    "section": "Including Plots",
+    "text": "Including Plots\nYou can also embed plots, for example:\n\n\n\n\n\n\n\n\n\nNote that the echo = FALSE parameter was added to the code chunk to prevent printing of the R code that generated the plot."
   },
   {
     "objectID": "content/sdm-methods.html",
@@ -196,116 +307,5 @@
       "Methods",
       "Species Distribution Modeling"
     ]
-  },
-  {
-    "objectID": "content/acknowledgements.html",
-    "href": "content/acknowledgements.html",
-    "title": "Acknowledgments",
-    "section": "",
-    "text": "The CVA2.0 project is funded by the Inflation Reduction Act.\nThis project would not have been possible without the dedication and hardwork of countless individuals aboard the federal and state-run survey programs and the NOAA Observer program.\nMany thanks to the following state-run programs for contributing data:\n\nNortheast Area Monitoring and Assessment Program (NEAMAP)\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\n\nWe also thank all of the NOAA staff, members of the New England and Mid Atlantic Fisheries Management Councils, the Atlantic States Marine Fisheries Commission, and our academic partners for their feedback and assistance in developing the methods described here.\nThis website is based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
-    "crumbs": [
-      "Acknowledgements"
-    ]
-  },
-  {
-    "objectID": "content/methods-overview.html",
-    "href": "content/methods-overview.html",
-    "title": "Methods Overview",
-    "section": "",
-    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.\nExpert feedback will also be used to provide input on the individual model components used to build the species distribution model ensemble.",
-    "crumbs": [
-      "Methods"
-    ]
-  },
-  {
-    "objectID": "content/methods-overview.html#overview",
-    "href": "content/methods-overview.html#overview",
-    "title": "Methods Overview",
-    "section": "",
-    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.\nExpert feedback will also be used to provide input on the individual model components used to build the species distribution model ensemble.",
-    "crumbs": [
-      "Methods"
-    ]
-  },
-  {
-    "objectID": "content/exposure.html",
-    "href": "content/exposure.html",
-    "title": "Species Exposure",
-    "section": "",
-    "text": "Species exposure will be quantified using decadal and long term projections from the MOM6 model. We will be able to quantify changes in habitat suitability over time by projecting the ensemble species distribution model onto future climate conditions. The projections and the models themselves will allow us to examine the drivers of change, by looking at change in important envrionmental covariates.",
-    "crumbs": [
-      "Methods",
-      "Species Exposure"
-    ]
-  },
-  {
-    "objectID": "content/customizing.html",
-    "href": "content/customizing.html",
-    "title": "Customization",
-    "section": "",
-    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
-  },
-  {
-    "objectID": "content/customizing.html#quarto-documentation",
-    "href": "content/customizing.html#quarto-documentation",
-    "title": "Customization",
-    "section": "",
-    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
-  },
-  {
-    "objectID": "content/customizing.html#examples",
-    "href": "content/customizing.html#examples",
-    "title": "Customization",
-    "section": "Examples",
-    "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
-  },
-  {
-    "objectID": "content/rmarkdown.html",
-    "href": "content/rmarkdown.html",
-    "title": "R Markdown",
-    "section": "",
-    "text": "You can include R Markdown files in your project."
-  },
-  {
-    "objectID": "content/rmarkdown.html#r-markdown",
-    "href": "content/rmarkdown.html#r-markdown",
-    "title": "R Markdown",
-    "section": "R Markdown",
-    "text": "R Markdown\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\n\nsummary(cars)\n\n     speed           dist       \n Min.   : 4.0   Min.   :  2.00  \n 1st Qu.:12.0   1st Qu.: 26.00  \n Median :15.0   Median : 36.00  \n Mean   :15.4   Mean   : 42.98  \n 3rd Qu.:19.0   3rd Qu.: 56.00  \n Max.   :25.0   Max.   :120.00"
-  },
-  {
-    "objectID": "content/rmarkdown.html#including-plots",
-    "href": "content/rmarkdown.html#including-plots",
-    "title": "R Markdown",
-    "section": "Including Plots",
-    "text": "Including Plots\nYou can also embed plots, for example:\n\n\n\n\n\n\n\n\n\nNote that the echo = FALSE parameter was added to the code chunk to prevent printing of the R code that generated the plot."
-  },
-  {
-    "objectID": "content/rendering.html",
-    "href": "content/rendering.html",
-    "title": "Rendering",
-    "section": "",
-    "text": "The repo includes a GitHub Action that will render (build) the website automatically when you make changes to the files. It will be pushed to the gh-pages branch.\nBut when you are developing your content, you will want to render it locally."
-  },
-  {
-    "objectID": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
-    "href": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
-    "title": "Rendering",
-    "section": "Step 1. Make sure you have a recent RStudio",
-    "text": "Step 1. Make sure you have a recent RStudio\nHave you updated RStudio since about August 2022? No? Then update to a newer version of RStudio. In general, you want to keep RStudio updated and it is required to have a recent version to use Quarto."
-  },
-  {
-    "objectID": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
-    "href": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
-    "title": "Rendering",
-    "section": "Step 2. Clone and create RStudio project",
-    "text": "Step 2. Clone and create RStudio project\nFirst, clone the repo onto your local computer. How? You can click File &gt; New Project and then select “Version Control”. Paste in the url of the repository. That will clone the repo on to your local computer. When you make changes, you will need to push those up."
-  },
-  {
-    "objectID": "content/rendering.html#step-3.-render-within-rstudio",
-    "href": "content/rendering.html#step-3.-render-within-rstudio",
-    "title": "Rendering",
-    "section": "Step 3. Render within RStudio",
-    "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”."
   }
 ]
