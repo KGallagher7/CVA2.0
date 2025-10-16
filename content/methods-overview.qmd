@@ -14,5 +14,4 @@ We will be able to use these same decadal and long-term (to 2100) forecasts to q
 ### Qualitative Methods 
 Species sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes. 
 
-Expert feedback will also be used to provide input on the individual model components used to build the species distribution model ensemble. 
 
