@@ -41,6 +41,13 @@ website:
           - content/exposure.qmd
           - content/sensitivity.qmd
           - content/vulnerability_directionality.qmd
+      - section: 'R Package' 
+        href: content/rpackage-overview.qmd
+        contents: 
+          - content/data-preparation.qmd
+          - content/sdm-building.qmd
+          - content/ensemble-building.qmd
+          - content/sensitivity-calculation.qmd
       - href: content/acknowledgements.qmd
         text: Acknowledgements
 
