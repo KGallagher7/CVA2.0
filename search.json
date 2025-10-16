@@ -272,7 +272,7 @@
     "href": "content/rpackage-overview.html",
     "title": "RPackage Overview",
     "section": "",
-    "text": "An R package is undergoing active development to document the workflows and codes used to contruct the new Climate Vulnerability Assessment.\nThe package will have 4 major components: * Building the ensemble species distribution models * Estimating exposure * Summarizing sensitivity from expert scores * Calculating final vulnerability scores\nThe following pages provide a tutorial for the different portions of the package.",
+    "text": "An R package is undergoing active development to document the workflows and codes used to contruct the new Climate Vulnerability Assessment.\nThe package will have 4 major components:\n\nBuilding the ensemble species distribution models\nEstimating exposure\nSummarizing sensitivity from expert scores\nCalculating final vulnerability scores\n\nThe following pages provide a tutorial for the different portions of the package.",
     "crumbs": [
       "R Package"
     ]
