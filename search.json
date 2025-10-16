@@ -111,58 +111,57 @@
     "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”."
   },
   {
-    "objectID": "content/add-content.html",
-    "href": "content/add-content.html",
-    "title": "Customize",
+    "objectID": "content/ensemble-sdms.html",
+    "href": "content/ensemble-sdms.html",
+    "title": "Building Ensemble Species Distribution Models",
     "section": "",
-    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
-  },
-  {
-    "objectID": "content/add-content.html#edit-and-add-your-pages",
-    "href": "content/add-content.html#edit-and-add-your-pages",
-    "title": "Customize",
-    "section": "",
-    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
-  },
-  {
-    "objectID": "content/add-content.html#add-your-pages-the-project",
-    "href": "content/add-content.html#add-your-pages-the-project",
-    "title": "Customize",
-    "section": "Add your pages the project",
-    "text": "Add your pages the project\n\nAdd the files to _quarto.yml"
-  },
-  {
-    "objectID": "content/data.html",
-    "href": "content/data.html",
-    "title": "Data",
-    "section": "",
-    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
+    "text": "Overview\nThe first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps: 1. Data preparation 2. Building & Predicting Species Distribution Models 3. Building the Ensemble\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables.",
     "crumbs": [
-      "Methods",
-      "Data"
+      "R Package",
+      "Building Ensemble Species Distribution Models"
     ]
   },
   {
-    "objectID": "content/data.html#fisheries-data",
-    "href": "content/data.html#fisheries-data",
-    "title": "Data",
+    "objectID": "content/code.html",
+    "href": "content/code.html",
+    "title": "Rendering with Code",
     "section": "",
-    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
-    "crumbs": [
-      "Methods",
-      "Data"
-    ]
+    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326"
   },
   {
-    "objectID": "content/data.html#environmental-data",
-    "href": "content/data.html#environmental-data",
-    "title": "Data",
-    "section": "Environmental Data",
-    "text": "Environmental Data\nWe will be using species distribution modeling to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the Changing Fisheries and Ecosystem Initiative and includes both a physical ocean model and a coupled biogeochemical model.\n\nFor the CVA2.0\nWe are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.\nCovariates used to build the species distribution models include:\n\nSea Surface Temperature & Salinity\nBottom Temperature & Salinity\nSurface pH\nBottom Aragonite Solubility\nMixed Layer Depth\nDiazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)\nSmall, medium, and large zooplankton biomass (integrated in the top 100 m)\nDownward particulate organic carbon (POC) flux\nWater column net primary productivity (NPP)\n\nCovariates will be normalized to long term (1993 - 2019) averages and matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.",
-    "crumbs": [
-      "Methods",
-      "Data"
-    ]
+    "objectID": "content/code.html#modify-the-github-action",
+    "href": "content/code.html#modify-the-github-action",
+    "title": "Rendering with Code",
+    "section": "Modify the GitHub Action",
+    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it."
+  },
+  {
+    "objectID": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
+    "href": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
+    "title": "Rendering with Code",
+    "section": "Render locally and publish to gh-pages branch",
+    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
+  },
+  {
+    "objectID": "content/customizing.html",
+    "href": "content/customizing.html",
+    "title": "Customization",
+    "section": "",
+    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
+  },
+  {
+    "objectID": "content/customizing.html#quarto-documentation",
+    "href": "content/customizing.html#quarto-documentation",
+    "title": "Customization",
+    "section": "",
+    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
+  },
+  {
+    "objectID": "content/customizing.html#examples",
+    "href": "content/customizing.html#examples",
+    "title": "Customization",
+    "section": "Examples",
+    "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
   },
   {
     "objectID": "index.html",
@@ -205,46 +204,58 @@
     ]
   },
   {
-    "objectID": "content/customizing.html",
-    "href": "content/customizing.html",
-    "title": "Customization",
+    "objectID": "content/data.html",
+    "href": "content/data.html",
+    "title": "Data",
     "section": "",
-    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
+    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
+    "crumbs": [
+      "Methods",
+      "Data"
+    ]
   },
   {
-    "objectID": "content/customizing.html#quarto-documentation",
-    "href": "content/customizing.html#quarto-documentation",
-    "title": "Customization",
+    "objectID": "content/data.html#fisheries-data",
+    "href": "content/data.html#fisheries-data",
+    "title": "Data",
     "section": "",
-    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
+    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
+    "crumbs": [
+      "Methods",
+      "Data"
+    ]
   },
   {
-    "objectID": "content/customizing.html#examples",
-    "href": "content/customizing.html#examples",
-    "title": "Customization",
-    "section": "Examples",
-    "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
+    "objectID": "content/data.html#environmental-data",
+    "href": "content/data.html#environmental-data",
+    "title": "Data",
+    "section": "Environmental Data",
+    "text": "Environmental Data\nWe will be using species distribution modeling to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the Changing Fisheries and Ecosystem Initiative and includes both a physical ocean model and a coupled biogeochemical model.\n\nFor the CVA2.0\nWe are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.\nCovariates used to build the species distribution models include:\n\nSea Surface Temperature & Salinity\nBottom Temperature & Salinity\nSurface pH\nBottom Aragonite Solubility\nMixed Layer Depth\nDiazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)\nSmall, medium, and large zooplankton biomass (integrated in the top 100 m)\nDownward particulate organic carbon (POC) flux\nWater column net primary productivity (NPP)\n\nCovariates will be normalized to long term (1993 - 2019) averages and matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.",
+    "crumbs": [
+      "Methods",
+      "Data"
+    ]
   },
   {
-    "objectID": "content/code.html",
-    "href": "content/code.html",
-    "title": "Rendering with Code",
+    "objectID": "content/add-content.html",
+    "href": "content/add-content.html",
+    "title": "Customize",
     "section": "",
-    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326"
+    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
   },
   {
-    "objectID": "content/code.html#modify-the-github-action",
-    "href": "content/code.html#modify-the-github-action",
-    "title": "Rendering with Code",
-    "section": "Modify the GitHub Action",
-    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it."
+    "objectID": "content/add-content.html#edit-and-add-your-pages",
+    "href": "content/add-content.html#edit-and-add-your-pages",
+    "title": "Customize",
+    "section": "",
+    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
   },
   {
-    "objectID": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
-    "href": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
-    "title": "Rendering with Code",
-    "section": "Render locally and publish to gh-pages branch",
-    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
+    "objectID": "content/add-content.html#add-your-pages-the-project",
+    "href": "content/add-content.html#add-your-pages-the-project",
+    "title": "Customize",
+    "section": "Add your pages the project",
+    "text": "Add your pages the project\n\nAdd the files to _quarto.yml"
   },
   {
     "objectID": "content/vulnerability_directionality.html",

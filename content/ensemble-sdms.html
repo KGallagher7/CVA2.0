@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data – Climate Vulnerability Assessment 2.0</title>
+<title>Building Ensemble Species Distribution Models – Climate Vulnerability Assessment 2.0</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -29,8 +29,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/sdm-methods.html" rel="next">
-<link href="../content/methods-overview.html" rel="prev">
+<link href="../content/acknowledgements.html" rel="next">
+<link href="../content/rpackage-overview.html" rel="prev">
 <link href="../images/favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -249,7 +249,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/methods-overview.html">Methods</a></li><li class="breadcrumb-item"><a href="../content/data.html">Data</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/rpackage-overview.html">R Package</a></li><li class="breadcrumb-item"><a href="../content/ensemble-sdms.html">Building Ensemble Species Distribution Models</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -290,14 +290,14 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="../content/methods-overview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Methods</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/data.html" class="sidebar-item-text sidebar-link active">
+  <a href="../content/data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data</span></a>
   </div>
 </li>
@@ -331,14 +331,14 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="../content/rpackage-overview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">R Package</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/ensemble-sdms.html" class="sidebar-item-text sidebar-link">
+  <a href="../content/ensemble-sdms.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Building Ensemble Species Distribution Models</span></a>
   </div>
 </li>
@@ -363,26 +363,17 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#fisheries-data" id="toc-fisheries-data" class="nav-link active" data-scroll-target="#fisheries-data">Fisheries Data</a>
-  <ul class="collapse">
-  <li><a href="#fisheries-independent-data" id="toc-fisheries-independent-data" class="nav-link" data-scroll-target="#fisheries-independent-data">Fisheries Independent Data</a></li>
-  <li><a href="#fisheries-dependent-data" id="toc-fisheries-dependent-data" class="nav-link" data-scroll-target="#fisheries-dependent-data">Fisheries Dependent Data</a></li>
-  <li><a href="#combining-fisheries-independent-and-dependent-data" id="toc-combining-fisheries-independent-and-dependent-data" class="nav-link" data-scroll-target="#combining-fisheries-independent-and-dependent-data">Combining Fisheries Independent and Dependent Data</a></li>
-  </ul></li>
-  <li><a href="#environmental-data" id="toc-environmental-data" class="nav-link" data-scroll-target="#environmental-data">Environmental Data</a>
-  <ul class="collapse">
-  <li><a href="#for-the-cva2.0" id="toc-for-the-cva2.0" class="nav-link" data-scroll-target="#for-the-cva2.0">For the CVA2.0</a></li>
-  </ul></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/data.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/methods-overview.html">Methods</a></li><li class="breadcrumb-item"><a href="../content/data.html">Data</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/rpackage-overview.html">R Package</a></li><li class="breadcrumb-item"><a href="../content/ensemble-sdms.html">Building Ensemble Species Distribution Models</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Data</h1>
+<h1 class="title">Building Ensemble Species Distribution Models</h1>
 </div>
 
 
@@ -399,54 +390,13 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="fisheries-data" class="level2">
-<h2 class="anchored" data-anchor-id="fisheries-data">Fisheries Data</h2>
-<p>We utilized two different data types for this work - fisheries independent and dependent data.</p>
-<section id="fisheries-independent-data" class="level3">
-<h3 class="anchored" data-anchor-id="fisheries-independent-data">Fisheries Independent Data</h3>
-<p>Fisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:</p>
-<ul>
-<li><a href="https://www.fisheries.noaa.gov/about/northeast-ecosystems-surveys">NOAA Northeast Ecosystems Surveys</a></li>
-<li><a href="https://www.neamap.net/neamap-nearshore-trawl/">Northeast Area Monitoring and Assessment Program Nearshore Trawl</a></li>
-<li><a href="https://www.neamap.net/menh-inshore-trawl/">Maine-New Hampshire Inshore Trawl Survey</a></li>
-<li><a href="https://www.neamap.net/madmf-bottom-trawl/">Massachusetts Division of Marine Fisheries Bottom Trawl Survey</a></li>
-<li><a href="https://portal.ct.gov/deep/fishing/fisheries-management/long-island-sound-trawl-survey">Long Island Sound Trawl Survey</a></li>
-<li><a href="https://www.neamap.net/ny-nearshore-trawl/">New York Nearshore Trawl Survey</a></li>
-<li><a href="https://dep.nj.gov/njfw/fishing/marine/ocean-stock-assessment-program/#:~:text=The%20New%20Jersey%20Ocean%20Stock,times%20throughout%20a%20calendar%20year.">New Jersey Ocean Stock Assessment Survey</a></li>
-<li><a href="https://dnrec.delaware.gov/fish-wildlife/fishing/research/">Delaware Trawl Surveys</a></li>
-</ul>
-</section>
-<section id="fisheries-dependent-data" class="level3">
-<h3 class="anchored" data-anchor-id="fisheries-dependent-data">Fisheries Dependent Data</h3>
-<p>Fisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the <a href="https://www.fisheries.noaa.gov/national/fisheries-observers/national-observer-program">National Observer Program</a>, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.</p>
-</section>
-<section id="combining-fisheries-independent-and-dependent-data" class="level3">
-<h3 class="anchored" data-anchor-id="combining-fisheries-independent-and-dependent-data">Combining Fisheries Independent and Dependent Data</h3>
-<p>Fisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.</p>
-</section>
-</section>
-<section id="environmental-data" class="level2">
-<h2 class="anchored" data-anchor-id="environmental-data">Environmental Data</h2>
-<p>We will be using <a href="../content/sdm-methods.html">species distribution modeling</a> to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the <a href="https://psl.noaa.gov/cefi_portal/">Changing Fisheries and Ecosystem Initiative</a> and includes both a physical ocean model and a coupled biogeochemical model.</p>
-<section id="for-the-cva2.0" class="level3">
-<h3 class="anchored" data-anchor-id="for-the-cva2.0">For the CVA2.0</h3>
-<p>We are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.</p>
-<p>Covariates used to build the species distribution models include:</p>
-<ul>
-<li>Sea Surface Temperature &amp; Salinity</li>
-<li>Bottom Temperature &amp; Salinity</li>
-<li>Surface pH</li>
-<li>Bottom Aragonite Solubility</li>
-<li>Mixed Layer Depth</li>
-<li>Diazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)</li>
-<li>Small, medium, and large zooplankton biomass (integrated in the top 100 m)</li>
-<li>Downward particulate organic carbon (POC) flux</li>
-<li>Water column net primary productivity (NPP)</li>
-</ul>
-<p>Covariates will be normalized to long term (1993 - 2019) averages and matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.</p>
+<section id="overview" class="level3">
+<h3 class="anchored" data-anchor-id="overview">Overview</h3>
+<p>The first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.</p>
+<p>Within this workflow, there are three steps: 1. Data preparation 2. Building &amp; Predicting Species Distribution Models 3. Building the Ensemble</p>
+<p>The functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -865,13 +815,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../content/methods-overview.html" class="pagination-link" aria-label="Methods">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Methods</span>
+      <a href="../content/rpackage-overview.html" class="pagination-link" aria-label="R Package">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">R Package</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/sdm-methods.html" class="pagination-link" aria-label="Species Distribution Modeling">
-        <span class="nav-page-text">Species Distribution Modeling</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/acknowledgements.html" class="pagination-link" aria-label="Acknowledgements">
+        <span class="nav-page-text">Acknowledgements</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -883,7 +833,7 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/data.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This page is built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>
