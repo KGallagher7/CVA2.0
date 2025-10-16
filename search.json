@@ -50,119 +50,67 @@
     ]
   },
   {
-    "objectID": "content/sdm-methods.html",
-    "href": "content/sdm-methods.html",
-    "title": "Species Distribution Modeling",
+    "objectID": "content/acknowledgements.html",
+    "href": "content/acknowledgements.html",
+    "title": "Acknowledgments",
     "section": "",
-    "text": "The first step in the CVA2.0 is the construction of species distribution models (SDMs). SDMs are statistical models that describe the relationships between species presence or abundance and environmental attributes or covariates. There are many different types of SDMs that use different data types and statistical methods. There is an abundance of scientific literature that both describe and compare different model types. We will provide a brief overview below and describe the methods selected for the CVA2.0.",
+    "text": "The CVA2.0 project is funded by the Inflation Reduction Act.\nThis project would not have been possible without the dedication and hardwork of countless individuals aboard the federal and state-run survey programs and the NOAA Observer program.\nMany thanks to the following state-run programs for contributing data:\n\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\nWe also thank all of the NOAA staff, members of the New England and Mid Atlantic Fisheries Management Councils, the Atlantic States Marine Fisheries Commission, and our academic partners for their feedback and assistance in developing the methods described here.\nThis website is based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
     "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
+      "Acknowledgements"
     ]
   },
   {
-    "objectID": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
-    "href": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
-    "title": "Species Distribution Modeling",
-    "section": "Presence/Absence vs Abundance Data",
-    "text": "Presence/Absence vs Abundance Data\nSpecies distribution models can be built with primarily two different kinds of species data - presence/absence or abundance data. Presence/absence data describes when a species was present or absent, usually in binary with 0s representing absences and 1s representing presences. SDMs built with presence/absence data predict how likely it is that a species will be found there - often called habitat suitability - but does not consider how many individuals will be present.\nAbundance data on the other hand uses count or species density estimates. SDMS built with abundance data can predict the abundance or density of species in a given area or at a given time, but must deal with often irregular data.\n\nIn the CVA2.0…\nFor the CVA2.0, we use presence/absence data from a variety of sources. Using presence/absence data will allow us to combine multiple datasets across fisheries independent and dependent surveys.",
+    "objectID": "content/vulnerability_directionality.html",
+    "href": "content/vulnerability_directionality.html",
+    "title": "Vulnerability & Directionality",
+    "section": "",
+    "text": "Vulnerability\nThe final vulnerability scores will be estimated using similar methods to Boyce et al 2022 and 2024 - a weighted average of sensitivity, exposure, and if used in this analysis, adaptive, scores based on variability across the study area. For attributes based on life history stages, such as sensitivity and/or adaptability, these will be uniform across the study region. These averages will occur across space.\nThe final product will be a map of species vulnerability across the study region. An overall vulnerability score may be generated based on habitat suitability.\n\n\nDirectionality\nIn the original CVA, in addition to ranking how sensitive species may be to future climate change, experts also estimated if species would be positively or negatively impacted by climate change. For the CVA2.0, we will use the species distribution models to estimate current area of preferred habitat. We will calculate change in habitat area over time from the decadal and long-term projections from MOM6. We may also calculate directionality via expert opinion and compare the two metrics.",
     "crumbs": [
       "Methods",
-      "Species Distribution Modeling"
+      "Vulnerability & Directionality"
     ]
   },
   {
-    "objectID": "content/sdm-methods.html#statistical-modeling",
-    "href": "content/sdm-methods.html#statistical-modeling",
-    "title": "Species Distribution Modeling",
-    "section": "Statistical Modeling",
-    "text": "Statistical Modeling\nThere are many statistical models that we could have chosen for our SDMs. Options included generalized linear models (GLMs), generalized additive models (GAMs), uni (single) or multi-variate state-space models, machine learning methods, decision tree methods, and more! Many models have been used to describe species distributions along the Northeast Shelf. Each model type has pros and cons, and different models use different assumptions, statistical methods, etc to define habitat preferences.\nTo account for some of these differences between models, model ensembles can be generated by combining different model outputs together. Ensembles are usually built by averaging the outputs of different component models. Weighted averages can also be used to weight the averages based on model performance.\n\nIn the CVA2.0…\nWe use an ensemble modeling approach for the CVA2.0, following the work of the Alaska Fisheries Science Center (AFSC)’s Groundfish program, recently implimented an ensemble modeling framework for their Essential Fish Habitat work. Here, we use the following models:\n\nGeneralized Additive Model (GAM)\nMAXimum ENTropy (MAXENT)\nRandom Forest with Spatial Interpolation (RFSI)\nBoosted Regression Trees (BRTs)\nSpatio-temporal Generalized Linear Mixed Models (GLMMs) with sdmTMB\n\nAll of these models accept presence/absence data; can be made spatially and temporally explicit, which was important for our analysis; and combine more “traditional” SDM methods such as GAM and MAXENT included in the AFSC’s ensemble with machine learning/decision tree-based models such as RFSI and BRTs. sdmTMB models are similar to other SDM methods common in fisheries work like VAST and tinyVAST. In addition, these or similar models have been used on the Northeast Shelf in previously published works.\nWe will generate our ensemble model by performing a weighted average on our components’ outputs. Weights will be calculated using the same methods as the AFSC. However, we will use Area under the Curve (AUC) rather than root mean squared error (RMSE) because AUC is a better accuracy metric for presence/absence models than RMSE.",
-    "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
-    ]
-  },
-  {
-    "objectID": "content/rendering.html",
-    "href": "content/rendering.html",
-    "title": "Rendering",
+    "objectID": "content/code.html",
+    "href": "content/code.html",
+    "title": "Rendering with Code",
     "section": "",
-    "text": "The repo includes a GitHub Action that will render (build) the website automatically when you make changes to the files. It will be pushed to the gh-pages branch.\nBut when you are developing your content, you will want to render it locally."
+    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326"
   },
   {
-    "objectID": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
-    "href": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
-    "title": "Rendering",
-    "section": "Step 1. Make sure you have a recent RStudio",
-    "text": "Step 1. Make sure you have a recent RStudio\nHave you updated RStudio since about August 2022? No? Then update to a newer version of RStudio. In general, you want to keep RStudio updated and it is required to have a recent version to use Quarto."
+    "objectID": "content/code.html#modify-the-github-action",
+    "href": "content/code.html#modify-the-github-action",
+    "title": "Rendering with Code",
+    "section": "Modify the GitHub Action",
+    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it."
   },
   {
-    "objectID": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
-    "href": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
-    "title": "Rendering",
-    "section": "Step 2. Clone and create RStudio project",
-    "text": "Step 2. Clone and create RStudio project\nFirst, clone the repo onto your local computer. How? You can click File &gt; New Project and then select “Version Control”. Paste in the url of the repository. That will clone the repo on to your local computer. When you make changes, you will need to push those up."
+    "objectID": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
+    "href": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
+    "title": "Rendering with Code",
+    "section": "Render locally and publish to gh-pages branch",
+    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
   },
   {
-    "objectID": "content/rendering.html#step-3.-render-within-rstudio",
-    "href": "content/rendering.html#step-3.-render-within-rstudio",
-    "title": "Rendering",
-    "section": "Step 3. Render within RStudio",
-    "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”."
-  },
-  {
-    "objectID": "content/add-content.html",
-    "href": "content/add-content.html",
-    "title": "Customize",
+    "objectID": "content/customizing.html",
+    "href": "content/customizing.html",
+    "title": "Customization",
     "section": "",
-    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
+    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
   },
   {
-    "objectID": "content/add-content.html#edit-and-add-your-pages",
-    "href": "content/add-content.html#edit-and-add-your-pages",
-    "title": "Customize",
+    "objectID": "content/customizing.html#quarto-documentation",
+    "href": "content/customizing.html#quarto-documentation",
+    "title": "Customization",
     "section": "",
-    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
+    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
   },
   {
-    "objectID": "content/add-content.html#add-your-pages-the-project",
-    "href": "content/add-content.html#add-your-pages-the-project",
-    "title": "Customize",
-    "section": "Add your pages the project",
-    "text": "Add your pages the project\n\nAdd the files to _quarto.yml"
-  },
-  {
-    "objectID": "content/data.html",
-    "href": "content/data.html",
-    "title": "Data",
-    "section": "",
-    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
-    "crumbs": [
-      "Methods",
-      "Data"
-    ]
-  },
-  {
-    "objectID": "content/data.html#fisheries-data",
-    "href": "content/data.html#fisheries-data",
-    "title": "Data",
-    "section": "",
-    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
-    "crumbs": [
-      "Methods",
-      "Data"
-    ]
-  },
-  {
-    "objectID": "content/data.html#environmental-data",
-    "href": "content/data.html#environmental-data",
-    "title": "Data",
-    "section": "Environmental Data",
-    "text": "Environmental Data\nWe will be using species distribution modeling to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the Changing Fisheries and Ecosystem Initiative and includes both a physical ocean model and a coupled biogeochemical model.\n\nFor the CVA2.0\nWe are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.\nCovariates used to build the species distribution models include:\n\nSea Surface Temperature & Salinity\nBottom Temperature & Salinity\nSurface pH\nBottom Aragonite Solubility\nMixed Layer Depth\nDiazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)\nSmall, medium, and large zooplankton biomass (integrated in the top 100 m)\nDownward particulate organic carbon (POC) flux\nWater column net primary productivity (NPP)\n\nCovariates will be normalized to long term (1993 - 2019) averages and matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.",
-    "crumbs": [
-      "Methods",
-      "Data"
-    ]
+    "objectID": "content/customizing.html#examples",
+    "href": "content/customizing.html#examples",
+    "title": "Customization",
+    "section": "Examples",
+    "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
   },
   {
     "objectID": "index.html",
@@ -205,76 +153,118 @@
     ]
   },
   {
-    "objectID": "content/customizing.html",
-    "href": "content/customizing.html",
-    "title": "Customization",
+    "objectID": "content/data.html",
+    "href": "content/data.html",
+    "title": "Data",
     "section": "",
-    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
-  },
-  {
-    "objectID": "content/customizing.html#quarto-documentation",
-    "href": "content/customizing.html#quarto-documentation",
-    "title": "Customization",
-    "section": "",
-    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
-  },
-  {
-    "objectID": "content/customizing.html#examples",
-    "href": "content/customizing.html#examples",
-    "title": "Customization",
-    "section": "Examples",
-    "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
-  },
-  {
-    "objectID": "content/code.html",
-    "href": "content/code.html",
-    "title": "Rendering with Code",
-    "section": "",
-    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326"
-  },
-  {
-    "objectID": "content/code.html#modify-the-github-action",
-    "href": "content/code.html#modify-the-github-action",
-    "title": "Rendering with Code",
-    "section": "Modify the GitHub Action",
-    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it."
-  },
-  {
-    "objectID": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
-    "href": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
-    "title": "Rendering with Code",
-    "section": "Render locally and publish to gh-pages branch",
-    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
-  },
-  {
-    "objectID": "content/vulnerability_directionality.html",
-    "href": "content/vulnerability_directionality.html",
-    "title": "Vulnerability & Directionality",
-    "section": "",
-    "text": "Vulnerability\nThe final vulnerability scores will be estimated using similar methods to Boyce et al 2022 and 2024 - a weighted average of sensitivity, exposure, and if used in this analysis, adaptive, scores based on variability across the study area. For attributes based on life history stages, such as sensitivity and/or adaptability, these will be uniform across the study region. These averages will occur across space.\nThe final product will be a map of species vulnerability across the study region. An overall vulnerability score may be generated based on habitat suitability.\n\n\nDirectionality\nIn the original CVA, in addition to ranking how sensitive species may be to future climate change, experts also estimated if species would be positively or negatively impacted by climate change. For the CVA2.0, we will use the species distribution models to estimate current area of preferred habitat. We will calculate change in habitat area over time from the decadal and long-term projections from MOM6. We may also calculate directionality via expert opinion and compare the two metrics.",
+    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
     "crumbs": [
       "Methods",
-      "Vulnerability & Directionality"
+      "Data"
     ]
   },
   {
-    "objectID": "content/acknowledgements.html",
-    "href": "content/acknowledgements.html",
-    "title": "Acknowledgments",
+    "objectID": "content/data.html#fisheries-data",
+    "href": "content/data.html#fisheries-data",
+    "title": "Data",
     "section": "",
-    "text": "The CVA2.0 project is funded by the Inflation Reduction Act.\nThis project would not have been possible without the dedication and hardwork of countless individuals aboard the federal and state-run survey programs and the NOAA Observer program.\nMany thanks to the following state-run programs for contributing data:\n\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\nWe also thank all of the NOAA staff, members of the New England and Mid Atlantic Fisheries Management Councils, the Atlantic States Marine Fisheries Commission, and our academic partners for their feedback and assistance in developing the methods described here.\nThis website is based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
+    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
     "crumbs": [
-      "Acknowledgements"
+      "Methods",
+      "Data"
     ]
   },
   {
-    "objectID": "content/rpackage-overview.html",
-    "href": "content/rpackage-overview.html",
-    "title": "Overview",
-    "section": "",
-    "text": "An R package is undergoing active development to document the workflows and codes used to contruct the new Climate Vulnerability Assessment.\nThe package will have 4 major components: * Building the ensemble species distribution models * Estimating exposure * Summarizing sensitivity from expert scores * Calculating final vulnerability scores\nThe following pages provide a tutorial for the different portions of the package.",
+    "objectID": "content/data.html#environmental-data",
+    "href": "content/data.html#environmental-data",
+    "title": "Data",
+    "section": "Environmental Data",
+    "text": "Environmental Data\nWe will be using species distribution modeling to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the Changing Fisheries and Ecosystem Initiative and includes both a physical ocean model and a coupled biogeochemical model.\n\nFor the CVA2.0\nWe are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.\nCovariates used to build the species distribution models include:\n\nSea Surface Temperature & Salinity\nBottom Temperature & Salinity\nSurface pH\nBottom Aragonite Solubility\nMixed Layer Depth\nDiazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)\nSmall, medium, and large zooplankton biomass (integrated in the top 100 m)\nDownward particulate organic carbon (POC) flux\nWater column net primary productivity (NPP)\n\nCovariates will be normalized to long term (1993 - 2019) averages and matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.",
     "crumbs": [
-      "R Package"
+      "Methods",
+      "Data"
+    ]
+  },
+  {
+    "objectID": "content/add-content.html",
+    "href": "content/add-content.html",
+    "title": "Customize",
+    "section": "",
+    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
+  },
+  {
+    "objectID": "content/add-content.html#edit-and-add-your-pages",
+    "href": "content/add-content.html#edit-and-add-your-pages",
+    "title": "Customize",
+    "section": "",
+    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
+  },
+  {
+    "objectID": "content/add-content.html#add-your-pages-the-project",
+    "href": "content/add-content.html#add-your-pages-the-project",
+    "title": "Customize",
+    "section": "Add your pages the project",
+    "text": "Add your pages the project\n\nAdd the files to _quarto.yml"
+  },
+  {
+    "objectID": "content/rendering.html",
+    "href": "content/rendering.html",
+    "title": "Rendering",
+    "section": "",
+    "text": "The repo includes a GitHub Action that will render (build) the website automatically when you make changes to the files. It will be pushed to the gh-pages branch.\nBut when you are developing your content, you will want to render it locally."
+  },
+  {
+    "objectID": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
+    "href": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
+    "title": "Rendering",
+    "section": "Step 1. Make sure you have a recent RStudio",
+    "text": "Step 1. Make sure you have a recent RStudio\nHave you updated RStudio since about August 2022? No? Then update to a newer version of RStudio. In general, you want to keep RStudio updated and it is required to have a recent version to use Quarto."
+  },
+  {
+    "objectID": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
+    "href": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
+    "title": "Rendering",
+    "section": "Step 2. Clone and create RStudio project",
+    "text": "Step 2. Clone and create RStudio project\nFirst, clone the repo onto your local computer. How? You can click File &gt; New Project and then select “Version Control”. Paste in the url of the repository. That will clone the repo on to your local computer. When you make changes, you will need to push those up."
+  },
+  {
+    "objectID": "content/rendering.html#step-3.-render-within-rstudio",
+    "href": "content/rendering.html#step-3.-render-within-rstudio",
+    "title": "Rendering",
+    "section": "Step 3. Render within RStudio",
+    "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”."
+  },
+  {
+    "objectID": "content/sdm-methods.html",
+    "href": "content/sdm-methods.html",
+    "title": "Species Distribution Modeling",
+    "section": "",
+    "text": "The first step in the CVA2.0 is the construction of species distribution models (SDMs). SDMs are statistical models that describe the relationships between species presence or abundance and environmental attributes or covariates. There are many different types of SDMs that use different data types and statistical methods. There is an abundance of scientific literature that both describe and compare different model types. We will provide a brief overview below and describe the methods selected for the CVA2.0.",
+    "crumbs": [
+      "Methods",
+      "Species Distribution Modeling"
+    ]
+  },
+  {
+    "objectID": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
+    "href": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
+    "title": "Species Distribution Modeling",
+    "section": "Presence/Absence vs Abundance Data",
+    "text": "Presence/Absence vs Abundance Data\nSpecies distribution models can be built with primarily two different kinds of species data - presence/absence or abundance data. Presence/absence data describes when a species was present or absent, usually in binary with 0s representing absences and 1s representing presences. SDMs built with presence/absence data predict how likely it is that a species will be found there - often called habitat suitability - but does not consider how many individuals will be present.\nAbundance data on the other hand uses count or species density estimates. SDMS built with abundance data can predict the abundance or density of species in a given area or at a given time, but must deal with often irregular data.\n\nIn the CVA2.0…\nFor the CVA2.0, we use presence/absence data from a variety of sources. Using presence/absence data will allow us to combine multiple datasets across fisheries independent and dependent surveys.",
+    "crumbs": [
+      "Methods",
+      "Species Distribution Modeling"
+    ]
+  },
+  {
+    "objectID": "content/sdm-methods.html#statistical-modeling",
+    "href": "content/sdm-methods.html#statistical-modeling",
+    "title": "Species Distribution Modeling",
+    "section": "Statistical Modeling",
+    "text": "Statistical Modeling\nThere are many statistical models that we could have chosen for our SDMs. Options included generalized linear models (GLMs), generalized additive models (GAMs), uni (single) or multi-variate state-space models, machine learning methods, decision tree methods, and more! Many models have been used to describe species distributions along the Northeast Shelf. Each model type has pros and cons, and different models use different assumptions, statistical methods, etc to define habitat preferences.\nTo account for some of these differences between models, model ensembles can be generated by combining different model outputs together. Ensembles are usually built by averaging the outputs of different component models. Weighted averages can also be used to weight the averages based on model performance.\n\nIn the CVA2.0…\nWe use an ensemble modeling approach for the CVA2.0, following the work of the Alaska Fisheries Science Center (AFSC)’s Groundfish program, recently implimented an ensemble modeling framework for their Essential Fish Habitat work. Here, we use the following models:\n\nGeneralized Additive Model (GAM)\nMAXimum ENTropy (MAXENT)\nRandom Forest with Spatial Interpolation (RFSI)\nBoosted Regression Trees (BRTs)\nSpatio-temporal Generalized Linear Mixed Models (GLMMs) with sdmTMB\n\nAll of these models accept presence/absence data; can be made spatially and temporally explicit, which was important for our analysis; and combine more “traditional” SDM methods such as GAM and MAXENT included in the AFSC’s ensemble with machine learning/decision tree-based models such as RFSI and BRTs. sdmTMB models are similar to other SDM methods common in fisheries work like VAST and tinyVAST. In addition, these or similar models have been used on the Northeast Shelf in previously published works.\nWe will generate our ensemble model by performing a weighted average on our components’ outputs. Weights will be calculated using the same methods as the AFSC. However, we will use Area under the Curve (AUC) rather than root mean squared error (RMSE) because AUC is a better accuracy metric for presence/absence models than RMSE.",
+    "crumbs": [
+      "Methods",
+      "Species Distribution Modeling"
     ]
   },
   {
