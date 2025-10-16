@@ -44,9 +44,7 @@ website:
       - section: 'R Package' 
         href: content/rpackage-overview.qmd
         contents: 
-          - content/data-preparation.qmd
-          - content/sdm-building.qmd
-          - content/ensemble-building.qmd
+          - content/ensemble-sdms.qmd
           - content/sensitivity-calculation.qmd
       - href: content/acknowledgements.qmd
         text: Acknowledgements
