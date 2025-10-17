@@ -1,44 +1,5 @@
 [
   {
-    "objectID": "content/exposure.html",
-    "href": "content/exposure.html",
-    "title": "Species Exposure",
-    "section": "",
-    "text": "Species exposure will be quantified using decadal and long term projections from the MOM6 model. In the CVA1.0, exposure to surface temperatures and changes in ocean acidification were quantified using a z-score. This quantity describes how many standard deviations over the present mean conditions a value, in this case mean future conditions, are.\nFor the CVA2.0, we will use this same metric. Z-scores will be calculated across space and time on monthly timesteps for the decadal and eventually long-term predictions. Exposure values will be averaged within each month to produce a single exposure metric for each variable, and across time and space, using predicted species distributions to perform weighted averages so that only expsoure within the species ranges are considered. To calculate a total exposure across environmental variables, we will use relative variable importance from the ensemble models to perform weighted averages of the time series and maps across important covariates in the model.\nWe will also quantify changes in habitat suitability over time by projecting the ensemble species distribution model onto future climate conditions. The projections and the models themselves will allow us to examine the drivers of change, by looking at change in important envrionmental covariates.",
-    "crumbs": [
-      "Methods",
-      "Species Exposure"
-    ]
-  },
-  {
-    "objectID": "content/publishing.html",
-    "href": "content/publishing.html",
-    "title": "Publishing",
-    "section": "",
-    "text": "To get your Quarto webpage to show up with the url\nyou have a few steps."
-  },
-  {
-    "objectID": "content/publishing.html#turn-on-github-pages-for-your-repo",
-    "href": "content/publishing.html#turn-on-github-pages-for-your-repo",
-    "title": "Publishing",
-    "section": "Turn on GitHub Pages for your repo",
-    "text": "Turn on GitHub Pages for your repo\n\nTurn on GitHub Pages under Settings &gt; Pages . You will set pages to be made from the gh-pages branch and the root directory.\nTurn on GitHub Actions under Settings &gt; Actions &gt; General\n\nThe GitHub Action will automatically recreate your website when you push to GitHub after you do the initial gh-pages set-up"
-  },
-  {
-    "objectID": "content/publishing.html#do-your-first-publish-to-gh-pages",
-    "href": "content/publishing.html#do-your-first-publish-to-gh-pages",
-    "title": "Publishing",
-    "section": "Do your first publish to gh-pages",
-    "text": "Do your first publish to gh-pages\nThe first time you publish to gh-pages, you need to do so locally.\n\nOn your local computer, open a terminal window and cd to your repo directory. Here is what that cd command looks like for me. You command will look different because your local repo will be somewhere else on your computer.\n\ncd ~/Documents/GitHub/NOAA-quarto-simple\n\nPublish to the gh-pages. In the terminal type\n\nquarto publish gh-pages\nThis is going to render your webpage and then push the _site contents to the gh-pages branch."
-  },
-  {
-    "objectID": "content/publishing.html#dont-like-using-gh-pages",
-    "href": "content/publishing.html#dont-like-using-gh-pages",
-    "title": "Publishing",
-    "section": "Don’t like using gh-pages?",
-    "text": "Don’t like using gh-pages?\nIn some cases, you don’t want your website on the gh-pages branch. For example, if you are creating releases and you want the website pages archived in that release, then you won’t want your website pages on the gh-pages branch.\nHere are the changes you need to make if you to avoid gh-pages branch.\n\nAt the top of _quarto.yml add the following:\n\nproject: \n  type: website\n  output-dir: docs\n\nOn GitHub under Settings &gt; Pages set pages to be made from the main branch and the docs directory.\nMake sure docs is not listed in .gitignore\nPublish the site the first time locally using quarto publish from the terminal\nChange the GitHub Action because you can’t use quarto publish gh-pages. You’ll need to push to the main branch yourself (in the GitHub Action)\n\non:\n  push:\n    branches: main\n\nname: Render and Publish\n\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    env:\n      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}\n\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v2 \n        \n      - name: Set up R (needed for Rmd)\n        uses: r-lib/actions/setup-r@v2\n\n      - name: Install packages (needed for Rmd)\n        run: Rscript -e 'install.packages(c(\"rmarkdown\", \"knitr\", \"jsonlite\"))'\n\n      - name: Set up Quarto\n        uses: quarto-dev/quarto-actions/setup@v2\n        with:\n          # To install LaTeX to build PDF book \n          # tinytex: true \n          # uncomment below and fill to pin a version\n          # version: 0.9.600\n      \n      - name: Render Quarto Project\n        uses: quarto-dev/quarto-actions/render@v2\n        with:\n          to: html\n\n      - name: Set up Git\n        run: |\n          git config --local user.email \"actions@github.com\"\n          git config --local user.name \"GitHub Actions\"\n\n      - name: Commit all changes and push\n        run: |\n          git add -A && git commit -m 'Build site' || echo \"No changes to commit\"\n          git push origin || echo \"No changes to commit\""
-  },
-  {
     "objectID": "content/sensitivity.html",
     "href": "content/sensitivity.html",
     "title": "Sensitivity",
@@ -50,37 +11,25 @@
     ]
   },
   {
-    "objectID": "content/sdm-methods.html",
-    "href": "content/sdm-methods.html",
-    "title": "Species Distribution Modeling",
+    "objectID": "content/customizing.html",
+    "href": "content/customizing.html",
+    "title": "Customization",
     "section": "",
-    "text": "The first step in the CVA2.0 is the construction of species distribution models (SDMs). SDMs are statistical models that describe the relationships between species presence or abundance and environmental attributes or covariates. There are many different types of SDMs that use different data types and statistical methods. There is an abundance of scientific literature that both describe and compare different model types. We will provide a brief overview below and describe the methods selected for the CVA2.0.",
-    "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
-    ]
+    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
   },
   {
-    "objectID": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
-    "href": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
-    "title": "Species Distribution Modeling",
-    "section": "Presence/Absence vs Abundance Data",
-    "text": "Presence/Absence vs Abundance Data\nSpecies distribution models can be built with primarily two different kinds of species data - presence/absence or abundance data. Presence/absence data describes when a species was present or absent, usually in binary with 0s representing absences and 1s representing presences. SDMs built with presence/absence data predict how likely it is that a species will be found there - often called habitat suitability - but does not consider how many individuals will be present.\nAbundance data on the other hand uses count or species density estimates. SDMS built with abundance data can predict the abundance or density of species in a given area or at a given time, but must deal with often irregular data.\n\nIn the CVA2.0…\nFor the CVA2.0, we use presence/absence data from a variety of sources. Using presence/absence data will allow us to combine multiple datasets across fisheries independent and dependent surveys.",
-    "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
-    ]
+    "objectID": "content/customizing.html#quarto-documentation",
+    "href": "content/customizing.html#quarto-documentation",
+    "title": "Customization",
+    "section": "",
+    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
   },
   {
-    "objectID": "content/sdm-methods.html#statistical-modeling",
-    "href": "content/sdm-methods.html#statistical-modeling",
-    "title": "Species Distribution Modeling",
-    "section": "Statistical Modeling",
-    "text": "Statistical Modeling\nThere are many statistical models that we could have chosen for our SDMs. Options included generalized linear models (GLMs), generalized additive models (GAMs), uni (single) or multi-variate state-space models, machine learning methods, decision tree methods, and more! Many models have been used to describe species distributions along the Northeast Shelf. Each model type has pros and cons, and different models use different assumptions, statistical methods, etc to define habitat preferences.\nTo account for some of these differences between models, model ensembles can be generated by combining different model outputs together. Ensembles are usually built by averaging the outputs of different component models. Weighted averages can also be used to weight the averages based on model performance.\n\nIn the CVA2.0…\nWe use an ensemble modeling approach for the CVA2.0, following the work of the Alaska Fisheries Science Center (AFSC)’s Groundfish program, recently implimented an ensemble modeling framework for their Essential Fish Habitat work. Here, we use the following models:\n\nGeneralized Additive Model (GAM)\nMAXimum ENTropy (MAXENT)\nRandom Forest with Spatial Interpolation (RFSI)\nBoosted Regression Trees (BRTs)\nSpatio-temporal Generalized Linear Mixed Models (GLMMs) with sdmTMB\n\nAll of these models accept presence/absence data; can be made spatially and temporally explicit, which was important for our analysis; and combine more “traditional” SDM methods such as GAM and MAXENT included in the AFSC’s ensemble with machine learning/decision tree-based models such as RFSI and BRTs. sdmTMB models are similar to other SDM methods common in fisheries work like VAST and tinyVAST. In addition, these or similar models have been used on the Northeast Shelf in previously published works.\nWe will generate our ensemble model by performing a weighted average on our components’ outputs. Weights will be calculated using the same methods as the AFSC. However, we will use Area under the Curve (AUC) rather than root mean squared error (RMSE) because AUC is a better accuracy metric for presence/absence models than RMSE.",
-    "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
-    ]
+    "objectID": "content/customizing.html#examples",
+    "href": "content/customizing.html#examples",
+    "title": "Customization",
+    "section": "Examples",
+    "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
   },
   {
     "objectID": "content/rendering.html",
@@ -109,28 +58,6 @@
     "title": "Rendering",
     "section": "Step 3. Render within RStudio",
     "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”."
-  },
-  {
-    "objectID": "content/ensemble-sdms.html",
-    "href": "content/ensemble-sdms.html",
-    "title": "Building Ensemble Species Distribution Models",
-    "section": "",
-    "text": "Overview\nThe first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps: 1. Data preparation 2. Building & Predicting Species Distribution Models 3. Building the Ensemble\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables.",
-    "crumbs": [
-      "R Package",
-      "Building Ensemble Species Distribution Models"
-    ]
-  },
-  {
-    "objectID": "content/sensitivity-calculation.html",
-    "href": "content/sensitivity-calculation.html",
-    "title": "Calculating Sensitivity",
-    "section": "",
-    "text": "Overview\nSensitivity is calculated from MOM6 forecast data, and utilizes predicted species distributions, and the relative importance of covariates in the ensemble models.\nDetailed methods coming soon.",
-    "crumbs": [
-      "R Package",
-      "Calculating Sensitivity"
-    ]
   },
   {
     "objectID": "content/data.html",
@@ -164,6 +91,87 @@
       "Methods",
       "Data"
     ]
+  },
+  {
+    "objectID": "content/publishing.html",
+    "href": "content/publishing.html",
+    "title": "Publishing",
+    "section": "",
+    "text": "To get your Quarto webpage to show up with the url\nyou have a few steps."
+  },
+  {
+    "objectID": "content/publishing.html#turn-on-github-pages-for-your-repo",
+    "href": "content/publishing.html#turn-on-github-pages-for-your-repo",
+    "title": "Publishing",
+    "section": "Turn on GitHub Pages for your repo",
+    "text": "Turn on GitHub Pages for your repo\n\nTurn on GitHub Pages under Settings &gt; Pages . You will set pages to be made from the gh-pages branch and the root directory.\nTurn on GitHub Actions under Settings &gt; Actions &gt; General\n\nThe GitHub Action will automatically recreate your website when you push to GitHub after you do the initial gh-pages set-up"
+  },
+  {
+    "objectID": "content/publishing.html#do-your-first-publish-to-gh-pages",
+    "href": "content/publishing.html#do-your-first-publish-to-gh-pages",
+    "title": "Publishing",
+    "section": "Do your first publish to gh-pages",
+    "text": "Do your first publish to gh-pages\nThe first time you publish to gh-pages, you need to do so locally.\n\nOn your local computer, open a terminal window and cd to your repo directory. Here is what that cd command looks like for me. You command will look different because your local repo will be somewhere else on your computer.\n\ncd ~/Documents/GitHub/NOAA-quarto-simple\n\nPublish to the gh-pages. In the terminal type\n\nquarto publish gh-pages\nThis is going to render your webpage and then push the _site contents to the gh-pages branch."
+  },
+  {
+    "objectID": "content/publishing.html#dont-like-using-gh-pages",
+    "href": "content/publishing.html#dont-like-using-gh-pages",
+    "title": "Publishing",
+    "section": "Don’t like using gh-pages?",
+    "text": "Don’t like using gh-pages?\nIn some cases, you don’t want your website on the gh-pages branch. For example, if you are creating releases and you want the website pages archived in that release, then you won’t want your website pages on the gh-pages branch.\nHere are the changes you need to make if you to avoid gh-pages branch.\n\nAt the top of _quarto.yml add the following:\n\nproject: \n  type: website\n  output-dir: docs\n\nOn GitHub under Settings &gt; Pages set pages to be made from the main branch and the docs directory.\nMake sure docs is not listed in .gitignore\nPublish the site the first time locally using quarto publish from the terminal\nChange the GitHub Action because you can’t use quarto publish gh-pages. You’ll need to push to the main branch yourself (in the GitHub Action)\n\non:\n  push:\n    branches: main\n\nname: Render and Publish\n\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    env:\n      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}\n\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v2 \n        \n      - name: Set up R (needed for Rmd)\n        uses: r-lib/actions/setup-r@v2\n\n      - name: Install packages (needed for Rmd)\n        run: Rscript -e 'install.packages(c(\"rmarkdown\", \"knitr\", \"jsonlite\"))'\n\n      - name: Set up Quarto\n        uses: quarto-dev/quarto-actions/setup@v2\n        with:\n          # To install LaTeX to build PDF book \n          # tinytex: true \n          # uncomment below and fill to pin a version\n          # version: 0.9.600\n      \n      - name: Render Quarto Project\n        uses: quarto-dev/quarto-actions/render@v2\n        with:\n          to: html\n\n      - name: Set up Git\n        run: |\n          git config --local user.email \"actions@github.com\"\n          git config --local user.name \"GitHub Actions\"\n\n      - name: Commit all changes and push\n        run: |\n          git add -A && git commit -m 'Build site' || echo \"No changes to commit\"\n          git push origin || echo \"No changes to commit\""
+  },
+  {
+    "objectID": "content/vulnerability_directionality.html",
+    "href": "content/vulnerability_directionality.html",
+    "title": "Vulnerability & Directionality",
+    "section": "",
+    "text": "Vulnerability\nThe final vulnerability scores will be estimated using similar methods to Boyce et al 2022 and 2024 - a weighted average of sensitivity, exposure, and if used in this analysis, adaptive, scores based on variability across the study area. For attributes based on life history stages, such as sensitivity and/or adaptability, these will be uniform across the study region. These averages will occur across space.\nThe final product will be a map of species vulnerability across the study region. An overall vulnerability score may be generated based on habitat suitability.\n\n\nDirectionality\nIn the original CVA, in addition to ranking how sensitive species may be to future climate change, experts also estimated if species would be positively or negatively impacted by climate change. For the CVA2.0, we will use the species distribution models to estimate current area of preferred habitat. We will calculate change in habitat area over time from the decadal and long-term projections from MOM6. We may also calculate directionality via expert opinion and compare the two metrics.",
+    "crumbs": [
+      "Methods",
+      "Vulnerability & Directionality"
+    ]
+  },
+  {
+    "objectID": "content/code.html",
+    "href": "content/code.html",
+    "title": "Rendering with Code",
+    "section": "",
+    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326"
+  },
+  {
+    "objectID": "content/code.html#modify-the-github-action",
+    "href": "content/code.html#modify-the-github-action",
+    "title": "Rendering with Code",
+    "section": "Modify the GitHub Action",
+    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it."
+  },
+  {
+    "objectID": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
+    "href": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
+    "title": "Rendering with Code",
+    "section": "Render locally and publish to gh-pages branch",
+    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
+  },
+  {
+    "objectID": "content/rmarkdown.html",
+    "href": "content/rmarkdown.html",
+    "title": "R Markdown",
+    "section": "",
+    "text": "You can include R Markdown files in your project."
+  },
+  {
+    "objectID": "content/rmarkdown.html#r-markdown",
+    "href": "content/rmarkdown.html#r-markdown",
+    "title": "R Markdown",
+    "section": "R Markdown",
+    "text": "R Markdown\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\n\nsummary(cars)\n\n     speed           dist       \n Min.   : 4.0   Min.   :  2.00  \n 1st Qu.:12.0   1st Qu.: 26.00  \n Median :15.0   Median : 36.00  \n Mean   :15.4   Mean   : 42.98  \n 3rd Qu.:19.0   3rd Qu.: 56.00  \n Max.   :25.0   Max.   :120.00"
+  },
+  {
+    "objectID": "content/rmarkdown.html#including-plots",
+    "href": "content/rmarkdown.html#including-plots",
+    "title": "R Markdown",
+    "section": "Including Plots",
+    "text": "Including Plots\nYou can also embed plots, for example:\n\n\n\n\n\n\n\n\n\nNote that the echo = FALSE parameter was added to the code chunk to prevent printing of the R code that generated the plot."
   },
   {
     "objectID": "index.html",
@@ -206,46 +214,56 @@
     ]
   },
   {
-    "objectID": "content/customizing.html",
-    "href": "content/customizing.html",
-    "title": "Customization",
+    "objectID": "content/methods-overview.html",
+    "href": "content/methods-overview.html",
+    "title": "Methods Overview",
     "section": "",
-    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
+    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
+    "crumbs": [
+      "Methods"
+    ]
   },
   {
-    "objectID": "content/customizing.html#quarto-documentation",
-    "href": "content/customizing.html#quarto-documentation",
-    "title": "Customization",
+    "objectID": "content/methods-overview.html#overview",
+    "href": "content/methods-overview.html#overview",
+    "title": "Methods Overview",
     "section": "",
-    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
+    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
+    "crumbs": [
+      "Methods"
+    ]
   },
   {
-    "objectID": "content/customizing.html#examples",
-    "href": "content/customizing.html#examples",
-    "title": "Customization",
-    "section": "Examples",
-    "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
-  },
-  {
-    "objectID": "content/code.html",
-    "href": "content/code.html",
-    "title": "Rendering with Code",
+    "objectID": "content/acknowledgements.html",
+    "href": "content/acknowledgements.html",
+    "title": "Acknowledgments",
     "section": "",
-    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326"
+    "text": "The CVA2.0 project is funded by the Inflation Reduction Act.\nThis project would not have been possible without the dedication and hardwork of countless individuals aboard the federal and state-run survey programs and the NOAA Observer program.\nMany thanks to the following state-run programs for contributing data:\n\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\nWe also thank all of the NOAA staff, members of the New England and Mid Atlantic Fisheries Management Councils, the Atlantic States Marine Fisheries Commission, and our academic partners for their feedback and assistance in developing the methods described here.\nThis website is based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
+    "crumbs": [
+      "Acknowledgements"
+    ]
   },
   {
-    "objectID": "content/code.html#modify-the-github-action",
-    "href": "content/code.html#modify-the-github-action",
-    "title": "Rendering with Code",
-    "section": "Modify the GitHub Action",
-    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it."
+    "objectID": "content/exposure.html",
+    "href": "content/exposure.html",
+    "title": "Species Exposure",
+    "section": "",
+    "text": "Species exposure will be quantified using decadal and long term projections from the MOM6 model. In the CVA1.0, exposure to surface temperatures and changes in ocean acidification were quantified using a z-score. This quantity describes how many standard deviations over the present mean conditions a value, in this case mean future conditions, are.\nFor the CVA2.0, we will use this same metric. Z-scores will be calculated across space and time on monthly timesteps for the decadal and eventually long-term predictions. Exposure values will be averaged within each month to produce a single exposure metric for each variable, and across time and space, using predicted species distributions to perform weighted averages so that only expsoure within the species ranges are considered. To calculate a total exposure across environmental variables, we will use relative variable importance from the ensemble models to perform weighted averages of the time series and maps across important covariates in the model.\nWe will also quantify changes in habitat suitability over time by projecting the ensemble species distribution model onto future climate conditions. The projections and the models themselves will allow us to examine the drivers of change, by looking at change in important envrionmental covariates.",
+    "crumbs": [
+      "Methods",
+      "Species Exposure"
+    ]
   },
   {
-    "objectID": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
-    "href": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
-    "title": "Rendering with Code",
-    "section": "Render locally and publish to gh-pages branch",
-    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
+    "objectID": "content/ensemble-sdms.html",
+    "href": "content/ensemble-sdms.html",
+    "title": "Building Ensemble Species Distribution Models",
+    "section": "",
+    "text": "Overview\nThe first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps: 1. Data preparation 2. Building & Predicting Species Distribution Models 3. Building the Ensemble\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables.",
+    "crumbs": [
+      "R Package",
+      "Building Ensemble Species Distribution Models"
+    ]
   },
   {
     "objectID": "content/add-content.html",
@@ -269,24 +287,47 @@
     "text": "Add your pages the project\n\nAdd the files to _quarto.yml"
   },
   {
-    "objectID": "content/vulnerability_directionality.html",
-    "href": "content/vulnerability_directionality.html",
-    "title": "Vulnerability & Directionality",
+    "objectID": "content/sensitivity-calculation.html",
+    "href": "content/sensitivity-calculation.html",
+    "title": "Calculating Sensitivity",
     "section": "",
-    "text": "Vulnerability\nThe final vulnerability scores will be estimated using similar methods to Boyce et al 2022 and 2024 - a weighted average of sensitivity, exposure, and if used in this analysis, adaptive, scores based on variability across the study area. For attributes based on life history stages, such as sensitivity and/or adaptability, these will be uniform across the study region. These averages will occur across space.\nThe final product will be a map of species vulnerability across the study region. An overall vulnerability score may be generated based on habitat suitability.\n\n\nDirectionality\nIn the original CVA, in addition to ranking how sensitive species may be to future climate change, experts also estimated if species would be positively or negatively impacted by climate change. For the CVA2.0, we will use the species distribution models to estimate current area of preferred habitat. We will calculate change in habitat area over time from the decadal and long-term projections from MOM6. We may also calculate directionality via expert opinion and compare the two metrics.",
+    "text": "Overview\nSensitivity is calculated from MOM6 forecast data, and utilizes predicted species distributions, and the relative importance of covariates in the ensemble models.\nDetailed methods coming soon.",
     "crumbs": [
-      "Methods",
-      "Vulnerability & Directionality"
+      "R Package",
+      "Calculating Sensitivity"
     ]
   },
   {
-    "objectID": "content/acknowledgements.html",
-    "href": "content/acknowledgements.html",
-    "title": "Acknowledgments",
+    "objectID": "content/sdm-methods.html",
+    "href": "content/sdm-methods.html",
+    "title": "Species Distribution Modeling",
     "section": "",
-    "text": "The CVA2.0 project is funded by the Inflation Reduction Act.\nThis project would not have been possible without the dedication and hardwork of countless individuals aboard the federal and state-run survey programs and the NOAA Observer program.\nMany thanks to the following state-run programs for contributing data:\n\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\nWe also thank all of the NOAA staff, members of the New England and Mid Atlantic Fisheries Management Councils, the Atlantic States Marine Fisheries Commission, and our academic partners for their feedback and assistance in developing the methods described here.\nThis website is based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
+    "text": "The first step in the CVA2.0 is the construction of species distribution models (SDMs). SDMs are statistical models that describe the relationships between species presence or abundance and environmental attributes or covariates. There are many different types of SDMs that use different data types and statistical methods. There is an abundance of scientific literature that both describe and compare different model types. We will provide a brief overview below and describe the methods selected for the CVA2.0.",
     "crumbs": [
-      "Acknowledgements"
+      "Methods",
+      "Species Distribution Modeling"
+    ]
+  },
+  {
+    "objectID": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
+    "href": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
+    "title": "Species Distribution Modeling",
+    "section": "Presence/Absence vs Abundance Data",
+    "text": "Presence/Absence vs Abundance Data\nSpecies distribution models can be built with primarily two different kinds of species data - presence/absence or abundance data. Presence/absence data describes when a species was present or absent, usually in binary with 0s representing absences and 1s representing presences. SDMs built with presence/absence data predict how likely it is that a species will be found there - often called habitat suitability - but does not consider how many individuals will be present.\nAbundance data on the other hand uses count or species density estimates. SDMS built with abundance data can predict the abundance or density of species in a given area or at a given time, but must deal with often irregular data.\n\nIn the CVA2.0…\nFor the CVA2.0, we use presence/absence data from a variety of sources. Using presence/absence data will allow us to combine multiple datasets across fisheries independent and dependent surveys.",
+    "crumbs": [
+      "Methods",
+      "Species Distribution Modeling"
+    ]
+  },
+  {
+    "objectID": "content/sdm-methods.html#statistical-modeling",
+    "href": "content/sdm-methods.html#statistical-modeling",
+    "title": "Species Distribution Modeling",
+    "section": "Statistical Modeling",
+    "text": "Statistical Modeling\nThere are many statistical models that we could have chosen for our SDMs. Options included generalized linear models (GLMs), generalized additive models (GAMs), uni (single) or multi-variate state-space models, machine learning methods, decision tree methods, and more! Many models have been used to describe species distributions along the Northeast Shelf. Each model type has pros and cons, and different models use different assumptions, statistical methods, etc to define habitat preferences.\nTo account for some of these differences between models, model ensembles can be generated by combining different model outputs together. Ensembles are usually built by averaging the outputs of different component models. Weighted averages can also be used to weight the averages based on model performance.\n\nIn the CVA2.0…\nWe use an ensemble modeling approach for the CVA2.0, following the work of the Alaska Fisheries Science Center (AFSC)’s Groundfish program, recently implimented an ensemble modeling framework for their Essential Fish Habitat work. Here, we use the following models:\n\nGeneralized Additive Model (GAM)\nMAXimum ENTropy (MAXENT)\nRandom Forest with Spatial Interpolation (RFSI)\nBoosted Regression Trees (BRTs)\nSpatio-temporal Generalized Linear Mixed Models (GLMMs) with sdmTMB\n\nAll of these models accept presence/absence data; can be made spatially and temporally explicit, which was important for our analysis; and combine more “traditional” SDM methods such as GAM and MAXENT included in the AFSC’s ensemble with machine learning/decision tree-based models such as RFSI and BRTs. sdmTMB models are similar to other SDM methods common in fisheries work like VAST and tinyVAST. In addition, these or similar models have been used on the Northeast Shelf in previously published works.\nWe will generate our ensemble model by performing a weighted average on our components’ outputs. Weights will be calculated using the same methods as the AFSC. However, we will use Area under the Curve (AUC) rather than root mean squared error (RMSE) because AUC is a better accuracy metric for presence/absence models than RMSE.",
+    "crumbs": [
+      "Methods",
+      "Species Distribution Modeling"
     ]
   },
   {
@@ -298,46 +339,5 @@
     "crumbs": [
       "R Package"
     ]
-  },
-  {
-    "objectID": "content/methods-overview.html",
-    "href": "content/methods-overview.html",
-    "title": "Methods Overview",
-    "section": "",
-    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
-    "crumbs": [
-      "Methods"
-    ]
-  },
-  {
-    "objectID": "content/methods-overview.html#overview",
-    "href": "content/methods-overview.html#overview",
-    "title": "Methods Overview",
-    "section": "",
-    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
-    "crumbs": [
-      "Methods"
-    ]
-  },
-  {
-    "objectID": "content/rmarkdown.html",
-    "href": "content/rmarkdown.html",
-    "title": "R Markdown",
-    "section": "",
-    "text": "You can include R Markdown files in your project."
-  },
-  {
-    "objectID": "content/rmarkdown.html#r-markdown",
-    "href": "content/rmarkdown.html#r-markdown",
-    "title": "R Markdown",
-    "section": "R Markdown",
-    "text": "R Markdown\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\n\nsummary(cars)\n\n     speed           dist       \n Min.   : 4.0   Min.   :  2.00  \n 1st Qu.:12.0   1st Qu.: 26.00  \n Median :15.0   Median : 36.00  \n Mean   :15.4   Mean   : 42.98  \n 3rd Qu.:19.0   3rd Qu.: 56.00  \n Max.   :25.0   Max.   :120.00"
-  },
-  {
-    "objectID": "content/rmarkdown.html#including-plots",
-    "href": "content/rmarkdown.html#including-plots",
-    "title": "R Markdown",
-    "section": "Including Plots",
-    "text": "Including Plots\nYou can also embed plots, for example:\n\n\n\n\n\n\n\n\n\nNote that the echo = FALSE parameter was added to the code chunk to prevent printing of the R code that generated the plot."
   }
 ]
