@@ -25,4 +25,27 @@ This R package is designed to work within a single working directory. To use the
 
 The Data subdirectory should have subfolders for csv and MOM6 (or other environmental) data, as well as an object containing a list of static environmental covariates (bathymetry, distance to shore, etc). The CSV folder should contain 'raw' and 'standardized' subfolders to hold the raw csv files from different data sources, and their standardized counterparts from the standardize_data function. The MOM6 data should contain the raw, averaged, standard deviation, and normalized outputs from the MOM6 functions. 
 
-Each species folder should contain three subfolders: 1) input_rasters, 2) model_output, and 3) output_rasters. The input raster folder contains all the individual rasters from each data source and the combined raster. The output raster folder contains all the predicted rasters from each model and the final ensemble model. The model output folder contains the following folders: 1) models, 2) cvs, 3) preds, 4) eval_metrics, and 5) importance. Each of these folders will contain the output from their respective functions for each model component, and as necessary, the ensemble model. 
+Each species folder should contain three subfolders: 1) input_rasters, 2) model_output, and 3) output_rasters. The input raster folder contains all the individual rasters from each data source and the combined raster. The output raster folder contains all the predicted rasters from each model and the final ensemble model. The model output folder contains the following folders: 1) models, 2) cvs, 3) preds, 4) eval_metrics, and 5) importance. Each of these folders will contain the output from their respective functions for each model component, and as necessary, the ensemble model.
+
+####Example
+In the below example directory, CVA2.0 is the working directory, species_list.csv is the csv file containing a list of species to perform the analysis for, and feeding/habitat_key.csv are the respective keys. 
+.
+└── CVA2.0/
+    ├── TargetSpecies/
+    │   ├── input_rasters/
+    │   ├── model_output/
+    │   │   ├── models/
+    │   │   ├── cvs/
+    │   │   ├── preds/
+    │   │   ├── eval_metrics/
+    │   │   └── importance/
+    │   └── output_rasters/
+    ├── Data/
+    │   ├── csvs/
+    │   │   ├── raw/
+    │   │   └── standardized/
+    │   └── MOM6/
+    ├── logs/
+    ├── species_list.csv
+    ├── feeding_key.csv
+    └── habitat_key.csv
