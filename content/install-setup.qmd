@@ -1,0 +1,13 @@
+---
+title: Installation & Setup
+---
+
+#### Installation 
+Installation instructions will come once the R package is finalized. 
+
+#### Set Up
+####### Necessary Files
+
+
+###### Directory 
+This R package is designed to work within a single directory. This directory should contain 
