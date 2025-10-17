@@ -43,7 +43,8 @@ website:
           - content/vulnerability_directionality.qmd
       - section: 'R Package' 
         href: content/rpackage-overview.qmd
-        contents: 
+        contents:
+          - contentinstall-setup.qmd
           - content/ensemble-sdms.qmd
           - content/sensitivity-calculation.qmd
       - href: content/acknowledgements.qmd
