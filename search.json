@@ -136,7 +136,7 @@
     "href": "content/install-setup.html",
     "title": "Installation & Setup",
     "section": "",
-    "text": "Installation\nInstallation instructions will come once the R package is finalized.\n\n\nSet Up\n\nNecessary Files\n\n\nDirectory\nThis R package is designed to work within a single directory. This directory should contain"
+    "text": "Installation\nInstallation instructions will come once the R package is finalized.\n\n\nSet Up\n\nNecessary Files\nIf you wish to subset environmental covariates used in the models when making the data frames, you will need files that 1) list the species and their habitat and feeding guilds and 2) define the covariates to keep for each feeding and habitat guild, referred to as key files.\nThe species list should at least include a column with the species name and then columns for the associated feeding and habitat guild.\nKey files should have seperate columns, for each feeding and habitat guild with names that match the different feeding and habitat guilds in the species list. The entries in each column should be a column name associated with that guild.\n\n\nDirectory\nThis R package is designed to work within a single directory. This directory should contain"
   },
   {
     "objectID": "content/acknowledgements.html",
