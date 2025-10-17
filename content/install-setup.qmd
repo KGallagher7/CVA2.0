@@ -27,4 +27,4 @@ The Data subdirectory should have subfolders for csv and MOM6 (or other environm
 
 Each species folder should contain three subfolders: 1) input_rasters, 2) model_output, and 3) output_rasters. The input raster folder contains all the individual rasters from each data source and the combined raster. The output raster folder contains all the predicted rasters from each model and the final ensemble model. The model output folder contains the following folders: 1) models, 2) cvs, 3) preds, 4) eval_metrics, and 5) importance. Each of these folders will contain the output from their respective functions for each model component, and as necessary, the ensemble model.
 
-[Example directory](/CVA2.0/file directory.png)
+![Example directory](/CVA2.0/file directory.png)
