@@ -44,7 +44,7 @@ website:
       - section: 'R Package' 
         href: content/rpackage-overview.qmd
         contents:
-          - contentinstall-setup.qmd
+          - content/install-setup.qmd
           - content/ensemble-sdms.qmd
           - content/sensitivity-calculation.qmd
       - href: content/acknowledgements.qmd
