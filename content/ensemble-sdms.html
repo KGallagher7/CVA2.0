@@ -373,6 +373,14 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a>
+  <ul class="collapse">
+  <li><a href="#fisheries-data" id="toc-fisheries-data" class="nav-link" data-scroll-target="#fisheries-data">Fisheries Data</a></li>
+  <li><a href="#environmental-data" id="toc-environmental-data" class="nav-link" data-scroll-target="#environmental-data">Environmental Data</a></li>
+  <li><a href="#creating-data-frames" id="toc-creating-data-frames" class="nav-link" data-scroll-target="#creating-data-frames">Creating Data Frames</a></li>
+  </ul></li>
+  <li><a href="#building-and-predicitng-species-distribution-models" id="toc-building-and-predicitng-species-distribution-models" class="nav-link" data-scroll-target="#building-and-predicitng-species-distribution-models">Building and Predicitng Species Distribution Models</a></li>
+  <li><a href="#building-ensemble" id="toc-building-ensemble" class="nav-link" data-scroll-target="#building-ensemble">Building Ensemble</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -399,8 +407,8 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="overview" class="level3">
-<h3 class="anchored" data-anchor-id="overview">Overview</h3>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>The first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.</p>
 <p>Within this workflow, there are three steps:</p>
 <ol type="1">
@@ -409,6 +417,24 @@ ul.task-list li input[type="checkbox"] {
 <li>Building the Ensemble</li>
 </ol>
 <p>The functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables.</p>
+</section>
+<section id="data-preparation" class="level2">
+<h2 class="anchored" data-anchor-id="data-preparation">Data Preparation</h2>
+<section id="fisheries-data" class="level3">
+<h3 class="anchored" data-anchor-id="fisheries-data">Fisheries Data</h3>
+</section>
+<section id="environmental-data" class="level3">
+<h3 class="anchored" data-anchor-id="environmental-data">Environmental Data</h3>
+</section>
+<section id="creating-data-frames" class="level3">
+<h3 class="anchored" data-anchor-id="creating-data-frames">Creating Data Frames</h3>
+</section>
+</section>
+<section id="building-and-predicitng-species-distribution-models" class="level2">
+<h2 class="anchored" data-anchor-id="building-and-predicitng-species-distribution-models">Building and Predicitng Species Distribution Models</h2>
+</section>
+<section id="building-ensemble" class="level2">
+<h2 class="anchored" data-anchor-id="building-ensemble">Building Ensemble</h2>
 
 
 </section>
