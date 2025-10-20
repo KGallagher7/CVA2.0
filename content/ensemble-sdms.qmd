@@ -30,6 +30,19 @@ To standardize CSV data, a file path to the csv file, as well as column names fo
 neamap <- standardize_data(dataType = 'CSV', csv = "./Data/csvs/raw/NEAMAP_Tow_Catch_2025-08-14.csv", csvCols = c('station', 'lon', 'lat', 'date', 'present_absent', 'SCI_NAME'))
 ```
 
+This function results in a dataframe being transformed from this: 
+```{r}
+#| echo: false
+exRaw <- read.csv('GOP_092025.csv')
+head(exRaw)
+```
+To this: 
+```{r}
+#| echo: false
+exSt <- read.csv('GOP.csv')
+head(exSt)
+```
+
 ### Environmental Data
 
 ### Creating Data Frames 
