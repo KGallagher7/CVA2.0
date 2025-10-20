@@ -16,13 +16,26 @@ The functions outlined below are designed to be run either sequentially or in pa
 
 ## Data Preparation 
 ### Fisheries Data 
+The function `standardize_data` can be used to standardize provided csv files or pull NEFSC survey or observer data from NEFSC databases via ROracle. This can also be accomplished in R outside of the package, but `standardize_data` provides a single function to format data in a way that will be accepted by downstream functions. If you are pulling together data from a variety of sources, you will likely still need to manipulate data outside of this function to make sure that data are in a single csv file and that dates and times are in the correct format. 
+
+To pull NEFSC survey or observer data, a channel from the package `dbutils` must be provided: 
+```{r}
+#| eval: false
+surv <- standardize_data(dataType = 'Surveys', channel = dbutils::connect_to_database(server="NEFSC_pw_oraprod",uid="KGALLAGHER"))
+```
+
+To standardize CSV data, a file path to the csv file, as well as column names for  station IDs; position (longitude/latitude); date; the column corresponding to the presence/absence, or count of the species; and species name. 
+```{r}
+#| eval: false
+neamap <- standardize_data(dataType = 'CSV', csv = "./Data/csvs/raw/NEAMAP_Tow_Catch_2025-08-14.csv", csvCols = c('station', 'lon', 'lat', 'date', 'present_absent', 'SCI_NAME'))
+```
 
 ### Environmental Data
 
 ### Creating Data Frames 
 
-## Building and Predicitng Species Distribution Models 
+## Building Species Distribution Models 
 
 ## Building Ensemble 
 
-## Predicting the Ensemble 
+## Predicting the Ensemble with Forecasts
