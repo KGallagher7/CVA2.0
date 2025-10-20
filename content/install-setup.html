@@ -453,22 +453,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The species list should at least include a column with the species name and then columns for the associated feeding and habitat guild. While it is not necessary, this file is also a good place to list alternative species names (common names, scientific names, any variations on either) that can be used to make sure that observations of the same species are combined across data types.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>spp <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'spp_list.csv'</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(spp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(spp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   36 obs. of  10 variables:
- $ Common.Name    : chr  "Atlantic cod " "Atlantic croaker" "Atlantic halibut" "Atlantic herring" ...
- $ COM_NAME       : chr  "ATLANTIC COD " "ATLANTIC CROAKER" "ATLANTIC HALIBUT" "ATLANTIC HERRING" ...
- $ Scientific.Name: chr  "Gadus morhua" "Micropogonias undulatus" "Hippoglossus hippoglossus" "Clupea harengus" ...
- $ Alternate.Name : chr  "Cod Atlantic" "CROAKER ATLANTIC" "Halibut Atlantic" "Herring Atlantic" ...
- $ SCI_NAME       : chr  "GADUS MORHUA" "MICROPOGONIAS UNDULATUS" "HIPPOGLOSSUS HIPPOGLOSSUS" "CLUPEA HARENGUS" ...
- $ SCI_NAME_ALT   : chr  "" "MICROPOGONIAS UNDULATES" "HALIBUT ATLANTIC" "" ...
- $ SCI_NAME_ALT2  : chr  "" "MICROPOGONIUS UNDULATUS" "" "" ...
- $ Managing.Body  : chr  "NEFMC" "ASMFC" "NEFMC" "NEFMC" ...
- $ Feeding.Guild  : chr  "Piscivore" "Benthivore" "Piscivore" "Planktivore" ...
- $ Habitat.Guild  : chr  "Groundfish" "Groundfish" "Groundfish" "Pelagic" ...</code></pre>
+<pre><code>           Common.Name             COM_NAME           Scientific.Name
+1        Atlantic cod         ATLANTIC COD               Gadus morhua
+2     Atlantic croaker     ATLANTIC CROAKER   Micropogonias undulatus
+3     Atlantic halibut     ATLANTIC HALIBUT Hippoglossus hippoglossus
+4     Atlantic herring     ATLANTIC HERRING           Clupea harengus
+5    Atlantic mackerel    ATLANTIC MACKEREL          Scomber scombrus
+6 Atlantic sea scallop ATLANTIC SEA SCALLOP  Placopecten magellanicus
+     Alternate.Name                  SCI_NAME            SCI_NAME_ALT
+1      Cod Atlantic              GADUS MORHUA                        
+2  CROAKER ATLANTIC   MICROPOGONIAS UNDULATUS MICROPOGONIAS UNDULATES
+3  Halibut Atlantic HIPPOGLOSSUS HIPPOGLOSSUS        HALIBUT ATLANTIC
+4  Herring Atlantic           CLUPEA HARENGUS                        
+5 Mackerel Atlantic          SCOMBER SCOMBRUS       MACKEREL ATLANTIC
+6       Scallop Sea  PLACOPECTEN MAGELLANICUS PLACOPECTEN MAGELANICUS
+            SCI_NAME_ALT2 Managing.Body Feeding.Guild Habitat.Guild
+1                                 NEFMC     Piscivore    Groundfish
+2 MICROPOGONIUS UNDULATUS         ASMFC    Benthivore    Groundfish
+3                                 NEFMC     Piscivore    Groundfish
+4                                 NEFMC   Planktivore       Pelagic
+5                                 MAFMC   Planktivore      Pelagic 
+6                                 NEFMC       Benthos       Benthic</code></pre>
 </div>
 </div>
 <p>Key files should have seperate columns, for each feeding and habitat guild with names that match the different feeding and habitat guilds in the species list. The entries in each column should be a column name associated with that guild.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>feed <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'feeding_guilds.csv'</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(feed)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Planktivore Piscivore Benthos Benthivore Apex.Predator
+1      diazPP  smallZoo  intNPP     intNPP        intNPP
+2     smallPP mediumZoo     POC        POC              
+3    mediumPP  largeZoo                                 
+4     largePP                                           </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hab <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'habitat_guilds.csv'</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(hab)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Groundfish   Benthic   Pelagic Pelagic.Migratory
+1    bottomT   bottomT  surfaceT          surfaceT
+2    bottomS   bottomS  surfaceS          surfaceS
+3   bottomO2  bottomO2 surfacepH         surfacepH
+4  bottomArg bottomArg       MLD               MLD</code></pre>
+</div>
+</div>
 </section>
 <section id="fisheries-data" class="level4">
 <h4 class="anchored" data-anchor-id="fisheries-data">Fisheries Data</h4>
