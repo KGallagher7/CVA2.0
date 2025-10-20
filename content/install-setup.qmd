@@ -15,10 +15,22 @@ The species list should at least include a column with the species name and then
 ```{r}
 #| label: Species List Format
 spp <- read.csv('spp_list.csv')
-str(spp)
+head(spp)
 ```
 
 Key files should have seperate columns, for each feeding and habitat guild with names that match the different feeding and habitat guilds in the species list. The entries in each column should be a column name associated with that guild.
+
+```{r}
+#| label: Feeding Guild Key Format
+feed <- read.csv('feeding_guilds.csv')
+head(feed)
+```
+
+```{r}
+#| label: Habitat Guild Key Format
+hab <- read.csv('habitat_guilds.csv')
+head(hab)
+```
 
 #### Fisheries Data
 This workflow is designed to accept both fisheries independent and dependent data sources. Data standardization functions have the ability to pull NEFSC survey (using survdat) and observer data using ROracle, but can also accept CSV files. CSV files will need records of all efforts, regardless of if the target species is collected or not, to correctly document absences and have a time column that can be converted with the POSIXct function. 
