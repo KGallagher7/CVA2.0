@@ -13,9 +13,8 @@ If you wish to subset environmental covariates used in the models when making th
 The species list should at least include a column with the species name and then columns for the associated feeding and habitat guild. While it is not necessary, this file is also a good place to list alternative species names (common names, scientific names, any variations on either) that can be used to make sure that observations of the same species are combined across data types. 
 
 ```r
-#| echo: true
 spp <- read.csv('spp_list.csv')
-print(head(spp))
+head(spp)
 ```
 
 Key files should have seperate columns, for each feeding and habitat guild with names that match the different feeding and habitat guilds in the species list. The entries in each column should be a column name associated with that guild.
