@@ -1,44 +1,5 @@
 [
   {
-    "objectID": "content/exposure.html",
-    "href": "content/exposure.html",
-    "title": "Species Exposure",
-    "section": "",
-    "text": "Species exposure will be quantified using decadal and long term projections from the MOM6 model. In the CVA1.0, exposure to surface temperatures and changes in ocean acidification were quantified using a z-score. This quantity describes how many standard deviations over the present mean conditions a value, in this case mean future conditions, are.\nFor the CVA2.0, we will use this same metric. Z-scores will be calculated across space and time on monthly timesteps for the decadal and eventually long-term predictions. Exposure values will be averaged within each month to produce a single exposure metric for each variable, and across time and space, using predicted species distributions to perform weighted averages so that only expsoure within the species ranges are considered. To calculate a total exposure across environmental variables, we will use relative variable importance from the ensemble models to perform weighted averages of the time series and maps across important covariates in the model.\nWe will also quantify changes in habitat suitability over time by projecting the ensemble species distribution model onto future climate conditions. The projections and the models themselves will allow us to examine the drivers of change, by looking at change in important envrionmental covariates.",
-    "crumbs": [
-      "Methods",
-      "Species Exposure"
-    ]
-  },
-  {
-    "objectID": "content/publishing.html",
-    "href": "content/publishing.html",
-    "title": "Publishing",
-    "section": "",
-    "text": "To get your Quarto webpage to show up with the url\nyou have a few steps."
-  },
-  {
-    "objectID": "content/publishing.html#turn-on-github-pages-for-your-repo",
-    "href": "content/publishing.html#turn-on-github-pages-for-your-repo",
-    "title": "Publishing",
-    "section": "Turn on GitHub Pages for your repo",
-    "text": "Turn on GitHub Pages for your repo\n\nTurn on GitHub Pages under Settings &gt; Pages . You will set pages to be made from the gh-pages branch and the root directory.\nTurn on GitHub Actions under Settings &gt; Actions &gt; General\n\nThe GitHub Action will automatically recreate your website when you push to GitHub after you do the initial gh-pages set-up"
-  },
-  {
-    "objectID": "content/publishing.html#do-your-first-publish-to-gh-pages",
-    "href": "content/publishing.html#do-your-first-publish-to-gh-pages",
-    "title": "Publishing",
-    "section": "Do your first publish to gh-pages",
-    "text": "Do your first publish to gh-pages\nThe first time you publish to gh-pages, you need to do so locally.\n\nOn your local computer, open a terminal window and cd to your repo directory. Here is what that cd command looks like for me. You command will look different because your local repo will be somewhere else on your computer.\n\ncd ~/Documents/GitHub/NOAA-quarto-simple\n\nPublish to the gh-pages. In the terminal type\n\nquarto publish gh-pages\nThis is going to render your webpage and then push the _site contents to the gh-pages branch."
-  },
-  {
-    "objectID": "content/publishing.html#dont-like-using-gh-pages",
-    "href": "content/publishing.html#dont-like-using-gh-pages",
-    "title": "Publishing",
-    "section": "Don’t like using gh-pages?",
-    "text": "Don’t like using gh-pages?\nIn some cases, you don’t want your website on the gh-pages branch. For example, if you are creating releases and you want the website pages archived in that release, then you won’t want your website pages on the gh-pages branch.\nHere are the changes you need to make if you to avoid gh-pages branch.\n\nAt the top of _quarto.yml add the following:\n\nproject: \n  type: website\n  output-dir: docs\n\nOn GitHub under Settings &gt; Pages set pages to be made from the main branch and the docs directory.\nMake sure docs is not listed in .gitignore\nPublish the site the first time locally using quarto publish from the terminal\nChange the GitHub Action because you can’t use quarto publish gh-pages. You’ll need to push to the main branch yourself (in the GitHub Action)\n\non:\n  push:\n    branches: main\n\nname: Render and Publish\n\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    env:\n      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}\n\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v2 \n        \n      - name: Set up R (needed for Rmd)\n        uses: r-lib/actions/setup-r@v2\n\n      - name: Install packages (needed for Rmd)\n        run: Rscript -e 'install.packages(c(\"rmarkdown\", \"knitr\", \"jsonlite\"))'\n\n      - name: Set up Quarto\n        uses: quarto-dev/quarto-actions/setup@v2\n        with:\n          # To install LaTeX to build PDF book \n          # tinytex: true \n          # uncomment below and fill to pin a version\n          # version: 0.9.600\n      \n      - name: Render Quarto Project\n        uses: quarto-dev/quarto-actions/render@v2\n        with:\n          to: html\n\n      - name: Set up Git\n        run: |\n          git config --local user.email \"actions@github.com\"\n          git config --local user.name \"GitHub Actions\"\n\n      - name: Commit all changes and push\n        run: |\n          git add -A && git commit -m 'Build site' || echo \"No changes to commit\"\n          git push origin || echo \"No changes to commit\""
-  },
-  {
     "objectID": "content/sensitivity.html",
     "href": "content/sensitivity.html",
     "title": "Sensitivity",
@@ -50,37 +11,25 @@
     ]
   },
   {
-    "objectID": "content/sdm-methods.html",
-    "href": "content/sdm-methods.html",
-    "title": "Species Distribution Modeling",
+    "objectID": "content/customizing.html",
+    "href": "content/customizing.html",
+    "title": "Customization",
     "section": "",
-    "text": "The first step in the CVA2.0 is the construction of species distribution models (SDMs). SDMs are statistical models that describe the relationships between species presence or abundance and environmental attributes or covariates. There are many different types of SDMs that use different data types and statistical methods. There is an abundance of scientific literature that both describe and compare different model types. We will provide a brief overview below and describe the methods selected for the CVA2.0.",
-    "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
-    ]
+    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
   },
   {
-    "objectID": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
-    "href": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
-    "title": "Species Distribution Modeling",
-    "section": "Presence/Absence vs Abundance Data",
-    "text": "Presence/Absence vs Abundance Data\nSpecies distribution models can be built with primarily two different kinds of species data - presence/absence or abundance data. Presence/absence data describes when a species was present or absent, usually in binary with 0s representing absences and 1s representing presences. SDMs built with presence/absence data predict how likely it is that a species will be found there - often called habitat suitability - but does not consider how many individuals will be present.\nAbundance data on the other hand uses count or species density estimates. SDMS built with abundance data can predict the abundance or density of species in a given area or at a given time, but must deal with often irregular data.\n\nIn the CVA2.0…\nFor the CVA2.0, we use presence/absence data from a variety of sources. Using presence/absence data will allow us to combine multiple datasets across fisheries independent and dependent surveys.",
-    "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
-    ]
+    "objectID": "content/customizing.html#quarto-documentation",
+    "href": "content/customizing.html#quarto-documentation",
+    "title": "Customization",
+    "section": "",
+    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
   },
   {
-    "objectID": "content/sdm-methods.html#statistical-modeling",
-    "href": "content/sdm-methods.html#statistical-modeling",
-    "title": "Species Distribution Modeling",
-    "section": "Statistical Modeling",
-    "text": "Statistical Modeling\nThere are many statistical models that we could have chosen for our SDMs. Options included generalized linear models (GLMs), generalized additive models (GAMs), uni (single) or multi-variate state-space models, machine learning methods, decision tree methods, and more! Many models have been used to describe species distributions along the Northeast Shelf. Each model type has pros and cons, and different models use different assumptions, statistical methods, etc to define habitat preferences.\nTo account for some of these differences between models, model ensembles can be generated by combining different model outputs together. Ensembles are usually built by averaging the outputs of different component models. Weighted averages can also be used to weight the averages based on model performance.\n\nIn the CVA2.0…\nWe use an ensemble modeling approach for the CVA2.0, following the work of the Alaska Fisheries Science Center (AFSC)’s Groundfish program, recently implimented an ensemble modeling framework for their Essential Fish Habitat work. Here, we use the following models:\n\nGeneralized Additive Model (GAM)\nMAXimum ENTropy (MAXENT)\nRandom Forest with Spatial Interpolation (RFSI)\nBoosted Regression Trees (BRTs)\nSpatio-temporal Generalized Linear Mixed Models (GLMMs) with sdmTMB\n\nAll of these models accept presence/absence data; can be made spatially and temporally explicit, which was important for our analysis; and combine more “traditional” SDM methods such as GAM and MAXENT included in the AFSC’s ensemble with machine learning/decision tree-based models such as RFSI and BRTs. sdmTMB models are similar to other SDM methods common in fisheries work like VAST and tinyVAST. In addition, these or similar models have been used on the Northeast Shelf in previously published works.\nWe will generate our ensemble model by performing a weighted average on our components’ outputs. Weights will be calculated using the same methods as the AFSC. However, we will use Area under the Curve (AUC) rather than root mean squared error (RMSE) because AUC is a better accuracy metric for presence/absence models than RMSE.",
-    "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
-    ]
+    "objectID": "content/customizing.html#examples",
+    "href": "content/customizing.html#examples",
+    "title": "Customization",
+    "section": "Examples",
+    "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
   },
   {
     "objectID": "content/rendering.html",
@@ -109,83 +58,6 @@
     "title": "Rendering",
     "section": "Step 3. Render within RStudio",
     "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”."
-  },
-  {
-    "objectID": "content/ensemble-sdms.html",
-    "href": "content/ensemble-sdms.html",
-    "title": "Building & Predicting Ensemble Species Distribution Models",
-    "section": "",
-    "text": "The first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps:\n\nData preparation\nBuilding & Predicting Species Distribution Models\nBuilding the Ensemble\nPredicting the Ensemble\n\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables.",
-    "crumbs": [
-      "R Package",
-      "Building & Predicting Ensemble Species Distribution Models"
-    ]
-  },
-  {
-    "objectID": "content/ensemble-sdms.html#overview",
-    "href": "content/ensemble-sdms.html#overview",
-    "title": "Building & Predicting Ensemble Species Distribution Models",
-    "section": "",
-    "text": "The first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps:\n\nData preparation\nBuilding & Predicting Species Distribution Models\nBuilding the Ensemble\nPredicting the Ensemble\n\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables.",
-    "crumbs": [
-      "R Package",
-      "Building & Predicting Ensemble Species Distribution Models"
-    ]
-  },
-  {
-    "objectID": "content/ensemble-sdms.html#data-preparation",
-    "href": "content/ensemble-sdms.html#data-preparation",
-    "title": "Building & Predicting Ensemble Species Distribution Models",
-    "section": "Data Preparation",
-    "text": "Data Preparation\n\nFisheries Data\nThe function standardize_data can be used to standardize provided csv files or pull NEFSC survey or observer data from NEFSC databases via ROracle. This can also be accomplished in R outside of the package, but standardize_data provides a single function to format data in a way that will be accepted by downstream functions. If you are pulling together data from a variety of sources, you will likely still need to manipulate data outside of this function to make sure that data are in a single csv file and that dates and times are in the correct format.\nTo pull NEFSC survey or observer data, a channel from the package dbutils must be provided:\n\nsurv &lt;- standardize_data(dataType = 'Surveys', channel = dbutils::connect_to_database(server=\"NEFSC_pw_oraprod\",uid=\"KGALLAGHER\"))\n\nTo standardize CSV data, a file path to the csv file, as well as column names for station IDs; position (longitude/latitude); date; the column corresponding to the presence/absence, or count of the species; and species name.\n\nneamap &lt;- standardize_data(dataType = 'CSV', csv = \"./Data/csvs/raw/NEAMAP_Tow_Catch_2025-08-14.csv\", csvCols = c('station', 'lon', 'lat', 'date', 'present_absent', 'SCI_NAME'))\n\n\n\nEnvironmental Data\n\n\nCreating Data Frames",
-    "crumbs": [
-      "R Package",
-      "Building & Predicting Ensemble Species Distribution Models"
-    ]
-  },
-  {
-    "objectID": "content/ensemble-sdms.html#building-species-distribution-models",
-    "href": "content/ensemble-sdms.html#building-species-distribution-models",
-    "title": "Building & Predicting Ensemble Species Distribution Models",
-    "section": "Building Species Distribution Models",
-    "text": "Building Species Distribution Models",
-    "crumbs": [
-      "R Package",
-      "Building & Predicting Ensemble Species Distribution Models"
-    ]
-  },
-  {
-    "objectID": "content/ensemble-sdms.html#building-ensemble",
-    "href": "content/ensemble-sdms.html#building-ensemble",
-    "title": "Building & Predicting Ensemble Species Distribution Models",
-    "section": "Building Ensemble",
-    "text": "Building Ensemble",
-    "crumbs": [
-      "R Package",
-      "Building & Predicting Ensemble Species Distribution Models"
-    ]
-  },
-  {
-    "objectID": "content/ensemble-sdms.html#predicting-the-ensemble-with-forecasts",
-    "href": "content/ensemble-sdms.html#predicting-the-ensemble-with-forecasts",
-    "title": "Building & Predicting Ensemble Species Distribution Models",
-    "section": "Predicting the Ensemble with Forecasts",
-    "text": "Predicting the Ensemble with Forecasts",
-    "crumbs": [
-      "R Package",
-      "Building & Predicting Ensemble Species Distribution Models"
-    ]
-  },
-  {
-    "objectID": "content/sensitivity-calculation.html",
-    "href": "content/sensitivity-calculation.html",
-    "title": "Calculating Sensitivity",
-    "section": "",
-    "text": "Overview\nSensitivity is calculated from MOM6 forecast data, and utilizes predicted species distributions, and the relative importance of covariates in the ensemble models.\nDetailed methods coming soon.",
-    "crumbs": [
-      "R Package",
-      "Calculating Sensitivity"
-    ]
   },
   {
     "objectID": "content/data.html",
@@ -221,25 +93,106 @@
     ]
   },
   {
-    "objectID": "content/customizing.html",
-    "href": "content/customizing.html",
-    "title": "Customization",
+    "objectID": "content/publishing.html",
+    "href": "content/publishing.html",
+    "title": "Publishing",
     "section": "",
-    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
+    "text": "To get your Quarto webpage to show up with the url\nyou have a few steps."
   },
   {
-    "objectID": "content/customizing.html#quarto-documentation",
-    "href": "content/customizing.html#quarto-documentation",
-    "title": "Customization",
-    "section": "",
-    "text": "Quarto allow many bells and whistles to make nice output. Read the documentation here Quarto documentation."
+    "objectID": "content/publishing.html#turn-on-github-pages-for-your-repo",
+    "href": "content/publishing.html#turn-on-github-pages-for-your-repo",
+    "title": "Publishing",
+    "section": "Turn on GitHub Pages for your repo",
+    "text": "Turn on GitHub Pages for your repo\n\nTurn on GitHub Pages under Settings &gt; Pages . You will set pages to be made from the gh-pages branch and the root directory.\nTurn on GitHub Actions under Settings &gt; Actions &gt; General\n\nThe GitHub Action will automatically recreate your website when you push to GitHub after you do the initial gh-pages set-up"
   },
   {
-    "objectID": "content/customizing.html#examples",
-    "href": "content/customizing.html#examples",
-    "title": "Customization",
-    "section": "Examples",
-    "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
+    "objectID": "content/publishing.html#do-your-first-publish-to-gh-pages",
+    "href": "content/publishing.html#do-your-first-publish-to-gh-pages",
+    "title": "Publishing",
+    "section": "Do your first publish to gh-pages",
+    "text": "Do your first publish to gh-pages\nThe first time you publish to gh-pages, you need to do so locally.\n\nOn your local computer, open a terminal window and cd to your repo directory. Here is what that cd command looks like for me. You command will look different because your local repo will be somewhere else on your computer.\n\ncd ~/Documents/GitHub/NOAA-quarto-simple\n\nPublish to the gh-pages. In the terminal type\n\nquarto publish gh-pages\nThis is going to render your webpage and then push the _site contents to the gh-pages branch."
+  },
+  {
+    "objectID": "content/publishing.html#dont-like-using-gh-pages",
+    "href": "content/publishing.html#dont-like-using-gh-pages",
+    "title": "Publishing",
+    "section": "Don’t like using gh-pages?",
+    "text": "Don’t like using gh-pages?\nIn some cases, you don’t want your website on the gh-pages branch. For example, if you are creating releases and you want the website pages archived in that release, then you won’t want your website pages on the gh-pages branch.\nHere are the changes you need to make if you to avoid gh-pages branch.\n\nAt the top of _quarto.yml add the following:\n\nproject: \n  type: website\n  output-dir: docs\n\nOn GitHub under Settings &gt; Pages set pages to be made from the main branch and the docs directory.\nMake sure docs is not listed in .gitignore\nPublish the site the first time locally using quarto publish from the terminal\nChange the GitHub Action because you can’t use quarto publish gh-pages. You’ll need to push to the main branch yourself (in the GitHub Action)\n\non:\n  push:\n    branches: main\n\nname: Render and Publish\n\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    env:\n      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}\n\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v2 \n        \n      - name: Set up R (needed for Rmd)\n        uses: r-lib/actions/setup-r@v2\n\n      - name: Install packages (needed for Rmd)\n        run: Rscript -e 'install.packages(c(\"rmarkdown\", \"knitr\", \"jsonlite\"))'\n\n      - name: Set up Quarto\n        uses: quarto-dev/quarto-actions/setup@v2\n        with:\n          # To install LaTeX to build PDF book \n          # tinytex: true \n          # uncomment below and fill to pin a version\n          # version: 0.9.600\n      \n      - name: Render Quarto Project\n        uses: quarto-dev/quarto-actions/render@v2\n        with:\n          to: html\n\n      - name: Set up Git\n        run: |\n          git config --local user.email \"actions@github.com\"\n          git config --local user.name \"GitHub Actions\"\n\n      - name: Commit all changes and push\n        run: |\n          git add -A && git commit -m 'Build site' || echo \"No changes to commit\"\n          git push origin || echo \"No changes to commit\""
+  },
+  {
+    "objectID": "content/vulnerability_directionality.html",
+    "href": "content/vulnerability_directionality.html",
+    "title": "Vulnerability & Directionality",
+    "section": "",
+    "text": "Vulnerability\nThe final vulnerability scores will be estimated using similar methods to Boyce et al 2022 and 2024 - a weighted average of sensitivity, exposure, and if used in this analysis, adaptive, scores based on variability across the study area. For attributes based on life history stages, such as sensitivity and/or adaptability, these will be uniform across the study region. These averages will occur across space.\nThe final product will be a map of species vulnerability across the study region. An overall vulnerability score may be generated based on habitat suitability.\n\n\nDirectionality\nIn the original CVA, in addition to ranking how sensitive species may be to future climate change, experts also estimated if species would be positively or negatively impacted by climate change. For the CVA2.0, we will use the species distribution models to estimate current area of preferred habitat. We will calculate change in habitat area over time from the decadal and long-term projections from MOM6. We may also calculate directionality via expert opinion and compare the two metrics.",
+    "crumbs": [
+      "Methods",
+      "Vulnerability & Directionality"
+    ]
+  },
+  {
+    "objectID": "content/install-setup.html",
+    "href": "content/install-setup.html",
+    "title": "Installation & Setup",
+    "section": "",
+    "text": "Installation instructions will come once the R package is finalized.",
+    "crumbs": [
+      "R Package",
+      "Installation & Setup"
+    ]
+  },
+  {
+    "objectID": "content/install-setup.html#installation",
+    "href": "content/install-setup.html#installation",
+    "title": "Installation & Setup",
+    "section": "",
+    "text": "Installation instructions will come once the R package is finalized.",
+    "crumbs": [
+      "R Package",
+      "Installation & Setup"
+    ]
+  },
+  {
+    "objectID": "content/install-setup.html#set-up",
+    "href": "content/install-setup.html#set-up",
+    "title": "Installation & Setup",
+    "section": "Set Up",
+    "text": "Set Up\n\nNecessary Files\n\nKey Files\nIf you wish to subset environmental covariates used in the models when making the data frames, you will need files that 1) list the species and their habitat and feeding guilds and 2) define the covariates to keep for each feeding and habitat guild, referred to as key files.\nThe species list should at least include a column with the species name and then columns for the associated feeding and habitat guild. While it is not necessary, this file is also a good place to list alternative species names (common names, scientific names, any variations on either) that can be used to make sure that observations of the same species are combined across data types.\n\nspp &lt;- read.csv('spp_list.csv')\nhead(spp)\n\n           Common.Name             COM_NAME           Scientific.Name\n1        Atlantic cod         ATLANTIC COD               Gadus morhua\n2     Atlantic croaker     ATLANTIC CROAKER   Micropogonias undulatus\n3     Atlantic halibut     ATLANTIC HALIBUT Hippoglossus hippoglossus\n4     Atlantic herring     ATLANTIC HERRING           Clupea harengus\n5    Atlantic mackerel    ATLANTIC MACKEREL          Scomber scombrus\n6 Atlantic sea scallop ATLANTIC SEA SCALLOP  Placopecten magellanicus\n     Alternate.Name                  SCI_NAME            SCI_NAME_ALT\n1      Cod Atlantic              GADUS MORHUA                        \n2  CROAKER ATLANTIC   MICROPOGONIAS UNDULATUS MICROPOGONIAS UNDULATES\n3  Halibut Atlantic HIPPOGLOSSUS HIPPOGLOSSUS        HALIBUT ATLANTIC\n4  Herring Atlantic           CLUPEA HARENGUS                        \n5 Mackerel Atlantic          SCOMBER SCOMBRUS       MACKEREL ATLANTIC\n6       Scallop Sea  PLACOPECTEN MAGELLANICUS PLACOPECTEN MAGELANICUS\n            SCI_NAME_ALT2 Managing.Body Feeding.Guild Habitat.Guild\n1                                 NEFMC     Piscivore    Groundfish\n2 MICROPOGONIUS UNDULATUS         ASMFC    Benthivore    Groundfish\n3                                 NEFMC     Piscivore    Groundfish\n4                                 NEFMC   Planktivore       Pelagic\n5                                 MAFMC   Planktivore      Pelagic \n6                                 NEFMC       Benthos       Benthic\n\n\nKey files should have seperate columns, for each feeding and habitat guild with names that match the different feeding and habitat guilds in the species list. The entries in each column should be a column name associated with that guild.\n\nfeed &lt;- read.csv('feeding_guilds.csv')\nhead(feed)\n\n  Planktivore Piscivore Benthos Benthivore Apex.Predator\n1      diazPP  smallZoo  intNPP     intNPP        intNPP\n2     smallPP mediumZoo     POC        POC              \n3    mediumPP  largeZoo                                 \n4     largePP                                           \n\n\n\nhab &lt;- read.csv('habitat_guilds.csv')\nhead(hab)\n\n  Groundfish   Benthic   Pelagic Pelagic.Migratory\n1    bottomT   bottomT  surfaceT          surfaceT\n2    bottomS   bottomS  surfaceS          surfaceS\n3   bottomO2  bottomO2 surfacepH         surfacepH\n4  bottomArg bottomArg       MLD               MLD\n\n\n\n\nFisheries Data\nThis workflow is designed to accept both fisheries independent and dependent data sources. Data standardization functions have the ability to pull NEFSC survey (using survdat) and observer data using ROracle, but can also accept CSV files. CSV files will need records of all efforts, regardless of if the target species is collected or not, to correctly document absences and have a time column that can be converted with the POSIXct function.\n\n\nEnvironmental Data\nFunctions are provided to pull hindcast or forecast data from MOM6 models via the CEFI portal. Other environmental data can be supplied, but should be on regular grids and are ideally netcdf files that can be read using raster if fisheries presence/absence rasters are desired on the same grid.\n\n\n\nDirectory\nThis R package is designed to work within a single working directory. To use the wrapper functions provided, the working directory should include a folder for each target species, a “Data” folder, and a ‘logs’ folder. Key files can be added to the working directory.\nThe Data subdirectory should have subfolders for csv and MOM6 (or other environmental) data, as well as an object containing a list of static environmental covariates (bathymetry, distance to shore, etc). The CSV folder should contain ‘raw’ and ‘standardized’ subfolders to hold the raw csv files from different data sources, and their standardized counterparts from the standardize_data function. The MOM6 data should contain the raw, averaged, standard deviation, and normalized outputs from the MOM6 functions.\nEach species folder should contain three subfolders: 1) input_rasters, 2) model_output, and 3) output_rasters. The input raster folder contains all the individual rasters from each data source and the combined raster. The output raster folder contains all the predicted rasters from each model and the final ensemble model. The model output folder contains the following folders: 1) models, 2) cvs, 3) preds, 4) eval_metrics, and 5) importance. Each of these folders will contain the output from their respective functions for each model component, and as necessary, the ensemble model.\n\n\n\nExample directory",
+    "crumbs": [
+      "R Package",
+      "Installation & Setup"
+    ]
+  },
+  {
+    "objectID": "content/acknowledgements.html",
+    "href": "content/acknowledgements.html",
+    "title": "Acknowledgments",
+    "section": "",
+    "text": "The CVA2.0 project is funded by the Inflation Reduction Act.\nThis project would not have been possible without the dedication and hardwork of countless individuals aboard the federal and state-run survey programs and the NOAA Observer program.\nMany thanks to the following state-run programs for contributing data:\n\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\nWe also thank all of the NOAA staff, members of the New England and Mid Atlantic Fisheries Management Councils, the Atlantic States Marine Fisheries Commission, and our academic partners for their feedback and assistance in developing the methods described here.\nThis website is based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
+    "crumbs": [
+      "Acknowledgements"
+    ]
+  },
+  {
+    "objectID": "content/methods-overview.html",
+    "href": "content/methods-overview.html",
+    "title": "Methods Overview",
+    "section": "",
+    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
+    "crumbs": [
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "content/methods-overview.html#overview",
+    "href": "content/methods-overview.html#overview",
+    "title": "Methods Overview",
+    "section": "",
+    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
+    "crumbs": [
+      "Methods"
+    ]
   },
   {
     "objectID": "index.html",
@@ -282,37 +235,25 @@
     ]
   },
   {
-    "objectID": "content/install-setup.html",
-    "href": "content/install-setup.html",
-    "title": "Installation & Setup",
+    "objectID": "content/rmarkdown.html",
+    "href": "content/rmarkdown.html",
+    "title": "R Markdown",
     "section": "",
-    "text": "Installation instructions will come once the R package is finalized.",
-    "crumbs": [
-      "R Package",
-      "Installation & Setup"
-    ]
+    "text": "You can include R Markdown files in your project."
   },
   {
-    "objectID": "content/install-setup.html#installation",
-    "href": "content/install-setup.html#installation",
-    "title": "Installation & Setup",
-    "section": "",
-    "text": "Installation instructions will come once the R package is finalized.",
-    "crumbs": [
-      "R Package",
-      "Installation & Setup"
-    ]
+    "objectID": "content/rmarkdown.html#r-markdown",
+    "href": "content/rmarkdown.html#r-markdown",
+    "title": "R Markdown",
+    "section": "R Markdown",
+    "text": "R Markdown\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\n\nsummary(cars)\n\n     speed           dist       \n Min.   : 4.0   Min.   :  2.00  \n 1st Qu.:12.0   1st Qu.: 26.00  \n Median :15.0   Median : 36.00  \n Mean   :15.4   Mean   : 42.98  \n 3rd Qu.:19.0   3rd Qu.: 56.00  \n Max.   :25.0   Max.   :120.00"
   },
   {
-    "objectID": "content/install-setup.html#set-up",
-    "href": "content/install-setup.html#set-up",
-    "title": "Installation & Setup",
-    "section": "Set Up",
-    "text": "Set Up\n\nNecessary Files\n\nKey Files\nIf you wish to subset environmental covariates used in the models when making the data frames, you will need files that 1) list the species and their habitat and feeding guilds and 2) define the covariates to keep for each feeding and habitat guild, referred to as key files.\nThe species list should at least include a column with the species name and then columns for the associated feeding and habitat guild. While it is not necessary, this file is also a good place to list alternative species names (common names, scientific names, any variations on either) that can be used to make sure that observations of the same species are combined across data types.\n\nspp &lt;- read.csv('spp_list.csv')\nhead(spp)\n\n           Common.Name             COM_NAME           Scientific.Name\n1        Atlantic cod         ATLANTIC COD               Gadus morhua\n2     Atlantic croaker     ATLANTIC CROAKER   Micropogonias undulatus\n3     Atlantic halibut     ATLANTIC HALIBUT Hippoglossus hippoglossus\n4     Atlantic herring     ATLANTIC HERRING           Clupea harengus\n5    Atlantic mackerel    ATLANTIC MACKEREL          Scomber scombrus\n6 Atlantic sea scallop ATLANTIC SEA SCALLOP  Placopecten magellanicus\n     Alternate.Name                  SCI_NAME            SCI_NAME_ALT\n1      Cod Atlantic              GADUS MORHUA                        \n2  CROAKER ATLANTIC   MICROPOGONIAS UNDULATUS MICROPOGONIAS UNDULATES\n3  Halibut Atlantic HIPPOGLOSSUS HIPPOGLOSSUS        HALIBUT ATLANTIC\n4  Herring Atlantic           CLUPEA HARENGUS                        \n5 Mackerel Atlantic          SCOMBER SCOMBRUS       MACKEREL ATLANTIC\n6       Scallop Sea  PLACOPECTEN MAGELLANICUS PLACOPECTEN MAGELANICUS\n            SCI_NAME_ALT2 Managing.Body Feeding.Guild Habitat.Guild\n1                                 NEFMC     Piscivore    Groundfish\n2 MICROPOGONIUS UNDULATUS         ASMFC    Benthivore    Groundfish\n3                                 NEFMC     Piscivore    Groundfish\n4                                 NEFMC   Planktivore       Pelagic\n5                                 MAFMC   Planktivore      Pelagic \n6                                 NEFMC       Benthos       Benthic\n\n\nKey files should have seperate columns, for each feeding and habitat guild with names that match the different feeding and habitat guilds in the species list. The entries in each column should be a column name associated with that guild.\n\nfeed &lt;- read.csv('feeding_guilds.csv')\nhead(feed)\n\n  Planktivore Piscivore Benthos Benthivore Apex.Predator\n1      diazPP  smallZoo  intNPP     intNPP        intNPP\n2     smallPP mediumZoo     POC        POC              \n3    mediumPP  largeZoo                                 \n4     largePP                                           \n\n\n\nhab &lt;- read.csv('habitat_guilds.csv')\nhead(hab)\n\n  Groundfish   Benthic   Pelagic Pelagic.Migratory\n1    bottomT   bottomT  surfaceT          surfaceT\n2    bottomS   bottomS  surfaceS          surfaceS\n3   bottomO2  bottomO2 surfacepH         surfacepH\n4  bottomArg bottomArg       MLD               MLD\n\n\n\n\nFisheries Data\nThis workflow is designed to accept both fisheries independent and dependent data sources. Data standardization functions have the ability to pull NEFSC survey (using survdat) and observer data using ROracle, but can also accept CSV files. CSV files will need records of all efforts, regardless of if the target species is collected or not, to correctly document absences and have a time column that can be converted with the POSIXct function.\n\n\nEnvironmental Data\nFunctions are provided to pull hindcast or forecast data from MOM6 models via the CEFI portal. Other environmental data can be supplied, but should be on regular grids and are ideally netcdf files that can be read using raster if fisheries presence/absence rasters are desired on the same grid.\n\n\n\nDirectory\nThis R package is designed to work within a single working directory. To use the wrapper functions provided, the working directory should include a folder for each target species, a “Data” folder, and a ‘logs’ folder. Key files can be added to the working directory.\nThe Data subdirectory should have subfolders for csv and MOM6 (or other environmental) data, as well as an object containing a list of static environmental covariates (bathymetry, distance to shore, etc). The CSV folder should contain ‘raw’ and ‘standardized’ subfolders to hold the raw csv files from different data sources, and their standardized counterparts from the standardize_data function. The MOM6 data should contain the raw, averaged, standard deviation, and normalized outputs from the MOM6 functions.\nEach species folder should contain three subfolders: 1) input_rasters, 2) model_output, and 3) output_rasters. The input raster folder contains all the individual rasters from each data source and the combined raster. The output raster folder contains all the predicted rasters from each model and the final ensemble model. The model output folder contains the following folders: 1) models, 2) cvs, 3) preds, 4) eval_metrics, and 5) importance. Each of these folders will contain the output from their respective functions for each model component, and as necessary, the ensemble model.\n\n\n\nExample directory",
-    "crumbs": [
-      "R Package",
-      "Installation & Setup"
-    ]
+    "objectID": "content/rmarkdown.html#including-plots",
+    "href": "content/rmarkdown.html#including-plots",
+    "title": "R Markdown",
+    "section": "Including Plots",
+    "text": "Including Plots\nYou can also embed plots, for example:\n\n\n\n\n\n\n\n\n\nNote that the echo = FALSE parameter was added to the code chunk to prevent printing of the R code that generated the plot."
   },
   {
     "objectID": "content/code.html",
@@ -336,6 +277,83 @@
     "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
   },
   {
+    "objectID": "content/exposure.html",
+    "href": "content/exposure.html",
+    "title": "Species Exposure",
+    "section": "",
+    "text": "Species exposure will be quantified using decadal and long term projections from the MOM6 model. In the CVA1.0, exposure to surface temperatures and changes in ocean acidification were quantified using a z-score. This quantity describes how many standard deviations over the present mean conditions a value, in this case mean future conditions, are.\nFor the CVA2.0, we will use this same metric. Z-scores will be calculated across space and time on monthly timesteps for the decadal and eventually long-term predictions. Exposure values will be averaged within each month to produce a single exposure metric for each variable, and across time and space, using predicted species distributions to perform weighted averages so that only expsoure within the species ranges are considered. To calculate a total exposure across environmental variables, we will use relative variable importance from the ensemble models to perform weighted averages of the time series and maps across important covariates in the model.\nWe will also quantify changes in habitat suitability over time by projecting the ensemble species distribution model onto future climate conditions. The projections and the models themselves will allow us to examine the drivers of change, by looking at change in important envrionmental covariates.",
+    "crumbs": [
+      "Methods",
+      "Species Exposure"
+    ]
+  },
+  {
+    "objectID": "content/ensemble-sdms.html",
+    "href": "content/ensemble-sdms.html",
+    "title": "Building & Predicting Ensemble Species Distribution Models",
+    "section": "",
+    "text": "The first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps:\n\nData preparation\nBuilding & Predicting Species Distribution Models\nBuilding the Ensemble\nPredicting the Ensemble\n\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables.",
+    "crumbs": [
+      "R Package",
+      "Building & Predicting Ensemble Species Distribution Models"
+    ]
+  },
+  {
+    "objectID": "content/ensemble-sdms.html#overview",
+    "href": "content/ensemble-sdms.html#overview",
+    "title": "Building & Predicting Ensemble Species Distribution Models",
+    "section": "",
+    "text": "The first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps:\n\nData preparation\nBuilding & Predicting Species Distribution Models\nBuilding the Ensemble\nPredicting the Ensemble\n\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables.",
+    "crumbs": [
+      "R Package",
+      "Building & Predicting Ensemble Species Distribution Models"
+    ]
+  },
+  {
+    "objectID": "content/ensemble-sdms.html#data-preparation",
+    "href": "content/ensemble-sdms.html#data-preparation",
+    "title": "Building & Predicting Ensemble Species Distribution Models",
+    "section": "Data Preparation",
+    "text": "Data Preparation\n\nFisheries Data\nThe function standardize_data can be used to standardize provided csv files or pull NEFSC survey or observer data from NEFSC databases via ROracle. This can also be accomplished in R outside of the package, but standardize_data provides a single function to format data in a way that will be accepted by downstream functions. If you are pulling together data from a variety of sources, you will likely still need to manipulate data outside of this function to make sure that data are in a single csv file and that dates and times are in the correct format.\nTo pull NEFSC survey or observer data, a channel from the package dbutils must be provided:\n\nsurv &lt;- standardize_data(dataType = 'Surveys', channel = dbutils::connect_to_database(server=\"NEFSC_pw_oraprod\",uid=\"KGALLAGHER\"))\n\nTo standardize CSV data, a file path to the csv file, as well as column names for station IDs; position (longitude/latitude); date; the column corresponding to the presence/absence, or count of the species; and species name.\n\nneamap &lt;- standardize_data(dataType = 'CSV', csv = \"./Data/csvs/raw/NEAMAP_Tow_Catch_2025-08-14.csv\", csvCols = c('station', 'lon', 'lat', 'date', 'present_absent', 'SCI_NAME'))\n\nThis function results in a dataframe being transformed from this:\n\n\n  X      ID TRIP_NUMBER.x HAUL_NUMBER.x AREA_FISHED SET_BEGIN_DATE SET_END_DATE\n1 1 44473.1         44473             1        3674      4/11/2010    4/11/2010\n2 2 44473.2         44473             2        3674      4/11/2010    4/11/2010\n3 3 44473.3         44473             3        3674      4/11/2010    4/11/2010\n4 4 44473.5         44473             5        3674      4/11/2010    4/11/2010\n5 5 44473.5         44473             5        3674      4/11/2010    4/11/2010\n6 6 44473.5         44473             5        3674      4/11/2010    4/11/2010\n  HAUL_BEGIN_DATE HAUL_END_DATE SET_BEGIN_LAT_CONV SET_BEGIN_LONG_CONV\n1       4/11/2010     4/11/2010             36.068             -74.921\n2       4/11/2010     4/11/2010             36.050             -74.909\n3       4/11/2010     4/11/2010             36.042             -74.942\n4       4/11/2010     4/11/2010             36.002             -74.975\n5       4/11/2010     4/11/2010             36.002             -74.975\n6       4/11/2010     4/11/2010             36.002             -74.975\n  HAUL_BEGIN_LAT_CONV HAUL_BEGIN_LONG_CONV HAUL_END_LAT_CONV HAUL_END_LONG_CONV\n1              36.063               74.921            36.065             74.936\n2              36.049               74.909            36.050             74.913\n3              36.044               74.941            36.044             74.945\n4              36.007               74.975            36.004             74.975\n5              36.007               74.975            36.004             74.975\n6              36.007               74.975            36.004             74.975\n  SET_DURATION HAUL_DURATION_HOURS GEAR_SOAK_HOURS  startDate VESSEL_ID\n1         0.07                0.90            3.08 2010-04-11    926397\n2         0.07                0.32            0.80 2010-04-11    926397\n3         0.03                0.18            0.48 2010-04-11    926397\n4         0.05                0.27            0.50 2010-04-11    926397\n5         0.05                0.27            0.50 2010-04-11    926397\n6         0.05                0.27            0.50 2010-04-11    926397\n  TRIP_NUMBER.y HAUL_NUMBER.y         SPECIES_NAME NUM_FISH SPECIES_ON_LIST\n1         44473             1             BLUEFISH      363               1\n2         44473             2             BLUEFISH       64               1\n3         44473             3             BLUEFISH        7               1\n4         44473             5             BLUEFISH       14               1\n5         44473             5 SHARK DOGFISH SMOOTH        3               0\n6         44473             5  SHARK DOGFISH SPINY        6               0\n\n\nTo this:\n\n\n  X       time month year   towID     lon    lat       date count\n1 1 2010-04-11     4 2010 44473.1 -74.921 36.068 2010-04-11   363\n2 2 2010-04-11     4 2010 44473.2 -74.909 36.050 2010-04-11    64\n3 3 2010-04-11     4 2010 44473.3 -74.942 36.042 2010-04-11     7\n4 4 2010-04-11     4 2010 44473.5 -74.975 36.002 2010-04-11    14\n5 5 2010-04-11     4 2010 44473.5 -74.975 36.002 2010-04-11     3\n6 6 2010-04-11     4 2010 44473.5 -74.975 36.002 2010-04-11     6\n                  name\n1             BLUEFISH\n2             BLUEFISH\n3             BLUEFISH\n4             BLUEFISH\n5 SHARK DOGFISH SMOOTH\n6  SHARK DOGFISH SPINY\n\n\n\n\nEnvironmental Data\n\n\nCreating Data Frames",
+    "crumbs": [
+      "R Package",
+      "Building & Predicting Ensemble Species Distribution Models"
+    ]
+  },
+  {
+    "objectID": "content/ensemble-sdms.html#building-species-distribution-models",
+    "href": "content/ensemble-sdms.html#building-species-distribution-models",
+    "title": "Building & Predicting Ensemble Species Distribution Models",
+    "section": "Building Species Distribution Models",
+    "text": "Building Species Distribution Models",
+    "crumbs": [
+      "R Package",
+      "Building & Predicting Ensemble Species Distribution Models"
+    ]
+  },
+  {
+    "objectID": "content/ensemble-sdms.html#building-ensemble",
+    "href": "content/ensemble-sdms.html#building-ensemble",
+    "title": "Building & Predicting Ensemble Species Distribution Models",
+    "section": "Building Ensemble",
+    "text": "Building Ensemble",
+    "crumbs": [
+      "R Package",
+      "Building & Predicting Ensemble Species Distribution Models"
+    ]
+  },
+  {
+    "objectID": "content/ensemble-sdms.html#predicting-the-ensemble-with-forecasts",
+    "href": "content/ensemble-sdms.html#predicting-the-ensemble-with-forecasts",
+    "title": "Building & Predicting Ensemble Species Distribution Models",
+    "section": "Predicting the Ensemble with Forecasts",
+    "text": "Predicting the Ensemble with Forecasts",
+    "crumbs": [
+      "R Package",
+      "Building & Predicting Ensemble Species Distribution Models"
+    ]
+  },
+  {
     "objectID": "content/add-content.html",
     "href": "content/add-content.html",
     "title": "Customize",
@@ -357,24 +375,47 @@
     "text": "Add your pages the project\n\nAdd the files to _quarto.yml"
   },
   {
-    "objectID": "content/vulnerability_directionality.html",
-    "href": "content/vulnerability_directionality.html",
-    "title": "Vulnerability & Directionality",
+    "objectID": "content/sensitivity-calculation.html",
+    "href": "content/sensitivity-calculation.html",
+    "title": "Calculating Sensitivity",
     "section": "",
-    "text": "Vulnerability\nThe final vulnerability scores will be estimated using similar methods to Boyce et al 2022 and 2024 - a weighted average of sensitivity, exposure, and if used in this analysis, adaptive, scores based on variability across the study area. For attributes based on life history stages, such as sensitivity and/or adaptability, these will be uniform across the study region. These averages will occur across space.\nThe final product will be a map of species vulnerability across the study region. An overall vulnerability score may be generated based on habitat suitability.\n\n\nDirectionality\nIn the original CVA, in addition to ranking how sensitive species may be to future climate change, experts also estimated if species would be positively or negatively impacted by climate change. For the CVA2.0, we will use the species distribution models to estimate current area of preferred habitat. We will calculate change in habitat area over time from the decadal and long-term projections from MOM6. We may also calculate directionality via expert opinion and compare the two metrics.",
+    "text": "Overview\nSensitivity is calculated from MOM6 forecast data, and utilizes predicted species distributions, and the relative importance of covariates in the ensemble models.\nDetailed methods coming soon.",
     "crumbs": [
-      "Methods",
-      "Vulnerability & Directionality"
+      "R Package",
+      "Calculating Sensitivity"
     ]
   },
   {
-    "objectID": "content/acknowledgements.html",
-    "href": "content/acknowledgements.html",
-    "title": "Acknowledgments",
+    "objectID": "content/sdm-methods.html",
+    "href": "content/sdm-methods.html",
+    "title": "Species Distribution Modeling",
     "section": "",
-    "text": "The CVA2.0 project is funded by the Inflation Reduction Act.\nThis project would not have been possible without the dedication and hardwork of countless individuals aboard the federal and state-run survey programs and the NOAA Observer program.\nMany thanks to the following state-run programs for contributing data:\n\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\nWe also thank all of the NOAA staff, members of the New England and Mid Atlantic Fisheries Management Councils, the Atlantic States Marine Fisheries Commission, and our academic partners for their feedback and assistance in developing the methods described here.\nThis website is based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
+    "text": "The first step in the CVA2.0 is the construction of species distribution models (SDMs). SDMs are statistical models that describe the relationships between species presence or abundance and environmental attributes or covariates. There are many different types of SDMs that use different data types and statistical methods. There is an abundance of scientific literature that both describe and compare different model types. We will provide a brief overview below and describe the methods selected for the CVA2.0.",
     "crumbs": [
-      "Acknowledgements"
+      "Methods",
+      "Species Distribution Modeling"
+    ]
+  },
+  {
+    "objectID": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
+    "href": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
+    "title": "Species Distribution Modeling",
+    "section": "Presence/Absence vs Abundance Data",
+    "text": "Presence/Absence vs Abundance Data\nSpecies distribution models can be built with primarily two different kinds of species data - presence/absence or abundance data. Presence/absence data describes when a species was present or absent, usually in binary with 0s representing absences and 1s representing presences. SDMs built with presence/absence data predict how likely it is that a species will be found there - often called habitat suitability - but does not consider how many individuals will be present.\nAbundance data on the other hand uses count or species density estimates. SDMS built with abundance data can predict the abundance or density of species in a given area or at a given time, but must deal with often irregular data.\n\nIn the CVA2.0…\nFor the CVA2.0, we use presence/absence data from a variety of sources. Using presence/absence data will allow us to combine multiple datasets across fisheries independent and dependent surveys.",
+    "crumbs": [
+      "Methods",
+      "Species Distribution Modeling"
+    ]
+  },
+  {
+    "objectID": "content/sdm-methods.html#statistical-modeling",
+    "href": "content/sdm-methods.html#statistical-modeling",
+    "title": "Species Distribution Modeling",
+    "section": "Statistical Modeling",
+    "text": "Statistical Modeling\nThere are many statistical models that we could have chosen for our SDMs. Options included generalized linear models (GLMs), generalized additive models (GAMs), uni (single) or multi-variate state-space models, machine learning methods, decision tree methods, and more! Many models have been used to describe species distributions along the Northeast Shelf. Each model type has pros and cons, and different models use different assumptions, statistical methods, etc to define habitat preferences.\nTo account for some of these differences between models, model ensembles can be generated by combining different model outputs together. Ensembles are usually built by averaging the outputs of different component models. Weighted averages can also be used to weight the averages based on model performance.\n\nIn the CVA2.0…\nWe use an ensemble modeling approach for the CVA2.0, following the work of the Alaska Fisheries Science Center (AFSC)’s Groundfish program, recently implimented an ensemble modeling framework for their Essential Fish Habitat work. Here, we use the following models:\n\nGeneralized Additive Model (GAM)\nMAXimum ENTropy (MAXENT)\nRandom Forest with Spatial Interpolation (RFSI)\nBoosted Regression Trees (BRTs)\nSpatio-temporal Generalized Linear Mixed Models (GLMMs) with sdmTMB\n\nAll of these models accept presence/absence data; can be made spatially and temporally explicit, which was important for our analysis; and combine more “traditional” SDM methods such as GAM and MAXENT included in the AFSC’s ensemble with machine learning/decision tree-based models such as RFSI and BRTs. sdmTMB models are similar to other SDM methods common in fisheries work like VAST and tinyVAST. In addition, these or similar models have been used on the Northeast Shelf in previously published works.\nWe will generate our ensemble model by performing a weighted average on our components’ outputs. Weights will be calculated using the same methods as the AFSC. However, we will use Area under the Curve (AUC) rather than root mean squared error (RMSE) because AUC is a better accuracy metric for presence/absence models than RMSE.",
+    "crumbs": [
+      "Methods",
+      "Species Distribution Modeling"
     ]
   },
   {
@@ -386,46 +427,5 @@
     "crumbs": [
       "R Package"
     ]
-  },
-  {
-    "objectID": "content/methods-overview.html",
-    "href": "content/methods-overview.html",
-    "title": "Methods Overview",
-    "section": "",
-    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
-    "crumbs": [
-      "Methods"
-    ]
-  },
-  {
-    "objectID": "content/methods-overview.html#overview",
-    "href": "content/methods-overview.html#overview",
-    "title": "Methods Overview",
-    "section": "",
-    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
-    "crumbs": [
-      "Methods"
-    ]
-  },
-  {
-    "objectID": "content/rmarkdown.html",
-    "href": "content/rmarkdown.html",
-    "title": "R Markdown",
-    "section": "",
-    "text": "You can include R Markdown files in your project."
-  },
-  {
-    "objectID": "content/rmarkdown.html#r-markdown",
-    "href": "content/rmarkdown.html#r-markdown",
-    "title": "R Markdown",
-    "section": "R Markdown",
-    "text": "R Markdown\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\n\nsummary(cars)\n\n     speed           dist       \n Min.   : 4.0   Min.   :  2.00  \n 1st Qu.:12.0   1st Qu.: 26.00  \n Median :15.0   Median : 36.00  \n Mean   :15.4   Mean   : 42.98  \n 3rd Qu.:19.0   3rd Qu.: 56.00  \n Max.   :25.0   Max.   :120.00"
-  },
-  {
-    "objectID": "content/rmarkdown.html#including-plots",
-    "href": "content/rmarkdown.html#including-plots",
-    "title": "R Markdown",
-    "section": "Including Plots",
-    "text": "Including Plots\nYou can also embed plots, for example:\n\n\n\n\n\n\n\n\n\nNote that the echo = FALSE parameter was added to the code chunk to prevent printing of the R code that generated the plot."
   }
 ]
