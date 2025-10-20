@@ -79,9 +79,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0d59ca884f2b610b219ea3d09d70ad34.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-b0ef4b2f5b7da6201b6f26c262ae4a79.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-0d59ca884f2b610b219ea3d09d70ad34.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-a6d3542b524ea76b8508e52f36d999f0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-a74ff6f363e47d6dd2fccaff2c7e62ef.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-a6d3542b524ea76b8508e52f36d999f0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -513,9 +513,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="directory" class="level3">
 <h3 class="anchored" data-anchor-id="directory">Directory</h3>
-<p>This R package is designed to work within a single working directory. To use the wrapper functions provided, the working directory should include a folder for each target species, a “Data” folder, and a ‘logs’ folder. Key files can be added to the working directory.</p>
-<p>The Data subdirectory should have subfolders for csv and MOM6 (or other environmental) data, as well as an object containing a list of static environmental covariates (bathymetry, distance to shore, etc). The CSV folder should contain ‘raw’ and ‘standardized’ subfolders to hold the raw csv files from different data sources, and their standardized counterparts from the standardize_data function. The MOM6 data should contain the raw, averaged, standard deviation, and normalized outputs from the MOM6 functions.</p>
-<p>Each species folder should contain three subfolders: 1) input_rasters, 2) model_output, and 3) output_rasters. The input raster folder contains all the individual rasters from each data source and the combined raster. The output raster folder contains all the predicted rasters from each model and the final ensemble model. The model output folder contains the following folders: 1) models, 2) cvs, 3) preds, 4) eval_metrics, and 5) importance. Each of these folders will contain the output from their respective functions for each model component, and as necessary, the ensemble model.</p>
+<p>This R package is designed to work within a single working directory. To use the wrapper functions provided, the working directory should include a folder for each target species, a <code>Data</code> folder, and a <code>logs</code> folder. Key files can be added to the working directory.</p>
+<p>The <code>Data</code> subdirectory should have subfolders for <code>csv</code> and <code>MOM6</code> (or other environmental) data, as well as an object containing a list of static environmental covariates (bathymetry, distance to shore, etc). The CSV folder should contain <code>raw</code> and <code>standardized</code> subfolders to hold the raw csv files from different data sources, and their standardized counterparts from the standardize_data function. The MOM6 data should contain the raw, averaged, standard deviation, and normalized outputs from the MOM6 functions.</p>
+<p>Each species folder should contain three subfolders: 1) <code>input_rasters</code>, 2) <code>model_output</code>, and 3) <code>output_rasters</code>. The <code>input_rasters</code> folder contains all the individual rasters from each data source and the combined raster. The <code>output_rasters</code> folder contains all the predicted rasters from each model and the final ensemble model. The <code>model_output</code> folder contains the following folders: 1) <code>models</code>, 2) <code>cvs</code>, 3) <code>preds</code>, 4) <code>eval_metrics</code>, and 5) <code>importance</code>. Each of these folders will contain the output from their respective functions for each model component, and as necessary, the ensemble model.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="file directory.png" class="img-fluid figure-img"></p>
