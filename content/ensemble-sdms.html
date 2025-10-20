@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -44,9 +79,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a6d3542b524ea76b8508e52f36d999f0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-a74ff6f363e47d6dd2fccaff2c7e62ef.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-a6d3542b524ea76b8508e52f36d999f0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-0d59ca884f2b610b219ea3d09d70ad34.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-b0ef4b2f5b7da6201b6f26c262ae4a79.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-0d59ca884f2b610b219ea3d09d70ad34.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -379,9 +414,9 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#environmental-data" id="toc-environmental-data" class="nav-link" data-scroll-target="#environmental-data">Environmental Data</a></li>
   <li><a href="#creating-data-frames" id="toc-creating-data-frames" class="nav-link" data-scroll-target="#creating-data-frames">Creating Data Frames</a></li>
   </ul></li>
-  <li><a href="#building-and-predicitng-species-distribution-models" id="toc-building-and-predicitng-species-distribution-models" class="nav-link" data-scroll-target="#building-and-predicitng-species-distribution-models">Building and Predicitng Species Distribution Models</a></li>
+  <li><a href="#building-species-distribution-models" id="toc-building-species-distribution-models" class="nav-link" data-scroll-target="#building-species-distribution-models">Building Species Distribution Models</a></li>
   <li><a href="#building-ensemble" id="toc-building-ensemble" class="nav-link" data-scroll-target="#building-ensemble">Building Ensemble</a></li>
-  <li><a href="#predicting-the-ensemble" id="toc-predicting-the-ensemble" class="nav-link" data-scroll-target="#predicting-the-ensemble">Predicting the Ensemble</a></li>
+  <li><a href="#predicting-the-ensemble-with-forecasts" id="toc-predicting-the-ensemble-with-forecasts" class="nav-link" data-scroll-target="#predicting-the-ensemble-with-forecasts">Predicting the Ensemble with Forecasts</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -424,6 +459,15 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="data-preparation">Data Preparation</h2>
 <section id="fisheries-data" class="level3">
 <h3 class="anchored" data-anchor-id="fisheries-data">Fisheries Data</h3>
+<p>The function <code>standardize_data</code> can be used to standardize provided csv files or pull NEFSC survey or observer data from NEFSC databases via ROracle. This can also be accomplished in R outside of the package, but <code>standardize_data</code> provides a single function to format data in a way that will be accepted by downstream functions. If you are pulling together data from a variety of sources, you will likely still need to manipulate data outside of this function to make sure that data are in a single csv file and that dates and times are in the correct format.</p>
+<p>To pull NEFSC survey or observer data, a channel from the package <code>dbutils</code> must be provided:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>surv <span class="ot">&lt;-</span> <span class="fu">standardize_data</span>(<span class="at">dataType =</span> <span class="st">'Surveys'</span>, <span class="at">channel =</span> dbutils<span class="sc">::</span><span class="fu">connect_to_database</span>(<span class="at">server=</span><span class="st">"NEFSC_pw_oraprod"</span>,<span class="at">uid=</span><span class="st">"KGALLAGHER"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To standardize CSV data, a file path to the csv file, as well as column names for station IDs; position (longitude/latitude); date; the column corresponding to the presence/absence, or count of the species; and species name.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>neamap <span class="ot">&lt;-</span> <span class="fu">standardize_data</span>(<span class="at">dataType =</span> <span class="st">'CSV'</span>, <span class="at">csv =</span> <span class="st">"./Data/csvs/raw/NEAMAP_Tow_Catch_2025-08-14.csv"</span>, <span class="at">csvCols =</span> <span class="fu">c</span>(<span class="st">'station'</span>, <span class="st">'lon'</span>, <span class="st">'lat'</span>, <span class="st">'date'</span>, <span class="st">'present_absent'</span>, <span class="st">'SCI_NAME'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="environmental-data" class="level3">
 <h3 class="anchored" data-anchor-id="environmental-data">Environmental Data</h3>
@@ -432,14 +476,14 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="creating-data-frames">Creating Data Frames</h3>
 </section>
 </section>
-<section id="building-and-predicitng-species-distribution-models" class="level2">
-<h2 class="anchored" data-anchor-id="building-and-predicitng-species-distribution-models">Building and Predicitng Species Distribution Models</h2>
+<section id="building-species-distribution-models" class="level2">
+<h2 class="anchored" data-anchor-id="building-species-distribution-models">Building Species Distribution Models</h2>
 </section>
 <section id="building-ensemble" class="level2">
 <h2 class="anchored" data-anchor-id="building-ensemble">Building Ensemble</h2>
 </section>
-<section id="predicting-the-ensemble" class="level2">
-<h2 class="anchored" data-anchor-id="predicting-the-ensemble">Predicting the Ensemble</h2>
+<section id="predicting-the-ensemble-with-forecasts" class="level2">
+<h2 class="anchored" data-anchor-id="predicting-the-ensemble-with-forecasts">Predicting the Ensemble with Forecasts</h2>
 
 
 </section>
