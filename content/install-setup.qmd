@@ -14,7 +14,7 @@ The species list should at least include a column with the species name and then
 
 ```r
 spp <- read.csv('spp_list.csv')
-head(spp)
+str(spp)
 ```
 
 Key files should have seperate columns, for each feeding and habitat guild with names that match the different feeding and habitat guilds in the species list. The entries in each column should be a column name associated with that guild.
