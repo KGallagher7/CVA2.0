@@ -115,7 +115,7 @@
     "href": "content/ensemble-sdms.html",
     "title": "Building & Predicting Ensemble Species Distribution Models",
     "section": "",
-    "text": "The first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps:\n\nData preparation\nBuilding & Predicting Species Distribution Models\nBuilding the Ensemble\nPredicting the Ensemble\n\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species.",
+    "text": "The first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps:\n\nData preparation\nBuilding & Predicting Species Distribution Models\nBuilding & Predicting the Ensemble\n\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species.",
     "crumbs": [
       "R Package",
       "Building & Predicting Ensemble Species Distribution Models"
@@ -126,7 +126,7 @@
     "href": "content/ensemble-sdms.html#overview",
     "title": "Building & Predicting Ensemble Species Distribution Models",
     "section": "",
-    "text": "The first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps:\n\nData preparation\nBuilding & Predicting Species Distribution Models\nBuilding the Ensemble\nPredicting the Ensemble\n\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species.",
+    "text": "The first step in the CVA2.0 workflow is to build the species distribution models. These will be the basis of the exposure, directionality, and possibly additional indicators from the CVA. These are what allow the calculations to be spatially explicit and account for species habitat use.\nWithin this workflow, there are three steps:\n\nData preparation\nBuilding & Predicting Species Distribution Models\nBuilding & Predicting the Ensemble\n\nThe functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species.",
     "crumbs": [
       "R Package",
       "Building & Predicting Ensemble Species Distribution Models"
