@@ -188,6 +188,49 @@ dfs <- future_pmap(list(..1 = args$name, ..2 = args$skip, ..3 = args$mMin, ..4 =
 plan(sequential)
 ```
 ## Building Species Distribution Models 
+Now that the data frames have been constructed and cleaned, you can build the species distribution models. A series of functions are provided to build, perform cross-validation on, evaluate, and extract variable importance from the models for each of the component models for the ensemble: Generalized Additive Model (GAM), MAXENT, Random Forest (RF), Boosted Regression Trees (BRT), sdmTMB. 
+
+The first step is building the base model: 
+```{r}
+#| eval: false
+ mod <- make_sdm(se = dfC, pa_col = 'value', xy_col = c('x', 'y'), month_col = 'month', year_col = 'year', model = model)
+```
+`model` is one of the five component models: `gam`, `maxent`, `rf`, `brt`, `sdmtmb` or the ensemble (`ens`). This function first creates the base model and simplifies it as necessary. 
+
+The `sdm_cv` function performs a cross-validation of the model with k = 5. 
+```{r}
+#| eval: false
+ cv <- sdm_cv(mod = mod, se = dfC, pa_col = 'value', xy_col = c('x', 'y'), month_col = 'month', year_col = 'year', model = model)
+```
+
+The predicted values are extracted from the cross-validation output to help build the ensemble and calculate the evaluation metric using the `sdm_preds` function.
+```{r}
+#| eval: false
+ preds <- sdm_preds(cv = cv, model = model)
+```
+
+The model is then evaluated using the predicted values. This function can calculate a Root Mean Squared Error (RMSE) or Area under the Curve (AUC). 
+```{r}
+#| eval: false
+ ev <- sdm_eval(preds = preds, metric = 'auc', model = model)
+```
+
+Variable importance for each of the ensemble model components can be extracted from the models: 
+```{r}
+#| eval: false
+imp <- sdm_importance(mod = mod, se = dfC, pa_col = 'value', xy_col = c('x', 'y'), month_col = 'month', year_col = 'year', model = model)
+```
+*It is important to note that variable importance from the different models should not be compared without normalizing the values between 0 and 1 as they are all generated using different methods.*
+
+The wrapper function `makeMods` combines the above 5 functions, and includes skip and logging functionality. Like previous wrapper functions, it is easy to launch this in parallel with the `furrr` functionality. 
+```{r}
+plan(multisession, workers = 5)
+checks <- future_pmap(list(..1 = args$spp, ..2 = args$model, ..3 = args$skip), ~ makeMods(spp = ..1, model = ..2, skip = ..3), .progress = T,  .options = furrr_options(seed = 2025))
+plan(sequential)
+```
+Where args is the combination of target species and models to be run, along with the flag to enable the skip functionality. 
+
+Here, it is important to note that the different models have different memory demands. The GAM, RF, and MAXENT models are the least computationally expensive, followed by BRT. The sdmTMB is the most expensive. Run times will depend on the dataset size, computational resources, and your R environment. Therefore, it is recommended that you generate sdmTMB models in sequence, but all other models can be generated in parallel. 
 
 ## Building Ensemble 
 
