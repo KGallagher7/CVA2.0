@@ -129,7 +129,24 @@ df <- merge_spp_env(rastStack = combinedRasts, envData = norm, addStatic = TRUE,
 #combinedRasts is the combined rasterStack for the species created by the function 'merge_rasts'
 #staticData is the path to the RData object containing a list of static environmental rasters 
 ```
-The resulting data frame 
+The resulting data frame will have the following structure: 
+```{r}
+#| echo: false
+load('pa_env_example.RData')
+str(df2)
+```
+Additional functions are provided to clean/simplify the data frame: `match_guilds`, `clean_data`, and `remove_corr`. Of these, only `clean_data` is required, `remove_corr` is recommended, and `match_guilds` is optional.
+
+These could be run in any order, with the exception of if the user is utlizing the `match_guilds` function. This should be run prior to `remove_corr` if using. 
+
+Here, we will run `match_guilds` first. This function uses the habitat and feeding guilds keys to subset the columns in the data frame to only those relevant to the target species. For example, you may have environmental covariates from the ocean surface and sea floor, like surface and bottom temperatures. Species more associated with the sea floor, such as groundfish or flatfish, are more likely to be impacted by bottom temperatures than surface temperatures they may rarely interact with. 
+
+Next we will run `clean_data` to turn the data into "true" binary data. The fisheries rasters, and resulting data frames, had values ranging from 0 to 2, representing no effort (0), effort but no catch (1), and catch (2). For presence/absence modeling, the only accepted values are 0 and 1, and these models do not need to know where there was an absence of effort (while is generally good for users to know to understand the scope of the fishing effort). The function `clean_data` will remove all existing 0 values, and remap the presence and absence data to 1s and 0s. 
+```{r}
+#| eval: false
+dfB <- clean_data(df, pa_col = 'value')
+```
+Finally, we will run `remove_corr` to remove any correlated environmental covariates before building the model. Position and time (month & year) are retained. 
 
 ## Building Species Distribution Models 
 
