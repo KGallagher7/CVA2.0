@@ -667,6 +667,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p><em>Note that these datasets are random subsets of the complete dataset so the number of presences/absences is not equal in each. These histograms are only to illustrate the shift in range from 0-2 to 0-1.</em></p>
 <p>Finally, we will run <code>remove_corr</code> to remove any correlated environmental covariates before building the model. Position and time (month &amp; year) are retained.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dfC <span class="ot">&lt;-</span> <span class="fu">remove_corr</span>(dfB, <span class="at">pa_col =</span> <span class="st">'value'</span>, <span class="at">xy_col =</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'y'</span>), <span class="at">month_col =</span> <span class="st">'month'</span>, <span class="at">year_col =</span> <span class="st">'year'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
