@@ -415,8 +415,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#creating-data-frames" id="toc-creating-data-frames" class="nav-link" data-scroll-target="#creating-data-frames">Creating Data Frames</a></li>
   </ul></li>
   <li><a href="#building-species-distribution-models" id="toc-building-species-distribution-models" class="nav-link" data-scroll-target="#building-species-distribution-models">Building Species Distribution Models</a></li>
-  <li><a href="#building-ensemble" id="toc-building-ensemble" class="nav-link" data-scroll-target="#building-ensemble">Building Ensemble</a></li>
-  <li><a href="#predicting-the-ensemble-with-forecasts" id="toc-predicting-the-ensemble-with-forecasts" class="nav-link" data-scroll-target="#predicting-the-ensemble-with-forecasts">Predicting the Ensemble with Forecasts</a></li>
+  <li><a href="#building-predicting-ensemble" id="toc-building-predicting-ensemble" class="nav-link" data-scroll-target="#building-predicting-ensemble">Building &amp; Predicting Ensemble</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -729,13 +728,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>checks <span class="ot">&lt;-</span> <span class="fu">future_pmap</span>(<span class="fu">list</span>(<span class="at">..1 =</span> args<span class="sc">$</span>spp, <span class="at">..2 =</span> args<span class="sc">$</span>model, <span class="at">..3 =</span> args<span class="sc">$</span>skip), <span class="sc">~</span> <span class="fu">predictMods</span>(<span class="at">spp =</span> ..<span class="dv">1</span>, <span class="at">model =</span> ..<span class="dv">2</span>, <span class="at">skip =</span> ..<span class="dv">3</span>), <span class="at">.progress =</span> T,  <span class="at">.options =</span> <span class="fu">furrr_options</span>(<span class="at">seed =</span> <span class="dv">2025</span>))</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(sequential)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>It is important to note that for whatever reason, the MAXENT model cannot be predicted in parallel, so it must be run in sequence. However, predicting the models is much quicker and less memory-intensive than making the models.</p>
+<p>It is important to note that for whatever reason, the MAXENT model cannot be predicted in parallel, so it must be run in sequence. However, predicting the models is much quicker and less memory-intensive than making the models themselves.</p>
 </section>
-<section id="building-ensemble" class="level2">
-<h2 class="anchored" data-anchor-id="building-ensemble">Building Ensemble</h2>
-</section>
-<section id="predicting-the-ensemble-with-forecasts" class="level2">
-<h2 class="anchored" data-anchor-id="predicting-the-ensemble-with-forecasts">Predicting the Ensemble with Forecasts</h2>
+<section id="building-predicting-ensemble" class="level2">
+<h2 class="anchored" data-anchor-id="building-predicting-ensemble">Building &amp; Predicting Ensemble</h2>
+<p>The ensemble is built using the framework from the EFHSDM package. Here it is included in the <code>make_sdm</code> function:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>ens <span class="ot">&lt;-</span> <span class="fu">make_sdm</span>(<span class="at">model =</span> <span class="st">'ens'</span>, <span class="at">ensembleWeights =</span> weights, <span class="at">ensemblePreds =</span> pds)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Where the <code>weights</code> is a vector of model weights produced either by the EFHSDM function <code>MakeEnsemble</code> if using RMSE or another method and <code>pds</code> is a list of prediction outputs from the cross-validation of the models. The weights vector and predictions list must be in the same order to correctly assign weights to predictions.</p>
+<p>To predict the ensemble model, the <code>make_predictions</code> function is used:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>abund <span class="ot">&lt;-</span> <span class="fu">make_predictions</span>(<span class="at">model =</span> <span class="st">'ens'</span>, <span class="at">rasts =</span> abds, <span class="at">weights =</span> weights, <span class="at">staticData =</span> <span class="cn">NULL</span>, <span class="at">mask =</span> F, <span class="at">bathy_nm =</span> <span class="cn">NULL</span>, <span class="at">bathy_max =</span> <span class="cn">NULL</span>, <span class="at">se =</span> <span class="cn">NULL</span>, <span class="at">month_col =</span> <span class="cn">NULL</span>, <span class="at">year_col =</span> <span class="cn">NULL</span>, <span class="at">xy_col =</span> <span class="cn">NULL</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Where <code>abds</code> is a list of predicted rasters from each of the component models. Similar to building the model, the order of the rasters must match the order of the models in the <code>weights</code> vector so that the weights can be assigned appropriately. To predict the ensemble, which is just a weighted average of the component model predictions, only a list of predictor rasters and the model weights are required, so many of the other arguments are set to NULL.</p>
+<p>The wrapper function <code>makeEns</code> is provided to combine both the creation and prediction of the ensemble. Creating and predicting the ensemble is fast and quick since it is just performing a weighted average of the existing data, so no skip functionality is provided, but logging functionality remains. This can be run in parallel if desired.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">5</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>checks <span class="ot">&lt;-</span> <span class="fu">future_pmap</span>(<span class="fu">list</span>(<span class="at">..1 =</span> spp.list<span class="sc">$</span>Name), <span class="sc">~</span> <span class="fu">makeEns</span>(<span class="at">spp =</span> ..<span class="dv">1</span>), <span class="at">.progress =</span> T,  <span class="at">.options =</span> <span class="fu">furrr_options</span>(<span class="at">seed =</span> <span class="dv">2025</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(sequential)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
 </section>
