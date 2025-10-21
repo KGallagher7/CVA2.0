@@ -156,8 +156,18 @@ str(dfG2)
 Next we will run `clean_data` to turn the data into "true" binary data. The fisheries rasters, and resulting data frames, had values ranging from 0 to 2, representing no effort (0), effort but no catch (1), and catch (2). For presence/absence modeling, the only accepted values are 0 and 1, and these models do not need to know where there was an absence of effort (while is generally good for users to know to understand the scope of the fishing effort). The function `clean_data` will remove all existing 0 values, and remap the presence and absence data to 1s and 0s. 
 ```{r}
 #| eval: false
-dfB <- clean_data(df, pa_col = 'value')
+dfB <- clean_data(dfG, pa_col = 'value')
 ```
+The histograms below illustrate how the data have been transformed. 
+```{r}
+#| echo: false 
+load('pa_guild_example.RData')
+load('pa_binary_example.RData')
+par(mfrow=c(1,2))
+hist(dfG2$value, main = 'Before clean_data')
+hist(dfB2$value, main = 'After clean_data')
+```
+
 Finally, we will run `remove_corr` to remove any correlated environmental covariates before building the model. Position and time (month & year) are retained. 
 
 ## Building Species Distribution Models 
