@@ -135,11 +135,23 @@ The resulting data frame will have the following structure:
 load('pa_env_example.RData')
 str(df2)
 ```
+The 'x', 'y', 'variable', 'value', 'month', 'year' columns will always be present. 'variable' is equal to the name of the rasterStack layers, which should be in MM.YYYY format to pull month and year. 'value' is the value in the fisheries raster grid cell and should be equal to 0, 1, or 2.  
+
 Additional functions are provided to clean/simplify the data frame: `match_guilds`, `clean_data`, and `remove_corr`. Of these, only `clean_data` is required, `remove_corr` is recommended, and `match_guilds` is optional.
 
 These could be run in any order, with the exception of if the user is utlizing the `match_guilds` function. This should be run prior to `remove_corr` if using. 
 
 Here, we will run `match_guilds` first. This function uses the habitat and feeding guilds keys to subset the columns in the data frame to only those relevant to the target species. For example, you may have environmental covariates from the ocean surface and sea floor, like surface and bottom temperatures. Species more associated with the sea floor, such as groundfish or flatfish, are more likely to be impacted by bottom temperatures than surface temperatures they may rarely interact with. 
+```{r}
+#| eval: false
+dfG <- match_guilds(spp_env = df, spp = c("PARALICHTHYS DENTATUS"), spp_col = 'SCI_NAME', spp_guild = 'spp_list.csv', feeding_key = 'feeding_guilds.csv', feeding_col = 'Feeding.Guild', habitat_key = 'habitat_guilds.csv',  habitat_col = 'Habitat.Guild', static_vars = c('x', 'y', 'month', 'year', 'bathy', 'rugosity', 'dist2coast'), pa_col = 'value')
+```
+For example, based on the habitat and feeding keys provided, the data frame for Summer flounder will be subset to the following variables:
+```{r}
+#| echo: false
+load('pa_guild_example.RData')
+str(dfG2)
+```
 
 Next we will run `clean_data` to turn the data into "true" binary data. The fisheries rasters, and resulting data frames, had values ranging from 0 to 2, representing no effort (0), effort but no catch (1), and catch (2). For presence/absence modeling, the only accepted values are 0 and 1, and these models do not need to know where there was an absence of effort (while is generally good for users to know to understand the scope of the fishing effort). The function `clean_data` will remove all existing 0 values, and remap the presence and absence data to 1s and 0s. 
 ```{r}
