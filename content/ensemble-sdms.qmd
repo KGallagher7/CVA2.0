@@ -169,7 +169,23 @@ hist(dfB2$value, main = 'After clean_data')
 ```
 
 Finally, we will run `remove_corr` to remove any correlated environmental covariates before building the model. Position and time (month & year) are retained. 
+```{r}
+#| eval: false
+dfC <- remove_corr(dfB, pa_col = 'value', xy_col = c('x', 'y'), month_col = 'month', year_col = 'year')
+```
+If covariates are removed due to correlation with other covariates, the corresponding column names will be printed in the console or the log file. 
 
+The wrapper function `makeDF` provides skip and log file functionalities. This function also makes sure that the combined fisheries raster is loaded and the layers have the appropriate names. Like other wrapper functions, this function also saves the results from each call in the appropriate species-specific folder. 
+
+This function is generally not very computationally expensive (takes <10 minutes), unless you are matching a lot of environmental covariates. If you need to perform this operation for a long list of species, the wrapper function is designed to be run in parallel. 
+```{r}
+#| eval: false
+load('./Data/MOM6/norm_MOM6_092025.RData') #normalized environmental data needs to be loaded prior to launching the code in parallel
+options(future.globals.maxSize = Inf) #remove check for sharing large files so that norm is shared across workers since this is a relatively low memory intensive job otherwise
+plan(multisession, workers = 5)
+dfs <- future_pmap(list(..1 = args$name, ..2 = args$skip, ..3 = args$mMin, ..4 = args$mMax, ..5 = args$yMin, ..6 = args$yMax), ~ makeDF(name = ..1, skip = ..2, mMin = ..3, mMax = ..4, yMin = ..5, yMax = ..6), .progress = T,  .options = furrr_options(seed = 2025))
+plan(sequential)
+```
 ## Building Species Distribution Models 
 
 ## Building Ensemble 
