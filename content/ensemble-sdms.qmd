@@ -176,7 +176,7 @@ dfC <- remove_corr(dfB, pa_col = 'value', xy_col = c('x', 'y'), month_col = 'mon
 ```
 If covariates are removed due to correlation with other covariates, the corresponding column names will be printed in the console or the log file. 
 
-The wrapper function `makeDF` provides skip and log file functionalities. This function also makes sure that the combined fisheries raster is loaded and the layers have the appropriate names. Like other wrapper functions, this function also saves the results from each call in the appropriate species-specific folder. 
+The wrapper function `makeDF` includes all of the functions related to making and cleaning the data frame and provides skip and log file functionalities. This function also makes sure that the combined fisheries raster is loaded and the layers have the appropriate names. Like other wrapper functions, this function also saves the results from each call in the appropriate species-specific folder. 
 
 This function is generally not very computationally expensive (takes <10 minutes), unless you are matching a lot of environmental covariates. If you need to perform this operation for a long list of species, the wrapper function is designed to be run in parallel. 
 ```{r}
