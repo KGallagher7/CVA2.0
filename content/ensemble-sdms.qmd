@@ -71,6 +71,49 @@ combinedRasts <- merge_rasts(rasts)
 ```
 
 ### Environmental Data
+The example below illustrates how to grab and normalize monthly data from the Modular Ocean Model (MOM6) from the Northeast Shelf. The `pull_hind` and `pull_forecast` functions are designed to work with any MOM6 output. Other environmental data can be used as well, and normalized using the same functions, as long as the raw data is in the expected format. 
+
+The first step in getting the environmental data is pulling and spatially subsetting the raw MOM6 data. The functions provided default to pulling the entire time series of the specified model release. Functionality to subset the data by time may be added at a later date, as the length of the timeseries impacts how long the functions take the spatially subset the data. 
+
+The function `pull_hind` is designed to pull data from the hindcast simulations: 
+```{r}
+#| eval: false
+ r <- pull_hind(jsonURL = "https://psl.noaa.gov/cefi_portal/data_index/cefi_data_indexing.Projects.CEFI.regional_mom6.cefi_portal.northwest_atlantic.full_domain.hindcast.json", reqVars = 'Bottom Temperature', shortNames = 'bottomT', release = 'r20230520', gt = 'regrid', of = 'monthly', bounds = c(-78,-65, 35,45), static = "http://psl.noaa.gov/thredds/dodsC/Projects/CEFI/regional_mom6/cefi_portal/northwest_atlantic/full_domain/hindcast/monthly/raw/r20230520/ocean_static.nc")
+```
+
+The function 'pull_forecast' pulls data from the specified forecast similations: 
+```{r}
+#| eval: false
+ r <- pull_forecast(jsonURL = "https://psl.noaa.gov/cefi_portal/data_index/cefi_data_indexing.Projects.CEFI.regional_mom6.cefi_portal.northwest_atlantic.full_domain.decadal_forecast.json", reqVars = 'Sea Water Potential Temperature at Sea Floor', shortNames = 'bottomT', release = 'r20250925', init = 'i202501', ens = 1, gt = 'regrid', of = 'monthly', bounds = c(-78,-65, 35,45), static = "http://psl.noaa.gov/thredds/dodsC/Projects/CEFI/regional_mom6/cefi_portal/northwest_atlantic/full_domain/hindcast/monthly/raw/r20230520/ocean_static.nc")
+```
+Note that `pull_forecast` has the additional arguments 'init' and 'ens', which represent the initalization date and the ensemble member desired. As of October 2025, the seasonal and decadal forecasts from MOM6 include 10 ensembles with slightly different initial forcing parameters, and as a result can be averaged across ensembles if desired, whereas the long-term forecasts have ensembles that represent different projected CO2 and climate conditions.
+
+For either function, the JSON file link can be found on the [CEFI portal](https://psl.noaa.gov/cefi_portal/) in the 'Data Access' tab. The arguments `reqVars`, `release`, `gt`, `of`, `init`, and `ens` help specify which variables to pull, at what output frequency, and what grid to pull (raw vs regrid; the latter is recommended). These need to match their corresponding columns in the JSON file **exactly**. See the documentation for these functions for more details. 
+
+Since spatially subsetting the data can take some time (upwards of 30 minutes per variable), if you are pulling a lot of environmental variables, it is recommended to run this command in parallel. Generally, this is not a memory-intensive activity; it just takes some time depending on the length of the timeseries (AKA the number of layers in the resulting rasterBrick). Below is an example of running the `pull_hind` function in parallel with `DoParallel`:
+```{r}
+#| eval: false
+cluster <- makeCluster(10, type='PSOCK')
+registerDoParallel(cluster)
+raw <- foreach(x = 1:nrow(var.list), .packages = c("ncdf4", 'raster', 'jsonlite')) %dopar% {
+  r <- pull_hind(varURL = "https://psl.noaa.gov/cefi_portal/data_index/cefi_data_indexing.Projects.CEFI.regional_mom6.cefi_portal.northwest_atlantic.full_domain.hindcast.json", reqVars = var.list$Long.Name[x], shortNames = var.list$Short.Name[x], release = 'r20230520')
+
+  raw[[x]] <- r
+}
+stopCluster(cluster)
+names(raw) <- var.list$Short.Name
+```
+Where `var.list` is a two column data frame with the full names of the desired variable (`Long.Name`) and an abbreviated variable name (`Short.Name`) which will eventually become the column name in the final dataframe. 
+
+Once the raw hindcast or forecast data is pulled, the workflow moving forward is the same: mean and standard deviations are calculated monthly to calculate z-scores for the complete timeseries. It is recommended to normalize the data in some way prior to building the models to help with interpretation since all the environmental data will likely have different units. We chose to normalize using a z-score to be consistent with exposure calculation methods. 
+```{r}
+#| eval: false
+# r is a list of rasterStacks of raw bottom temperature, bottom salinity, and bottom oxygen data 
+a <- avg_env(r) #calculate monthly average
+s <- sd_env(r) #calculate monthly standard deviation
+n <- norm_env(rawList = r, avgList = a, sdList = s, shortNames = c('bottomT', 'bottomS', 'bottomO2')) #calculate z-score for every time step
+``` 
+You could also perform each of these steps in parallel following the example above. However, it is not really necessary since these steps are faster than the initial data pull. That being said, it is important to note that the `avg_env`, `sd_env`, and `norm_env` functions expect lists of rasterStacks (which would be the outcome of running `pull_hind` or `pull_forecast` in parallel as illustrated above). 
 
 ### Creating Data Frames 
 
