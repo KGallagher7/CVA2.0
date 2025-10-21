@@ -655,7 +655,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Next we will run <code>clean_data</code> to turn the data into “true” binary data. The fisheries rasters, and resulting data frames, had values ranging from 0 to 2, representing no effort (0), effort but no catch (1), and catch (2). For presence/absence modeling, the only accepted values are 0 and 1, and these models do not need to know where there was an absence of effort (while is generally good for users to know to understand the scope of the fishing effort). The function <code>clean_data</code> will remove all existing 0 values, and remap the presence and absence data to 1s and 0s.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dfB <span class="ot">&lt;-</span> <span class="fu">clean_data</span>(df, <span class="at">pa_col =</span> <span class="st">'value'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dfB <span class="ot">&lt;-</span> <span class="fu">clean_data</span>(dfG, <span class="at">pa_col =</span> <span class="st">'value'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The histograms below illustrate how the data have been transformed.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ensemble-sdms_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 <p>Finally, we will run <code>remove_corr</code> to remove any correlated environmental covariates before building the model. Position and time (month &amp; year) are retained.</p>
 </section>
