@@ -167,6 +167,7 @@ par(mfrow=c(1,2))
 hist(dfG2$value, main = 'Before clean_data')
 hist(dfB2$value, main = 'After clean_data')
 ```
+*Note that these datasets are random subsets of the complete dataset so the number of presences/absences is not equal in each. These histograms are only to illustrate the shift in range from 0-2 to 0-1.*
 
 Finally, we will run `remove_corr` to remove any correlated environmental covariates before building the model. Position and time (month & year) are retained. 
 ```{r}
