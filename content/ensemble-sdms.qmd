@@ -12,7 +12,7 @@ Within this workflow, there are three steps:
 3. Building the Ensemble
 4. Predicting the Ensemble
 
-The functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (doParallel and furrr are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables. 
+The functions outlined below are designed to be run either sequentially or in parallel with the R parallelization method of your choice (`doParallel` and `furrr` are recommended) and can be run in loops across a list of species. Below we describe the recommended directory set up and formats for any supporting tables. 
 
 ## Data Preparation 
 ### Fisheries Data 
@@ -90,7 +90,7 @@ Note that `pull_forecast` has the additional arguments 'init' and 'ens', which r
 
 For either function, the JSON file link can be found on the [CEFI portal](https://psl.noaa.gov/cefi_portal/) in the 'Data Access' tab. The arguments `reqVars`, `release`, `gt`, `of`, `init`, and `ens` help specify which variables to pull, at what output frequency, and what grid to pull (raw vs regrid; the latter is recommended). These need to match their corresponding columns in the JSON file **exactly**. See the documentation for these functions for more details. 
 
-Since spatially subsetting the data can take some time (upwards of 30 minutes per variable), if you are pulling a lot of environmental variables, it is recommended to run this command in parallel. Generally, this is not a memory-intensive activity; it just takes some time depending on the length of the timeseries (AKA the number of layers in the resulting rasterBrick). Below is an example of running the `pull_hind` function in parallel with `DoParallel`:
+Since spatially subsetting the data can take some time (upwards of 30 minutes per variable), if you are pulling a lot of environmental variables, it is recommended to run this command in parallel. Generally, this is not a memory-intensive activity; it just takes some time depending on the length of the timeseries (AKA the number of layers in the resulting rasterBrick). Below is an example of running the `pull_hind` function in parallel with `doParallel`:
 ```{r}
 #| eval: false
 cluster <- makeCluster(10, type='PSOCK')
@@ -224,13 +224,31 @@ imp <- sdm_importance(mod = mod, se = dfC, pa_col = 'value', xy_col = c('x', 'y'
 
 The wrapper function `makeMods` combines the above 5 functions, and includes skip and logging functionality. Like previous wrapper functions, it is easy to launch this in parallel with the `furrr` functionality. 
 ```{r}
+#| eval: false
 plan(multisession, workers = 5)
 checks <- future_pmap(list(..1 = args$spp, ..2 = args$model, ..3 = args$skip), ~ makeMods(spp = ..1, model = ..2, skip = ..3), .progress = T,  .options = furrr_options(seed = 2025))
 plan(sequential)
 ```
 Where args is the combination of target species and models to be run, along with the flag to enable the skip functionality. 
 
-Here, it is important to note that the different models have different memory demands. The GAM, RF, and MAXENT models are the least computationally expensive, followed by BRT. The sdmTMB is the most expensive. Run times will depend on the dataset size, computational resources, and your R environment. Therefore, it is recommended that you generate sdmTMB models in sequence, but all other models can be generated in parallel. 
+Here, it is important to note that the different models have different memory demands. The GAM, RF, and MAXENT models are the least computationally expensive, followed by BRT. The sdmTMB is the most expensive. Run times will depend on the dataset size, computational resources, and your R environment. Therefore, it is recommended that you generate sdmTMB models in sequence, but all other models can be generated in parallel.
+
+The function `make_predictions` will predict the model to a provided timeseries. It has the option to mask off the predictions based on bathymetry. 
+```{r}
+#| eval: false
+load('./Data/MOM6/norm_MOM6_082025.RData') #list of normalized environmental rasterStacks to predict to; number of layers will dictate the time series predicted to
+abund <- make_predictions(mod = mod, model = model, rasts = norm, mask = T, bathy_nm = 'bathy', bathy_max = 1000, se = dfC, staticData = './Data/staticVariables_cropped_normZ.RData', xy_col = c('x', 'y'), month_col = 'month', year_col = 'year')
+```
+The output will be a rasterStack with the same resolution and number of layers as the time series of environmental data provided. 
+
+The wrapper function `predictMods` loads the necessary data frames and models, and saves the output to the `output_rasters` directory within the working directory. Similar to other wrapper functions, it also includes skip and logging functionality, and it is written to be easily run in parallel. 
+```{r}
+#| eval: false
+plan(multisession, workers = 5)
+checks <- future_pmap(list(..1 = args$spp, ..2 = args$model, ..3 = args$skip), ~ predictMods(spp = ..1, model = ..2, skip = ..3), .progress = T,  .options = furrr_options(seed = 2025))
+plan(sequential)
+```
+It is important to note that for whatever reason, the MAXENT model cannot be predicted in parallel, so it must be run in sequence. However, predicting the models is much quicker and less memory-intensive than making the models. 
 
 ## Building Ensemble 
 
