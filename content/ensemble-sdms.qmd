@@ -242,6 +242,7 @@ Below are example run times and run conditions for the final model runs for the 
 | Total Run Time (hrs) | 15  |    |  2   |     |    |
 | Average Run Time per Model (hrs)* | 4.2    |      |   0.3    |    |   |
 : Model Run Times 
+
 * *Note that this is an average run time calculated by dividing the total run time by the number of models run per core (36/number of cores). Some species models are built faster or slower depending on their complexity*
 
 The function `make_predictions` will predict the model to a provided timeseries. It has the option to mask off the predictions based on bathymetry. 
