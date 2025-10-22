@@ -235,13 +235,14 @@ Where args is the combination of target species and models to be run, along with
 Here, it is important to note that the different models have different memory demands. The GAM, RF, and MAXENT models are the least computationally expensive, followed by BRT. The sdmTMB is the most expensive. Run times will depend on the dataset size, computational resources, and your R environment. Therefore, it is recommended that you generate sdmTMB models in sequence, but all other models can be generated in parallel.
 
 Below are example run times and run conditions for the final model runs for the Northeast CVA2.0 with 36 target species. All models were run in a remote R terminal, in an environment linked to Intel's oneAPI BLAS library (sdmTMB recommends linking R to an optimized BLAS library to improve runtimes; see the sdmTMB installation guide) with 96 GB of available memory. Final datasets for each species had 100,000+ observations and were not downsampled, with the exception of the random forest models which perform better with even distributions of presences and absences.
+
 |         | GAM | MAXENT | RF | BRT | sdmTMB |
 |---------|:-----|------:|------:|------:|:------:|
 | Number of Cores | 10   |     |   6   |  10  |     |
 | Total Run Time (hrs) | 15  |    |  2   |     |    |
-| Approximate Run Time per Model (hrs)* | 4.2    |      |   0.3    |    |   |
-
-* *Note that this is a simple average run time calculated by dividing the total run time by the number of models run per core (36/number of cores). Some species models are built faster or slower depending on their complexity*
+| Average Run Time per Model (hrs)* | 4.2    |      |   0.3    |    |   |
+: Model Run Times 
+* *Note that this is an average run time calculated by dividing the total run time by the number of models run per core (36/number of cores). Some species models are built faster or slower depending on their complexity*
 
 The function `make_predictions` will predict the model to a provided timeseries. It has the option to mask off the predictions based on bathymetry. 
 ```{r}
