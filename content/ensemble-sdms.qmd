@@ -70,6 +70,16 @@ Where `argsList` is a dataframe with a row for each desired call of `saveRast`, 
 combinedRasts <- merge_rasts(rasts)
 #where rasts is a list of rasterStacks to combine
 ```
+
+The wrapper function `combineSave` is similar to `saveRast` where is provides logging and skip functionality. This function also handles creating the list of rasterStacks necessary to provide to `create_rast`. It is also written to be run in parallel:
+```{r}
+#| eval: false
+options(future.globals.maxSize = Inf)
+plan(multisession, workers = 5)
+combs <- future_pmap(list(..1 = args$name, ..2 = args$skip), ~ combineSave(name = ..1, skip = ..2), .progress = T)
+plan(sequential)
+```
+
 The resulting combined rasterStack will retain the range from 0-2 with a number of layers equal to the length of the timeseries. It works by retaining the maximum value in a grid cell across a given layer (which represent different timestamps) of the provided rasterStacks. Below is an example layer from the merged rasterStack for Atlantic Cod from the NEFSC survey data. 
 ![Example layer from merged rasterStack](combined_raster_example.png)
 
