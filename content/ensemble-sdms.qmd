@@ -275,6 +275,10 @@ plan(sequential)
 ```
 It is important to note that for whatever reason, the MAXENT model cannot be predicted in parallel, so it must be run in sequence. However, predicting the models is much quicker and less memory-intensive than making the models themselves. 
 
+`make_predictions` will produce a list of rasters, one raster for each time in the time series, that can be converted to a rasterStack with the `stack` function. Predictions will range between 0 and 1, representing the probability of a species occuring in that grid cell at that time. If `mask = T`, predictions will be limited to a certain depth range. For example if `bathy_max = 1000` then predictions will not be made for areas where the bathymetry is greater than 1000 m as in the example from a GAM model for Atlantic cod below: 
+![Example layer from GAM predictions rasterStack](gam_example.png)
+
+
 ## Building & Predicting Ensemble 
 The ensemble is built using the framework from the EFHSDM package. Here it is included in the `make_sdm` function: 
 ```{r}
@@ -298,3 +302,6 @@ plan(multisession, workers = 5)
 checks <- future_pmap(list(..1 = spp.list$Name), ~ makeEns(spp = ..1), .progress = T,  .options = furrr_options(seed = 2025))
 plan(sequential)
 ```
+
+The resulting list of rasters, which is again a list of raster layers, will be a weighted average of all provided model predictions. So, like the original predictions the values will range between 0 and 1. 
+![Example layer from ensemble predictions rasterStack](ensemble_example.png)
