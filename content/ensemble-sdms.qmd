@@ -236,14 +236,15 @@ Here, it is important to note that the different models have different memory de
 
 Below are example run times and run conditions for the final model runs for the Northeast CVA2.0 with 36 target species. All models were run in a remote R terminal, in an environment linked to [Intel's oneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), which includes a BLAS library, (sdmTMB recommends linking R to an optimized BLAS library to improve runtimes; see the [sdmTMB installation guide](https://pbs-assess.github.io/sdmTMB/#installation)) with 96 GB of available memory. Final datasets for each species had 100,000+ observations and were not downsampled, with the exception of the random forest models which perform better with even distributions of presences and absences.
 
-|         | GAM | MAXENT | RF | BRT | sdmTMB |
+|         | GAM | MAXENT* | RF | BRT | sdmTMB |
 |---------|:-----|------:|------:|------:|:------:|
 | Number of Cores | 10   |     |   6   |  10  |     |
 | Total Run Time (hrs) | 15  |    |  2   |     |    |
-| Average Run Time per Model (hrs)* | 4.2    |      |   0.3    |    |   |
+| Average Model Run Time (hrs)* | 4.2    |      |   0.3    |    |   |
 : Model Run Times 
 
-* *Note that this is an average run time calculated by dividing the total run time by the number of models run per core (36/number of cores). Some individual models were built faster or slower than the times listed due to the number of presences and the complexity of the environmental relationships*
+* *Note 1: These are average run times calculated by dividing the total run time by the number of models run per core (36/number of cores). Some individual models were built faster or slower than the times listed due to the number of presences and the complexity of the environmental relationships*
+* *Note 2: The addition of the oneAPI BLAS library increased MAXENT model run times in comparison to previous runs in environments not linked to oneAPI. These previous MAXENT run times were more similar to GAM run times. However, sdmTMB run times decreased by ~2x (based on small scale tests), but needed to be run in sequence due to memory constraints (yes, even with 96GB of memory, there were memory contrains due to the size of the data set and memory needs of the model), whereas MAXENT models were memory-light enough to be run in parallel.  
 
 The function `make_predictions` will predict the model to a provided timeseries. It has the option to mask off the predictions based on bathymetry. 
 ```{r}
