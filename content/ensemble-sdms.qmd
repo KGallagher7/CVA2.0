@@ -70,6 +70,8 @@ Where `argsList` is a dataframe with a row for each desired call of `saveRast`, 
 combinedRasts <- merge_rasts(rasts)
 #where rasts is a list of rasterStacks to combine
 ```
+The resulting combined rasterStack will retain the range from 0-2 with a number of layers equal to the length of the timeseries. It works by retaining the maximum value in a grid cell across a given layer (which represent different timestamps) of the provided rasterStacks. Below is an example layer from the merged rasterStack for Atlantic Cod from the NEFSC survey data. 
+![Example layer from merged rasterStack](combined_raster_example.png)
 
 ### Environmental Data
 The example below illustrates how to grab and normalize monthly data from the Modular Ocean Model (MOM6) from the Northeast Shelf. The `pull_hind` and `pull_forecast` functions are designed to work with any MOM6 output. Other environmental data can be used as well, and normalized using the same functions, as long as the raw data is in the expected format. 
