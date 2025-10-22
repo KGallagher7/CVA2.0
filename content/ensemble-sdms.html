@@ -781,6 +781,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(sequential)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>It is important to note that for whatever reason, the MAXENT model cannot be predicted in parallel, so it must be run in sequence. However, predicting the models is much quicker and less memory-intensive than making the models themselves.</p>
+<p><code>make_predictions</code> will produce a list of rasters, one raster for each time in the time series, that can be converted to a rasterStack with the <code>stack</code> function. Predictions will range between 0 and 1, representing the probability of a species occuring in that grid cell at that time. If <code>mask = T</code>, predictions will be limited to a certain depth range. For example if <code>bathy_max = 1000</code> then predictions will not be made for areas where the bathymetry is greater than 1000 m as in the example from a GAM model for Atlantic cod below: <img src="gam_example.png" class="img-fluid" alt="Example layer from GAM predictions rasterStack"></p>
 </section>
 <section id="building-predicting-ensemble" class="level2">
 <h2 class="anchored" data-anchor-id="building-predicting-ensemble">Building &amp; Predicting Ensemble</h2>
@@ -800,6 +801,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>checks <span class="ot">&lt;-</span> <span class="fu">future_pmap</span>(<span class="fu">list</span>(<span class="at">..1 =</span> spp.list<span class="sc">$</span>Name), <span class="sc">~</span> <span class="fu">makeEns</span>(<span class="at">spp =</span> ..<span class="dv">1</span>), <span class="at">.progress =</span> T,  <span class="at">.options =</span> <span class="fu">furrr_options</span>(<span class="at">seed =</span> <span class="dv">2025</span>))</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(sequential)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>The resulting list of rasters, which is again a list of raster layers, will be a weighted average of all provided model predictions. So, like the original predictions the values will range between 0 and 1. <img src="ensemble_example.png" class="img-fluid" alt="Example layer from ensemble predictions rasterStack"></p>
 
 
 </section>
