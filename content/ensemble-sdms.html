@@ -414,7 +414,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#environmental-data" id="toc-environmental-data" class="nav-link" data-scroll-target="#environmental-data">Environmental Data</a></li>
   <li><a href="#creating-data-frames" id="toc-creating-data-frames" class="nav-link" data-scroll-target="#creating-data-frames">Creating Data Frames</a></li>
   </ul></li>
-  <li><a href="#building-species-distribution-models" id="toc-building-species-distribution-models" class="nav-link" data-scroll-target="#building-species-distribution-models">Building Species Distribution Models</a></li>
+  <li><a href="#building-predicting-species-distribution-models" id="toc-building-predicting-species-distribution-models" class="nav-link" data-scroll-target="#building-predicting-species-distribution-models">Building &amp; Predicting Species Distribution Models</a></li>
   <li><a href="#building-predicting-ensemble" id="toc-building-predicting-ensemble" class="nav-link" data-scroll-target="#building-predicting-ensemble">Building &amp; Predicting Ensemble</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/ensemble-sdms.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -683,8 +683,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="building-species-distribution-models" class="level2">
-<h2 class="anchored" data-anchor-id="building-species-distribution-models">Building Species Distribution Models</h2>
+<section id="building-predicting-species-distribution-models" class="level2">
+<h2 class="anchored" data-anchor-id="building-predicting-species-distribution-models">Building &amp; Predicting Species Distribution Models</h2>
 <p>Now that the data frames have been constructed and cleaned, you can build the species distribution models. A series of functions are provided to build, perform cross-validation on, evaluate, and extract variable importance from the models for each of the component models for the ensemble: Generalized Additive Model (GAM), MAXENT, Random Forest (RF), Boosted Regression Trees (BRT), sdmTMB.</p>
 <p>The first step is building the base model:</p>
 <div class="cell">
@@ -716,7 +716,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Where args is the combination of target species and models to be run, along with the flag to enable the skip functionality.</p>
 <p>Here, it is important to note that the different models have different memory demands. The GAM, RF, and MAXENT models are the least computationally expensive, followed by BRT. The sdmTMB is the most expensive. Run times will depend on the dataset size, computational resources, and your R environment. Therefore, it is recommended that you generate sdmTMB models in sequence, but all other models can be generated in parallel.</p>
-<p>Below are example run times and run conditions for the final model runs for the Northeast CVA2.0 with 36 target species. All models were run in a remote R terminal, in an environment linked to Intel’s oneAPI BLAS library (sdmTMB recommends linking R to an optimized BLAS library to improve runtimes; see the sdmTMB installation guide) with 96 GB of available memory. Final datasets for each species had 100,000+ observations and were not downsampled, with the exception of the random forest models which perform better with even distributions of presences and absences.</p>
+<p>Below are example run times and run conditions for the final model runs for the Northeast CVA2.0 with 36 target species. All models were run in a remote R terminal, in an environment linked to <a href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html">Intel’s oneAPI</a>, which includes a BLAS library, (sdmTMB recommends linking R to an optimized BLAS library to improve runtimes; see the <a href="https://pbs-assess.github.io/sdmTMB/#installation">sdmTMB installation guide</a>) with 96 GB of available memory. Final datasets for each species had 100,000+ observations and were not downsampled, with the exception of the random forest models which perform better with even distributions of presences and absences.</p>
 <table class="caption-top table">
 <caption>Model Run Times</caption>
 <colgroup>
