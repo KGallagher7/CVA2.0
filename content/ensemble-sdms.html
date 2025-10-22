@@ -719,19 +719,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Below are example run times and run conditions for the final model runs for the Northeast CVA2.0 with 36 target species. All models were run in a remote R terminal, in an environment linked to <a href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html">Intel’s oneAPI</a>, which includes a BLAS library, (sdmTMB recommends linking R to an optimized BLAS library to improve runtimes; see the <a href="https://pbs-assess.github.io/sdmTMB/#installation">sdmTMB installation guide</a>) with 96 GB of available memory. Final datasets for each species had 100,000+ observations and were not downsampled, with the exception of the random forest models which perform better with even distributions of presences and absences.</p>
 <table class="caption-top table">
 <caption>Model Run Times</caption>
-<colgroup>
-<col style="width: 20%">
-<col style="width: 13%">
-<col style="width: 15%">
-<col style="width: 15%">
-<col style="width: 15%">
-<col style="width: 18%">
-</colgroup>
 <thead>
 <tr class="header">
 <th></th>
 <th style="text-align: left;">GAM</th>
-<th style="text-align: right;">MAXENT</th>
+<th style="text-align: right;">MAXENT*</th>
 <th style="text-align: right;">RF</th>
 <th style="text-align: right;">BRT</th>
 <th style="text-align: center;">sdmTMB</th>
@@ -755,7 +747,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: center;"></td>
 </tr>
 <tr class="odd">
-<td>Average Run Time per Model (hrs)*</td>
+<td>Average Model Run Time (hrs)*</td>
 <td style="text-align: left;">4.2</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;">0.3</td>
@@ -765,7 +757,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <ul>
-<li><em>Note that this is an average run time calculated by dividing the total run time by the number of models run per core (36/number of cores). Some individual models were built faster or slower than the times listed due to the number of presences and the complexity of the environmental relationships</em></li>
+<li><em>Note 1: These are average run times calculated by dividing the total run time by the number of models run per core (36/number of cores). Some individual models were built faster or slower than the times listed due to the number of presences and the complexity of the environmental relationships</em></li>
+<li>*Note 2: The addition of the oneAPI BLAS library increased MAXENT model run times in comparison to previous runs in environments not linked to oneAPI. These previous MAXENT run times were more similar to GAM run times. However, sdmTMB run times decreased by ~2x (based on small scale tests), but needed to be run in sequence due to memory constraints (yes, even with 96GB of memory, there were memory contrains due to the size of the data set and memory needs of the model), whereas MAXENT models were memory-light enough to be run in parallel.</li>
 </ul>
 <p>The function <code>make_predictions</code> will predict the model to a provided timeseries. It has the option to mask off the predictions based on bathymetry.</p>
 <div class="cell">
