@@ -188,7 +188,7 @@ plan(multisession, workers = 5)
 dfs <- future_pmap(list(..1 = args$name, ..2 = args$skip, ..3 = args$mMin, ..4 = args$mMax, ..5 = args$yMin, ..6 = args$yMax), ~ makeDF(name = ..1, skip = ..2, mMin = ..3, mMax = ..4, yMin = ..5, yMax = ..6), .progress = T,  .options = furrr_options(seed = 2025))
 plan(sequential)
 ```
-## Building Species Distribution Models 
+## Building & Predicting Species Distribution Models 
 Now that the data frames have been constructed and cleaned, you can build the species distribution models. A series of functions are provided to build, perform cross-validation on, evaluate, and extract variable importance from the models for each of the component models for the ensemble: Generalized Additive Model (GAM), MAXENT, Random Forest (RF), Boosted Regression Trees (BRT), sdmTMB. 
 
 The first step is building the base model: 
@@ -234,7 +234,7 @@ Where args is the combination of target species and models to be run, along with
 
 Here, it is important to note that the different models have different memory demands. The GAM, RF, and MAXENT models are the least computationally expensive, followed by BRT. The sdmTMB is the most expensive. Run times will depend on the dataset size, computational resources, and your R environment. Therefore, it is recommended that you generate sdmTMB models in sequence, but all other models can be generated in parallel.
 
-Below are example run times and run conditions for the final model runs for the Northeast CVA2.0 with 36 target species. All models were run in a remote R terminal, in an environment linked to Intel's oneAPI BLAS library (sdmTMB recommends linking R to an optimized BLAS library to improve runtimes; see the sdmTMB installation guide) with 96 GB of available memory. Final datasets for each species had 100,000+ observations and were not downsampled, with the exception of the random forest models which perform better with even distributions of presences and absences.
+Below are example run times and run conditions for the final model runs for the Northeast CVA2.0 with 36 target species. All models were run in a remote R terminal, in an environment linked to [Intel's oneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), which includes a BLAS library, (sdmTMB recommends linking R to an optimized BLAS library to improve runtimes; see the [sdmTMB installation guide](https://pbs-assess.github.io/sdmTMB/#installation)) with 96 GB of available memory. Final datasets for each species had 100,000+ observations and were not downsampled, with the exception of the random forest models which perform better with even distributions of presences and absences.
 
 |         | GAM | MAXENT | RF | BRT | sdmTMB |
 |---------|:-----|------:|------:|------:|:------:|
