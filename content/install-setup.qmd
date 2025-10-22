@@ -31,6 +31,7 @@ head(feed)
 hab <- read.csv('habitat_guilds.csv')
 head(hab)
 ```
+It is **critical** that the column names in the key files and the different habitat/feeding guild names in the species key are identical (remember: 'Pelagic' and 'Pelagic ' are technically two different character strings in R) or else they will not be matched correctly. 
 
 #### Fisheries Data
 This workflow is designed to accept both fisheries independent and dependent data sources. Data standardization functions have the ability to pull NEFSC survey (using survdat) and observer data using ROracle, but can also accept CSV files. CSV files will need records of all efforts, regardless of if the target species is collected or not, to correctly document absences and have a time column that can be converted with the POSIXct function. 
