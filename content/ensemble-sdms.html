@@ -718,7 +718,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Here, it is important to note that the different models have different memory demands. The GAM, RF, and MAXENT models are the least computationally expensive, followed by BRT. The sdmTMB is the most expensive. Run times will depend on the dataset size, computational resources, and your R environment. Therefore, it is recommended that you generate sdmTMB models in sequence, but all other models can be generated in parallel.</p>
 <p>Below are example run times and run conditions for the final model runs for the Northeast CVA2.0 with 36 target species. All models were run in a remote R terminal, in an environment linked to Intel’s oneAPI BLAS library (sdmTMB recommends linking R to an optimized BLAS library to improve runtimes; see the sdmTMB installation guide) with 96 GB of available memory. Final datasets for each species had 100,000+ observations and were not downsampled, with the exception of the random forest models which perform better with even distributions of presences and absences.</p>
 <table class="caption-top table">
-<caption>Model Run Times * <em>Note that this is an average run time calculated by dividing the total run time by the number of models run per core (36/number of cores). Some species models are built faster or slower depending on their complexity</em></caption>
+<caption>Model Run Times</caption>
 <colgroup>
 <col style="width: 20%">
 <col style="width: 13%">
@@ -764,6 +764,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<ul>
+<li><em>Note that this is an average run time calculated by dividing the total run time by the number of models run per core (36/number of cores). Some species models are built faster or slower depending on their complexity</em></li>
+</ul>
 <p>The function <code>make_predictions</code> will predict the model to a provided timeseries. It has the option to mask off the predictions based on bathymetry.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">'./Data/MOM6/norm_MOM6_082025.RData'</span>) <span class="co">#list of normalized environmental rasterStacks to predict to; number of layers will dictate the time series predicted to</span></span>
