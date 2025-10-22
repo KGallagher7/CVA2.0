@@ -736,7 +736,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;"></td>
 <td style="text-align: right;">6</td>
 <td style="text-align: right;">10</td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">1</td>
 </tr>
 <tr class="even">
 <td>Total Run Time (hrs)</td>
@@ -758,7 +758,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <ul>
 <li><em>Note 1: These are average run times calculated by dividing the total run time by the number of models run per core (36/number of cores). Some individual models were built faster or slower than the times listed due to the number of presences and the complexity of the environmental relationships</em></li>
-<li>*Note 2: The addition of the oneAPI BLAS library increased MAXENT model run times in comparison to previous runs in environments not linked to oneAPI. These previous MAXENT run times were more similar to GAM run times. However, sdmTMB run times decreased by ~2x (based on small scale tests), but needed to be run in sequence due to memory constraints (yes, even with 96GB of memory, there were memory contrains due to the size of the data set and memory needs of the model), whereas MAXENT models were memory-light enough to be run in parallel.</li>
+<li><em>Note 2: The addition of the oneAPI BLAS library increased MAXENT model run times in comparison to previous runs in environments not linked to oneAPI. These previous MAXENT run times were more similar to GAM run times. However, sdmTMB run times decreased by ~2x (based on small scale tests), but needed to be run in sequence due to memory constraints (yes, even with 96GB of memory, there were memory contrains due to the size of the data set and memory needs of the model), whereas MAXENT models were memory-light enough to be run in parallel.</em></li>
 </ul>
 <p>The function <code>make_predictions</code> will predict the model to a provided timeseries. It has the option to mask off the predictions based on bathymetry.</p>
 <div class="cell">
