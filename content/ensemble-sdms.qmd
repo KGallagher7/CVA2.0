@@ -249,7 +249,7 @@ Here, it is important to note that the different models have different memory de
 Below are example run times and run conditions for the final model runs for the Northeast CVA2.0 with 36 target species. This includes all of the steps outlined above: 1) building & simplying the model, 2) performing cross validations, and extracting 3) predictions, 4) AUC, and 5) variable importance. All models were run in a remote R terminal, in an environment linked to [Intel's oneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html), which includes a BLAS library (sdmTMB recommends linking R to an optimized BLAS library to improve runtimes; see the [sdmTMB installation guide](https://pbs-assess.github.io/sdmTMB/#installation)), with 96 GB of available memory. Final datasets for each species had 100,000+ observations and were not downsampled. The exception to this was the random forest models which perform better with even distributions of presences and absences. All presences were retained and absences were randomly selected across regions in time and space to ensure an even distribution of absences. 
 
 |         | GAM | MAXENT* | RF | BRT | sdmTMB |
-|---------|:-----|------:|------:|------:|:------:|
+|---------|:-----|-----:|-----:|-----:|:-----:|
 | Number of Cores | 10   |   12  |   6   |  10  |  1   |
 | Total Run Time (hrs) | 15  |    |  2   |  26   |    |
 | Average Model Run Time (hrs)* | 4.2    |      |   0.3    | 7.2   |   |
