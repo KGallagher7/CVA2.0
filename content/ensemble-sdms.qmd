@@ -250,7 +250,7 @@ Below are example run times and run conditions for the final model runs for the 
 
 |         | GAM | MAXENT* | RF | BRT | sdmTMB |
 |---------|:-----|------:|------:|------:|:------:|
-| Number of Cores | 10   |     |   6   |  10  |  1   |
+| Number of Cores | 10   |   12  |   6   |  10  |  1   |
 | Total Run Time (hrs) | 15  |    |  2   |  26   |    |
 | Average Model Run Time (hrs)* | 4.2    |      |   0.3    | 7.2   |   |
 : Model Run Times 
