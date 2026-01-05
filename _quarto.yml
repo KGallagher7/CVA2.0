@@ -1,4 +1,4 @@
-project: 
+suproject: 
   type: website
 
 website: 
@@ -46,7 +46,7 @@ website:
         contents:
           - content/install-setup.qmd
           - content/ensemble-sdms.qmd
-          - content/sensitivity-calculation.qmd
+          - content/exposure-calculation.qmd
       - href: content/acknowledgements.qmd
         text: Acknowledgements
 
