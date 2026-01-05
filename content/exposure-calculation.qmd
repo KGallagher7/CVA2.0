@@ -20,7 +20,7 @@ The next step is to rank the raw exposure. Since the CVA is designed to help det
 |:---------:|:---------:|:---------:|
 | Low | < 0.5   |   1  |
 | Medium | 0.5 - 1.5  | 2   |  
-| High | 4.2 |  1.5 - 2 |  3 | 
+| High |  1.5 - 2 |  3 | 
 | Very High | > 2 | 4|
 : Raw Exposure Ranks
 
@@ -52,6 +52,25 @@ plan(multisession, workers = 6)
 checks <- future_pmap(list(..1 = args$spp, ..2 = args$ensName, ..3 = args$pStart, ..4 = args$pEnd, ..5 = args$fStart, ..6 = args$fEnd), ~ makeVariableAverages(spp = ..1, ensName = ..2, pStart = ..3, pEnd = ..4, fStart = ..5, fEnd = ..6), .progress = T,  .options = furrr_options(seed = 2025))
 plan(sequential)
 ```
-Like the SDM wrapper functions, `args` is a dataframe where each row is a set of arguments to be passed to the function. Here, the arguments include the species name (`spp`), ensemble name to help locate the appropriate ensemble model (`ensName`), and start and end years for the present and future timeseries (`pStart`/`pEnd`/`fStart`/`fEnd`) to load in the correct exposure values, as well as save the results from `makeExposureTimeseries` and `makeExposureMaps` appropriately. 
+Like the SDM wrapper functions, `args` is a dataframe where each row is a set of arguments to be passed to the function. Here, the arguments include the species name (`spp`), ensemble name to help locate the appropriate ensemble model (`ensName`), and start and end years for the present and future timeseries (`pStart`/`pEnd`/`fStart`/`fEnd`) to load in the correct exposure values, as well as save the results from `makeExposureTimeseries` and `makeExposureMaps` appropriately. These are not memory or time-intensive calculations, so it is not necessary to run them in parallel - it is just helpful if you have a lot of species to work through. 
 
-The output from `makeExposureTimeseries` is a matrix with 12 columns (1 for each month) and a number of rows equal to the number of environmental variables in `expRanked`. `makeExposureMaps` produces a rasterStack, with each layer representing one of the environmental variables. 
+The output from `makeExposureTimeseries` is a matrix with 12 columns (1 for each month) and a number of rows equal to the number of environmental variables in `expRanked`. `makeExposureMaps` produces a rasterStack, with each layer representing one of the environmental variables. Values should range from 1 to 4. 
+
+## Calculating Total Exposure for Each Species 
+Once you have the species-specific exposure calculated for each variable, they must be combined to estimate total species-specific exposure. These will be the final spatially and temporally explicit values that are combined with species sensitivity to estimate vulnerability. 
+
+To combine the species-specific exposures for each variable, we use the same logic rule as the CVA1.0:
+|Overall Score| Numeric Score | Logic Rule |
+|:---------:|:---------:|:---------:|
+| Low | 1   |   All other scores  |
+| Medium | 2  | 2 or more attributes >= 2.5   |  
+| High | 3 |  2 or more attributes >= 3.0  |
+| Very High | 4 | 3 or more attributes >= 3.5 |
+: Total Species-Specific Exposure Ranks
+
+We calculate total exposure in two ways: 1) Applying the logic rule to all ecologically relevant environmental variables as defined by the feeding and habitat keys and 2) Only applying the logic rule to ecological variables that have relative weights in the final ensemble SDM greater than a set value (for the NE Shelf CVA2.0, we chose 10% or 0.1). This was done to account for possible unknown changes in variable importance under future climate change. The latter method (only counting the most important variables), assumes that these values will continue to be very important under future climate change scenarios. It is unclear if this will be the case, especially for variables such as pH where it is unclear how they will impact species. Calculating total exposure using all the ecologically relevant variables allows us and stakeholders to consider all variables regardless of their model importance. 
+
+The functions `combineTimeseries` and `combineMaps` provide options for both methods with the option `countAll`. If set to TRUE, you will need to provide the relative weights and the threshold to use to count variables. Setting `countAll` to FALSE will automatically count all provided variables in `matExp` for `combineTimeseries` or `mapExp` for `combineMaps`, which are the outputs from `makeExposureTimeseries` and `makeExposureMaps`, respectively. It is important that, if you have not yet done so, that you subset `matExp` and `mapExp` to only the ecologically relevant variables before running the `combineTimeseries` and `combineMaps` functions. This can be done using the relative weights of the variables. 
+
+The function `combineWeights` provides 
+
