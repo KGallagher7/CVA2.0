@@ -2,7 +2,14 @@
 title: Calculating Exposure
 ---
 
-### Overview
-Exposure is calculated from MOM6 forecast data, and utilizes predicted species distributions, and the relative importance of covariates in the ensemble models. 
+## Overview
+Exposure is calculated from MOM6 forecast data using the same methods to calculate raw exposure as the CVA1.0 on the MOM6 environmental data. We then use the predicted species distributions and the relative importance of covariates in the ensemble models to calculate variable-specific and total exposure for each species.
 
-Detailed methods coming soon. 
+## Calculating Raw Exposure
+As in the CVA1.0, raw exposure for each environmental variable is calculated using a z-score, which is the difference in mean conditions in a future and present timeseries divided by present day standard deviations. 
+
+The function `calcExposure` will take the output from `pull_hind` and/or `pull_forecast` (a list of rasterStacks) and calculate monthly raw exposure for each environmental variable in the list. 
+```{r}
+exposure <- calcExposure(presentRasts, futureRasts)
+```
+
