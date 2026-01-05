@@ -15,11 +15,18 @@ exposure <- calcExposure(presentRasts, futureRasts)
 ```
 Where `presentRasts` and `futureRasts` are lists of rasterStacks with the same length. These are the raw timeseries over the desired time periods. Remember that `pull_hind` and `pull_forecast` pull the complete timeseries for the desired MOM6 run, so you will need to subset their outputs accordingly if desired. `calcExposure` will produce a list of rasterStacks with the same length as the provided lists. Each rasterStack will have 12 layers, one for each month. 
 
-The next step is to rank the raw exposure based on the values. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0: 
+The next step is to rank the raw exposure. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0: 
 |Score| Raw Exposure | Rank |
-|:---------:|:-----:|:-----:|
+|:---------:|:---------:|:---------:|
 | Low | < 0.5   |   1  |
 | Medium | 0.5 - 1.5  | 2   |  
 | High | 4.2 |  1.5 - 2 |  3 | 
 | Very High | > 2 | 4|
 : Raw Exposure Ranks
+
+The function `rankExposure` performs the ranking. It also provides the option to multiply raw exposure values for certain by -1 (aka flip). This option was included because the direction of change and the meaning of that change may differ across environmental variables. For example, an increase in surface temperatures would have a positive exposure, whereas a decrease in pH would have a negative exposure; both changes are considered bad for the environment, but the signs differ due to how these variables are quantified. The `flip` and `noFlipList` options provide the option to flip the signs of raw exposure for all variables *except* those listed in `noFlipList`. 
+
+## Creating Species-Specific Exposure Time Series and Maps for Each Variable
+Once raw exposure is ranked, species-specific exposure for each environmental variable can be calculated using the functions `makeExposureTimeseries` and `makeExposureMaps`. These functions are nearly identical and only require the ranked exposure values and the mean ensemble species distribution model (SDM) predictions. Ranked exposure values are averaged across space within each month in `makeExposureTimeseries` and averaged across months in each model grid cell in `makeExposureMaps`, using the SDM results as weights to account for species distributions and habitat use. The results are a time series of average ranked species-specific exposure within each month and a raster of average species-specific exposure across time for each environmental variable. 
+
+The ensemble SDM results produced by `make_predictions` should be converted into a monthly average prior to using `makeExposureTimeseries` and `makeExposureMaps`. It is also recommended that you remove low SDM values after averaging. In the NE Shelf CVA2.0, we removed all SDM values less than 0.1 (representing areas with less than a 10% likelihood of finding the species). Not removing these low values resulted in higher than expected exposure results in areas where the species is rare. 
