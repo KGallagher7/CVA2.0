@@ -278,6 +278,18 @@ It is important to note that for whatever reason, the MAXENT model cannot be pre
 `make_predictions` will produce a list of rasters, one raster for each time in the time series, that can be converted to a rasterStack with the `stack` function. Predictions will range between 0 and 1, representing the probability of a species occuring in that grid cell at that time. If `mask = T`, predictions will be limited to a certain depth range. For example if `bathy_max = 1000` then predictions will not be made for areas where the bathymetry is greater than 1000 m as in the example from a GAM model for Atlantic cod below: 
 ![Example layer from GAM predictions rasterStack](gam_example.png)
 
+### Alternative for sdmTMB Predictions
+Regardless of working environment, predictions of sdmTMB models with `predictMods` can take significant amounts of time. The functions `makePredDF` and `predictSDM` offer an alternative workflow similar to `predictMods`. While `predictMods` performs the predictions for each timestep, this workflow generates a large dataframe of all environmental raster data across all timesteps, performs the prediction once for all timesteps, then creates the individual rasters for each timestep. 
+
+```{r}
+#| eval: false
+#all arguments are the same as `make_predictions`
+allData <- makePredDF(norm, bathyR = bathyR, bathy_max = 1000, staticData = './Data/staticVariables_cropped_normZ.RData', mask = T)
+pred <- predict(mod, newdata = all2023, type = 'response') #predict everything all at once in a single call 
+pred$my <- paste(pred$month, pred$year, sep = '.')
+abund <- predictSDM(mod = mod, df = pred, staticData = './Data/staticVariables_cropped_normZ.RData') #make into rasters
+```
+This workflow can be easily modified to run in a loop across multiple species. It still takes significant amounts of memory (~50GB for the NE Shelf CVA2.0) so running in parallel is not recommended. Luckily, this code takes approximately 25 minutes to run for a single species. 
 
 ## Building & Predicting Ensemble 
 The ensemble is built using the framework from the EFHSDM package. Here it is included in the `make_sdm` function: 
