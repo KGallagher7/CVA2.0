@@ -339,7 +339,21 @@
     "href": "content/exposure-calculation.html",
     "title": "Calculating Exposure",
     "section": "",
-    "text": "Overview\nExposure is calculated from MOM6 forecast data, and utilizes predicted species distributions, and the relative importance of covariates in the ensemble models.\nDetailed methods coming soon."
+    "text": "Exposure is calculated from MOM6 forecast data using the same methods to calculate and rank raw exposure as the CVA1.0 on the MOM6 environmental data. We then use the predicted species distributions and the relative importance of covariates in the ensemble models to calculate variable-specific and total exposure for each species."
+  },
+  {
+    "objectID": "content/exposure-calculation.html#overview",
+    "href": "content/exposure-calculation.html#overview",
+    "title": "Calculating Exposure",
+    "section": "",
+    "text": "Exposure is calculated from MOM6 forecast data using the same methods to calculate and rank raw exposure as the CVA1.0 on the MOM6 environmental data. We then use the predicted species distributions and the relative importance of covariates in the ensemble models to calculate variable-specific and total exposure for each species."
+  },
+  {
+    "objectID": "content/exposure-calculation.html#calculating-and-ranking-raw-exposure",
+    "href": "content/exposure-calculation.html#calculating-and-ranking-raw-exposure",
+    "title": "Calculating Exposure",
+    "section": "Calculating and Ranking Raw Exposure",
+    "text": "Calculating and Ranking Raw Exposure\nAs in the CVA1.0, raw exposure for each environmental variable is calculated using a z-score, which is the difference in mean conditions in a future and present timeseries divided by present day standard deviations.\nThe function calcExposure will take the output from pull_hind and/or pull_forecast (a list of rasterStacks) and calculate monthly raw exposure for each environmental variable in the list:\n\nexposure &lt;- calcExposure(presentRasts, futureRasts)\n\nWhere presentRasts and futureRasts are lists of rasterStacks with the same length. These are the raw timeseries over the desired time periods. Remember that pull_hind and pull_forecast pull the complete timeseries for the desired MOM6 run, so you will need to subset their outputs accordingly if desired. calcExposure will produce a list of rasterStacks with the same length as the provided lists. Each rasterStack will have 12 layers, one for each month.\nThe next step is to rank the raw exposure based on the values. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0:"
   },
   {
     "objectID": "content/vulnerability_directionality.html",
