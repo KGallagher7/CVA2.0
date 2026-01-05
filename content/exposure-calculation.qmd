@@ -26,7 +26,32 @@ The next step is to rank the raw exposure. Since the CVA is designed to help det
 
 The function `rankExposure` performs the ranking. It also provides the option to multiply raw exposure values for certain by -1 (aka flip). This option was included because the direction of change and the meaning of that change may differ across environmental variables. For example, an increase in surface temperatures would have a positive exposure, whereas a decrease in pH would have a negative exposure; both changes are considered bad for the environment, but the signs differ due to how these variables are quantified. The `flip` and `noFlipList` options provide the option to flip the signs of raw exposure for all variables *except* those listed in `noFlipList`. 
 
+```{r}
+#| eval: false
+expRanked <- rankExposure(exposure, flip = T, noflipList = c('bottomT', 'surfaceT', 'bottomArg', 'MLD'))
+```
+
 ## Creating Species-Specific Exposure Time Series and Maps for Each Variable
 Once raw exposure is ranked, species-specific exposure for each environmental variable can be calculated using the functions `makeExposureTimeseries` and `makeExposureMaps`. These functions are nearly identical and only require the ranked exposure values and the mean ensemble species distribution model (SDM) predictions. Ranked exposure values are averaged across space within each month in `makeExposureTimeseries` and averaged across months in each model grid cell in `makeExposureMaps`, using the SDM results as weights to account for species distributions and habitat use. The results are a time series of average ranked species-specific exposure within each month and a raster of average species-specific exposure across time for each environmental variable. 
 
+```{r}
+#| eval: false
+#map
+mapExp <- makeExposureMaps(rankExp = expRanked, sdmRast = avgHSM)
+
+#timeseries
+vecExp <- makeExposureTimeseries(rankExp = expRanked, sdmRast = avgHSM)
+```
+
 The ensemble SDM results produced by `make_predictions` should be converted into a monthly average prior to using `makeExposureTimeseries` and `makeExposureMaps`. It is also recommended that you remove low SDM values after averaging. In the NE Shelf CVA2.0, we removed all SDM values less than 0.1 (representing areas with less than a 10% likelihood of finding the species). Not removing these low values resulted in higher than expected exposure results in areas where the species is rare. 
+
+The wrapper function `makeVariableAverages` is provided and can be run in parallel using the `furrr` package, similar to the SDM wrapper functions. Like those wrapper functions, your directory must be set up according to the Installation and Setup Guide provided for them to function. `makeVariableAverages` also generates the monthly average SDM results, and removes low values for you. 
+```{r}
+#| eval: false
+plan(multisession, workers = 6)
+checks <- future_pmap(list(..1 = args$spp, ..2 = args$ensName, ..3 = args$pStart, ..4 = args$pEnd, ..5 = args$fStart, ..6 = args$fEnd), ~ makeVariableAverages(spp = ..1, ensName = ..2, pStart = ..3, pEnd = ..4, fStart = ..5, fEnd = ..6), .progress = T,  .options = furrr_options(seed = 2025))
+plan(sequential)
+```
+Like the SDM wrapper functions, `args` is a dataframe where each row is a set of arguments to be passed to the function. Here, the arguments include the species name (`spp`), ensemble name to help locate the appropriate ensemble model (`ensName`), and start and end years for the present and future timeseries (`pStart`/`pEnd`/`fStart`/`fEnd`) to load in the correct exposure values, as well as save the results from `makeExposureTimeseries` and `makeExposureMaps` appropriately. 
+
+The output from `makeExposureTimeseries` is a matrix with 12 columns (1 for each month) and a number of rows equal to the number of environmental variables in `expRanked`. `makeExposureMaps` produces a rasterStack, with each layer representing one of the environmental variables. 
