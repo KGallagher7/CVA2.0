@@ -285,7 +285,7 @@ Regardless of working environment, predictions of sdmTMB models with `predictMod
 #| eval: false
 #all arguments are the same as `make_predictions`
 allData <- makePredDF(norm, bathyR = bathyR, bathy_max = 1000, staticData = './Data/staticVariables_cropped_normZ.RData', mask = T)
-pred <- predict(mod, newdata = all2023, type = 'response') #predict everything all at once in a single call 
+pred <- predict(mod, newdata = allData, type = 'response') #predict everything all at once in a single call 
 pred$my <- paste(pred$month, pred$year, sep = '.')
 abund <- predictSDM(mod = mod, df = pred, staticData = './Data/staticVariables_cropped_normZ.RData') #make into rasters
 ```
