@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -39,9 +39,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-0d59ca884f2b610b219ea3d09d70ad34.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -393,9 +393,9 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Species exposure will be quantified using decadal and long term projections from the MOM6 model. In the CVA1.0, exposure to surface temperatures and changes in ocean acidification were quantified using a z-score. This quantity describes how many standard deviations over the present mean conditions a value, in this case mean future conditions, are.</p>
-<p>For the CVA2.0, we will use this same metric. Z-scores will be calculated across space and time on monthly timesteps for the decadal and eventually long-term predictions. Exposure values will be averaged within each month to produce a single exposure metric for each variable, and across time and space, using predicted species distributions to perform weighted averages so that only expsoure within the species ranges are considered. To calculate a total exposure across environmental variables, we will use relative variable importance from the ensemble models to perform weighted averages of the time series and maps across important covariates in the model.</p>
-<p>We will also quantify changes in habitat suitability over time by projecting the ensemble species distribution model onto future climate conditions. The projections and the models themselves will allow us to examine the drivers of change, by looking at change in important envrionmental covariates.</p>
+<p>Species exposure is quantified using the decadal from the MOM6 model. In the CVA1.0, exposure to surface temperatures, salinities, and changes in ocean acidification were quantified using a z-score. This quantity describes how many standard deviations over the present mean conditions a value, in this case mean future conditions, are.</p>
+<p>For the CVA2.0, we will use this same metric. Z-scores will be calculated across space and time using average monthly timesteps. Exposure values will be averaged across time and space each month to produce an exposure map and monthly timeseries for each variable, using predicted species distributions to perform weighted averages so that only expsoure within the species ranges are considered and habitat use by the species is taken into account.</p>
+<p>We will calculate total exposure using the same logic rule implimented in the CVA 1.0 in two different ways: 1) counting all ecologicaly relevant variables and 2) only counting variables that have relative weights over 10% in the species distribution models. This will be done across both time and space to produce both a total timeseries and map of exposure for each species.</p>
 
 
 
