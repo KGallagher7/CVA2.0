@@ -92,6 +92,9 @@ The names of the vector resulting from `combineWeights` can be used to subset th
   totalTA <- combineTimeseries(matExp = vecSub, weights = cW, wThreshold = 0, countAll = T) #counting all variables
   totalTS <- combineTimeseries(matExp = vecSub, weights = cW, wThreshold = 0.1, countAll = F) #counting only ecologically relevant variables
 
+#subset mapExp by rownames
+  i <- names(mapExp) %in% names(cW)
+  mapSub <- raster::subset(mapExp, which(i == T))
 #maps
   totalM <- combineMaps(mapExp = mapSub, weights = cW, wThreshold = 0, countAll = T)
   totalMS <- combineMaps(mapExp = mapSub, weights = cW, wThreshold = 0.1, countAll = F)
