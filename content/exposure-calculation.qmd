@@ -14,7 +14,7 @@ The function `calcExposure` will take the output from `pull_hind` and/or `pull_f
 exposure <- calcExposure(presentRasts, futureRasts)
 ```
 Where `presentRasts` and `futureRasts` are lists of rasterStacks with the same length. These are the raw timeseries over the desired time periods. Remember that `pull_hind` and `pull_forecast` pull the complete timeseries for the desired MOM6 run, so you will need to subset their outputs accordingly if desired. `calcExposure` will produce a list of rasterStacks with the same length as the provided lists. Each rasterStack will have 12 layers, one for each month. 
-![Bottom Temperature Raw Exposure comparing 2019-2019 and 2025-2035](raster_example.png)
+![Bottom Temperature Raw Exposure comparing 2019-2019 and 2025-2035](bottomT_exposure.jpg)
 
 The next step is to rank the raw exposure. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0: 
 
@@ -33,6 +33,8 @@ The function `rankExposure` performs the ranking. It also provides the option to
 expRanked <- rankExposure(exposure, flip = T, noflipList = c('bottomT', 'surfaceT', 'bottomArg', 'MLD'))
 ```
 
+![Bottom Temperature Ranked Exposure comparing 2019-2019 and 2025-2035](bottomT_exposure_ranked.jpg)
+
 ## Creating Species-Specific Exposure Time Series and Maps for Each Variable
 Once raw exposure is ranked, species-specific exposure for each environmental variable can be calculated using the functions `makeExposureTimeseries` and `makeExposureMaps`. These functions are nearly identical and only require the ranked exposure values and the mean ensemble species distribution model (SDM) predictions. Ranked exposure values are averaged across space within each month in `makeExposureTimeseries` and averaged across months in each model grid cell in `makeExposureMaps`, using the SDM results as weights to account for species distributions and habitat use. The results are a time series of average ranked species-specific exposure within each month and a raster of average species-specific exposure across time for each environmental variable. 
 
@@ -47,6 +49,8 @@ vecExp <- makeExposureTimeseries(rankExp = expRanked, sdmRast = avgHSM)
 
 The ensemble SDM results produced by `make_predictions` should be converted into a monthly average prior to using `makeExposureTimeseries` and `makeExposureMaps`. It is also recommended that you remove low SDM values after averaging. In the NE Shelf CVA2.0, we removed all SDM values less than 0.1 (representing areas with less than a 10% likelihood of finding the species). Not removing these low values resulted in higher than expected exposure results in areas where the species is rare. 
 
+The output from `makeExposureTimeseries` is a matrix with 12 columns (1 for each month) and a number of rows equal to the number of environmental variables in `expRanked`. `makeExposureMaps` produces a rasterStack, with each layer representing one of the environmental variables. Values should range from 1 to 4. 
+
 The wrapper function `makeVariableAverages` is provided and can be run in parallel using the `furrr` package, similar to the SDM wrapper functions. Like those wrapper functions, your directory must be set up according to the Installation and Setup Guide provided for them to function. `makeVariableAverages` also generates the monthly average SDM results, and removes low values for you. 
 ```{r}
 #| eval: false
@@ -56,7 +60,10 @@ plan(sequential)
 ```
 Like the SDM wrapper functions, `args` is a dataframe where each row is a set of arguments to be passed to the function. Here, the arguments include the species name (`spp`), ensemble name to help locate the appropriate ensemble model (`ensName`), and start and end years for the present and future timeseries (`pStart`/`pEnd`/`fStart`/`fEnd`) to load in the correct exposure values, as well as save the results from `makeExposureTimeseries` and `makeExposureMaps` appropriately. These are not memory or time-intensive calculations, so it is not necessary to run them in parallel - it is just helpful if you have a lot of species to work through. 
 
-The output from `makeExposureTimeseries` is a matrix with 12 columns (1 for each month) and a number of rows equal to the number of environmental variables in `expRanked`. `makeExposureMaps` produces a rasterStack, with each layer representing one of the environmental variables. Values should range from 1 to 4. 
+Below are example variable-specific exposures for Atlantic cod: 
+![Variable-specific exposures across time](exposure_variable_timeseries.png)
+
+![Variable-specific exposures across space](exposure_variable_maps.png)
 
 ## Calculating Total Exposure for Each Species 
 Once you have the species-specific exposure calculated for each variable, they must be combined to estimate total species-specific exposure. These will be the final spatially and temporally explicit values that are combined with species sensitivity to estimate vulnerability. 
@@ -100,3 +107,12 @@ The names of the vector resulting from `combineWeights` can be used to subset th
   totalM <- combineMaps(mapExp = mapSub, weights = cW, wThreshold = 0, countAll = T)
   totalMS <- combineMaps(mapExp = mapSub, weights = cW, wThreshold = 0.1, countAll = F)
 ```
+
+Below are examples of total exposure using both methods for Atlantic cod: 
+![Total Exposure using all ecologically-relevant variables across time](exposure_timeseries_all.png)
+
+![Total Exposure using only important variables across time](exposure_timeseries_subset.png)
+
+![Total Exposure using all ecologically-relevant variables across space](exposure_total_maps_all.png)
+
+![Total Exposure using only important variables across space](exposure_total_maps_subset.png)
