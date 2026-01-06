@@ -16,6 +16,7 @@ exposure <- calcExposure(presentRasts, futureRasts)
 Where `presentRasts` and `futureRasts` are lists of rasterStacks with the same length. These are the raw timeseries over the desired time periods. Remember that `pull_hind` and `pull_forecast` pull the complete timeseries for the desired MOM6 run, so you will need to subset their outputs accordingly if desired. `calcExposure` will produce a list of rasterStacks with the same length as the provided lists. Each rasterStack will have 12 layers, one for each month. 
 
 The next step is to rank the raw exposure. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0: 
+
 |Score| Raw Exposure | Rank |
 |:---------:|:---------:|:---------:|
 | Low | < 0.5   |   1  |
@@ -60,6 +61,7 @@ The output from `makeExposureTimeseries` is a matrix with 12 columns (1 for each
 Once you have the species-specific exposure calculated for each variable, they must be combined to estimate total species-specific exposure. These will be the final spatially and temporally explicit values that are combined with species sensitivity to estimate vulnerability. 
 
 To combine the species-specific exposures for each variable, we use the same logic rule as the CVA1.0:
+
 |Overall Score| Numeric Score | Logic Rule |
 |:---------:|:---------:|:---------:|
 | Low | 1   |   All other scores  |
