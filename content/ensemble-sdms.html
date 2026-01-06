@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/acknowledgements.html" rel="next">
+<link href="../content/exposure-calculation.html" rel="next">
 <link href="../content/install-setup.html" rel="prev">
 <link href="../images/favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -384,8 +384,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">content/sensitivity-calculation.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../content/exposure-calculation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Calculating Exposure</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -796,7 +799,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#all arguments are the same as `make_predictions`</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>allData <span class="ot">&lt;-</span> <span class="fu">makePredDF</span>(norm, <span class="at">bathyR =</span> bathyR, <span class="at">bathy_max =</span> <span class="dv">1000</span>, <span class="at">staticData =</span> <span class="st">'./Data/staticVariables_cropped_normZ.RData'</span>, <span class="at">mask =</span> T)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod, <span class="at">newdata =</span> all2023, <span class="at">type =</span> <span class="st">'response'</span>) <span class="co">#predict everything all at once in a single call </span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod, <span class="at">newdata =</span> allData, <span class="at">type =</span> <span class="st">'response'</span>) <span class="co">#predict everything all at once in a single call </span></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>pred<span class="sc">$</span>my <span class="ot">&lt;-</span> <span class="fu">paste</span>(pred<span class="sc">$</span>month, pred<span class="sc">$</span>year, <span class="at">sep =</span> <span class="st">'.'</span>)</span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>abund <span class="ot">&lt;-</span> <span class="fu">predictSDM</span>(<span class="at">mod =</span> mod, <span class="at">df =</span> pred, <span class="at">staticData =</span> <span class="st">'./Data/staticVariables_cropped_normZ.RData'</span>) <span class="co">#make into rasters</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1247,8 +1250,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/acknowledgements.html" class="pagination-link" aria-label="Acknowledgements">
-        <span class="nav-page-text">Acknowledgements</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/exposure-calculation.html" class="pagination-link" aria-label="Calculating Exposure">
+        <span class="nav-page-text">Calculating Exposure</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
