@@ -14,6 +14,7 @@ The function `calcExposure` will take the output from `pull_hind` and/or `pull_f
 exposure <- calcExposure(presentRasts, futureRasts)
 ```
 Where `presentRasts` and `futureRasts` are lists of rasterStacks with the same length. These are the raw timeseries over the desired time periods. Remember that `pull_hind` and `pull_forecast` pull the complete timeseries for the desired MOM6 run, so you will need to subset their outputs accordingly if desired. `calcExposure` will produce a list of rasterStacks with the same length as the provided lists. Each rasterStack will have 12 layers, one for each month. 
+![Bottom Temperature Raw Exposure comparing 2019-2019 and 2025-2035](raster_example.png)
 
 The next step is to rank the raw exposure. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0: 
 
