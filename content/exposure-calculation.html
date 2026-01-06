@@ -449,8 +449,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>exposure <span class="ot">&lt;-</span> <span class="fu">calcExposure</span>(presentRasts, futureRasts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Where <code>presentRasts</code> and <code>futureRasts</code> are lists of rasterStacks with the same length. These are the raw timeseries over the desired time periods. Remember that <code>pull_hind</code> and <code>pull_forecast</code> pull the complete timeseries for the desired MOM6 run, so you will need to subset their outputs accordingly if desired. <code>calcExposure</code> will produce a list of rasterStacks with the same length as the provided lists. Each rasterStack will have 12 layers, one for each month.</p>
-<p>The next step is to rank the raw exposure. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0: |Score| Raw Exposure | Rank | |:———:|:———:|:———:| | Low | &lt; 0.5 | 1 | | Medium | 0.5 - 1.5 | 2 |<br>
-| High | 1.5 - 2 | 3 | | Very High | &gt; 2 | 4| : Raw Exposure Ranks</p>
+<p>The next step is to rank the raw exposure. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0:</p>
+<table class="caption-top table">
+<caption>Raw Exposure Ranks</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Score</th>
+<th style="text-align: center;">Raw Exposure</th>
+<th style="text-align: center;">Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Low</td>
+<td style="text-align: center;">&lt; 0.5</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Medium</td>
+<td style="text-align: center;">0.5 - 1.5</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">High</td>
+<td style="text-align: center;">1.5 - 2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Very High</td>
+<td style="text-align: center;">&gt; 2</td>
+<td style="text-align: center;">4</td>
+</tr>
+</tbody>
+</table>
 <p>The function <code>rankExposure</code> performs the ranking. It also provides the option to multiply raw exposure values for certain by -1 (aka flip). This option was included because the direction of change and the meaning of that change may differ across environmental variables. For example, an increase in surface temperatures would have a positive exposure, whereas a decrease in pH would have a negative exposure; both changes are considered bad for the environment, but the signs differ due to how these variables are quantified. The <code>flip</code> and <code>noFlipList</code> options provide the option to flip the signs of raw exposure for all variables <em>except</em> those listed in <code>noFlipList</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>expRanked <span class="ot">&lt;-</span> <span class="fu">rankExposure</span>(exposure, <span class="at">flip =</span> T, <span class="at">noflipList =</span> <span class="fu">c</span>(<span class="st">'bottomT'</span>, <span class="st">'surfaceT'</span>, <span class="st">'bottomArg'</span>, <span class="st">'MLD'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -479,8 +510,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="calculating-total-exposure-for-each-species" class="level2">
 <h2 class="anchored" data-anchor-id="calculating-total-exposure-for-each-species">Calculating Total Exposure for Each Species</h2>
 <p>Once you have the species-specific exposure calculated for each variable, they must be combined to estimate total species-specific exposure. These will be the final spatially and temporally explicit values that are combined with species sensitivity to estimate vulnerability.</p>
-<p>To combine the species-specific exposures for each variable, we use the same logic rule as the CVA1.0: |Overall Score| Numeric Score | Logic Rule | |:———:|:———:|:———:| | Low | 1 | All other scores | | Medium | 2 | 2 or more attributes &gt;= 2.5 |<br>
-| High | 3 | 2 or more attributes &gt;= 3.0 | | Very High | 4 | 3 or more attributes &gt;= 3.5 | : Total Species-Specific Exposure Ranks</p>
+<p>To combine the species-specific exposures for each variable, we use the same logic rule as the CVA1.0:</p>
+<table class="caption-top table">
+<caption>Total Species-Specific Exposure Ranks</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Overall Score</th>
+<th style="text-align: center;">Numeric Score</th>
+<th style="text-align: center;">Logic Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Low</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">All other scores</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Medium</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2 or more attributes &gt;= 2.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">High</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">2 or more attributes &gt;= 3.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Very High</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">3 or more attributes &gt;= 3.5</td>
+</tr>
+</tbody>
+</table>
 <p>We calculate total exposure in two ways: 1) Applying the logic rule to all ecologically relevant environmental variables as defined by the feeding and habitat keys and 2) Only applying the logic rule to ecological variables that have relative weights in the final ensemble SDM greater than a set value (for the NE Shelf CVA2.0, we chose 10% or 0.1). This was done to account for possible unknown changes in variable importance under future climate change. The latter method (only counting the most important variables), assumes that these values will continue to be very important under future climate change scenarios. It is unclear if this will be the case, especially for variables such as pH where it is unclear how they will impact species. Calculating total exposure using all the ecologically relevant variables allows us and stakeholders to consider all variables regardless of their model importance.</p>
 <p>The functions <code>combineTimeseries</code> and <code>combineMaps</code> provide options for both methods with the option <code>countAll</code>. If set to TRUE, you will need to provide the relative weights and the threshold to use to count variables. Setting <code>countAll</code> to FALSE will automatically count all provided variables in <code>matExp</code> for <code>combineTimeseries</code> or <code>mapExp</code> for <code>combineMaps</code>, which are the outputs from <code>makeExposureTimeseries</code> and <code>makeExposureMaps</code>, respectively. It is important that, if you have not yet done so, that you subset <code>matExp</code> and <code>mapExp</code> to only the ecologically relevant variables before running the <code>combineTimeseries</code> and <code>combineMaps</code> functions. This can be done using the relative weights of the variables.</p>
 <p>The function <code>combineWeights</code> estimates the relative variable importance across the models. Since every component model of the ensemble SDM estimates variable importance differently, all importance data is normalized to their respective sums such that they total 1. A weighted average is then performed across models using the weights of each component model in the ensemble. The result is a vector of values representing the relative importance of each of the ecologically relevant variables to the model.</p>
