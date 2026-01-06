@@ -448,7 +448,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>exposure <span class="ot">&lt;-</span> <span class="fu">calcExposure</span>(presentRasts, futureRasts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Where <code>presentRasts</code> and <code>futureRasts</code> are lists of rasterStacks with the same length. These are the raw timeseries over the desired time periods. Remember that <code>pull_hind</code> and <code>pull_forecast</code> pull the complete timeseries for the desired MOM6 run, so you will need to subset their outputs accordingly if desired. <code>calcExposure</code> will produce a list of rasterStacks with the same length as the provided lists. Each rasterStack will have 12 layers, one for each month. <img src="raster_example.png" class="img-fluid" alt="Bottom Temperature Raw Exposure comparing 2019-2019 and 2025-2035"></p>
+<p>Where <code>presentRasts</code> and <code>futureRasts</code> are lists of rasterStacks with the same length. These are the raw timeseries over the desired time periods. Remember that <code>pull_hind</code> and <code>pull_forecast</code> pull the complete timeseries for the desired MOM6 run, so you will need to subset their outputs accordingly if desired. <code>calcExposure</code> will produce a list of rasterStacks with the same length as the provided lists. Each rasterStack will have 12 layers, one for each month. <img src="bottomT_exposure.jpg" class="img-fluid" alt="Bottom Temperature Raw Exposure comparing 2019-2019 and 2025-2035"></p>
 <p>The next step is to rank the raw exposure. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0:</p>
 <table class="caption-top table">
 <caption>Raw Exposure Ranks</caption>
@@ -486,6 +486,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>expRanked <span class="ot">&lt;-</span> <span class="fu">rankExposure</span>(exposure, <span class="at">flip =</span> T, <span class="at">noflipList =</span> <span class="fu">c</span>(<span class="st">'bottomT'</span>, <span class="st">'surfaceT'</span>, <span class="st">'bottomArg'</span>, <span class="st">'MLD'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="bottomT_exposure_ranked.jpg" class="img-fluid figure-img"></p>
+<figcaption>Bottom Temperature Ranked Exposure comparing 2019-2019 and 2025-2035</figcaption>
+</figure>
+</div>
 </section>
 <section id="creating-species-specific-exposure-time-series-and-maps-for-each-variable" class="level2">
 <h2 class="anchored" data-anchor-id="creating-species-specific-exposure-time-series-and-maps-for-each-variable">Creating Species-Specific Exposure Time Series and Maps for Each Variable</h2>
@@ -498,6 +504,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>vecExp <span class="ot">&lt;-</span> <span class="fu">makeExposureTimeseries</span>(<span class="at">rankExp =</span> expRanked, <span class="at">sdmRast =</span> avgHSM)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The ensemble SDM results produced by <code>make_predictions</code> should be converted into a monthly average prior to using <code>makeExposureTimeseries</code> and <code>makeExposureMaps</code>. It is also recommended that you remove low SDM values after averaging. In the NE Shelf CVA2.0, we removed all SDM values less than 0.1 (representing areas with less than a 10% likelihood of finding the species). Not removing these low values resulted in higher than expected exposure results in areas where the species is rare.</p>
+<p>The output from <code>makeExposureTimeseries</code> is a matrix with 12 columns (1 for each month) and a number of rows equal to the number of environmental variables in <code>expRanked</code>. <code>makeExposureMaps</code> produces a rasterStack, with each layer representing one of the environmental variables. Values should range from 1 to 4.</p>
 <p>The wrapper function <code>makeVariableAverages</code> is provided and can be run in parallel using the <code>furrr</code> package, similar to the SDM wrapper functions. Like those wrapper functions, your directory must be set up according to the Installation and Setup Guide provided for them to function. <code>makeVariableAverages</code> also generates the monthly average SDM results, and removes low values for you.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">6</span>)</span>
@@ -505,7 +512,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(sequential)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Like the SDM wrapper functions, <code>args</code> is a dataframe where each row is a set of arguments to be passed to the function. Here, the arguments include the species name (<code>spp</code>), ensemble name to help locate the appropriate ensemble model (<code>ensName</code>), and start and end years for the present and future timeseries (<code>pStart</code>/<code>pEnd</code>/<code>fStart</code>/<code>fEnd</code>) to load in the correct exposure values, as well as save the results from <code>makeExposureTimeseries</code> and <code>makeExposureMaps</code> appropriately. These are not memory or time-intensive calculations, so it is not necessary to run them in parallel - it is just helpful if you have a lot of species to work through.</p>
-<p>The output from <code>makeExposureTimeseries</code> is a matrix with 12 columns (1 for each month) and a number of rows equal to the number of environmental variables in <code>expRanked</code>. <code>makeExposureMaps</code> produces a rasterStack, with each layer representing one of the environmental variables. Values should range from 1 to 4.</p>
+<p>Below are example variable-specific exposures for Atlantic cod: <img src="exposure_variable_timeseries.png" class="img-fluid" alt="Variable-specific exposures across time"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="exposure_variable_maps.png" class="img-fluid figure-img"></p>
+<figcaption>Variable-specific exposures across space</figcaption>
+</figure>
+</div>
 </section>
 <section id="calculating-total-exposure-for-each-species" class="level2">
 <h2 class="anchored" data-anchor-id="calculating-total-exposure-for-each-species">Calculating Total Exposure for Each Species</h2>
@@ -566,6 +579,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#maps</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  totalM <span class="ot">&lt;-</span> <span class="fu">combineMaps</span>(<span class="at">mapExp =</span> mapSub, <span class="at">weights =</span> cW, <span class="at">wThreshold =</span> <span class="dv">0</span>, <span class="at">countAll =</span> T)</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  totalMS <span class="ot">&lt;-</span> <span class="fu">combineMaps</span>(<span class="at">mapExp =</span> mapSub, <span class="at">weights =</span> cW, <span class="at">wThreshold =</span> <span class="fl">0.1</span>, <span class="at">countAll =</span> F)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Below are examples of total exposure using both methods for Atlantic cod: <img src="exposure_timeseries_all.png" class="img-fluid" alt="Total Exposure using all ecologically-relevant variables across time"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="exposure_timeseries_subset.png" class="img-fluid figure-img"></p>
+<figcaption>Total Exposure using only important variables across time</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="exposure_total_maps_all.png" class="img-fluid figure-img"></p>
+<figcaption>Total Exposure using all ecologically-relevant variables across space</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="exposure_total_maps_subset.png" class="img-fluid figure-img"></p>
+<figcaption>Total Exposure using only important variables across space</figcaption>
+</figure>
 </div>
 
 
