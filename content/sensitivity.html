@@ -407,12 +407,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#a-note-on-sensitivity-vs-adaptability" id="toc-a-note-on-sensitivity-vs-adaptability" class="nav-link active" data-scroll-target="#a-note-on-sensitivity-vs-adaptability">A Note on Sensitivity vs Adaptability</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a>
+  <ul class="collapse">
+  <li><a href="#a-note-on-sensitivity-vs-adaptability" id="toc-a-note-on-sensitivity-vs-adaptability" class="nav-link" data-scroll-target="#a-note-on-sensitivity-vs-adaptability">A Note on Sensitivity vs Adaptability</a></li>
+  </ul></li>
   <li><a href="#expert-scoring" id="toc-expert-scoring" class="nav-link" data-scroll-target="#expert-scoring">Expert Scoring</a></li>
   <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a>
   <ul class="collapse">
   <li><a href="#attribute-scores" id="toc-attribute-scores" class="nav-link" data-scroll-target="#attribute-scores">Attribute Scores</a></li>
   <li><a href="#total-sensitivity-scores" id="toc-total-sensitivity-scores" class="nav-link" data-scroll-target="#total-sensitivity-scores">Total Sensitivity Scores</a></li>
+  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow">Workflow</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/sensitivity.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/sensitivity.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -440,7 +444,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>##Overview Species sensitivity to change will be measured qualitatively as in the original CVA. Species experts will rank the impacts of different life history attributes on species sensitivity.</p>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>Species sensitivity to change will be measured qualitatively as in the original CVA. Species experts will rank the impacts of different life history attributes on species sensitivity.</p>
 <section id="a-note-on-sensitivity-vs-adaptability" class="level3">
 <h3 class="anchored" data-anchor-id="a-note-on-sensitivity-vs-adaptability">A Note on Sensitivity vs Adaptability</h3>
 <p>The Boyce et al 2022 and 2024 papers seperated species sensitivity and adaptability attributes. In the original CVA, sensitivity and adaptive attributes were grouped together, as removing one or the other significantly changed the results. Furthermore, <a href="http://www.st.nmfs.noaa.gov/Assets/ecosystems/climate/documents/TM%20OSF3.pdf">Morrison et al 2015</a> considered sensitivity and adaptivity inverses of each other (ie higher sensitivity would mean that a species is less adaptive) and decided to group them.</p>
@@ -461,6 +467,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Spawning Cycle</li>
 </ul>
 <p>Full text of the attributes will be made available once finalized.</p>
+</section>
 </section>
 <section id="expert-scoring" class="level2">
 <h2 class="anchored" data-anchor-id="expert-scoring">Expert Scoring</h2>
@@ -539,13 +546,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>The total sensitivity score is calculated using the <code>logic.rule</code> function.</p>
-<p>###Workflow #### Calculating Scores A single function, <code>calculate.sensitivity</code>, combines both the attribute score calculation done by <code>attribute.score</code> and the total sensitivity score calculation done by <code>logic.rule</code> in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center.</p>
+</section>
+<section id="workflow" class="level3">
+<h3 class="anchored" data-anchor-id="workflow">Workflow</h3>
+<section id="calculating-scores" class="level4">
+<h4 class="anchored" data-anchor-id="calculating-scores">Calculating Scores</h4>
+<p>A single function, <code>calculate.sensitivity</code>, combines both the attribute score calculation done by <code>attribute.score</code> and the total sensitivity score calculation done by <code>logic.rule</code> in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">'expert_scores.csv'</span>) <span class="co">#raw sensitivity data from FSCVA Portal</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>species.data.list <span class="ot">&lt;-</span> <span class="fu">split</span>(data, data<span class="sc">$</span>Stock.Name) <span class="co">#generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>species.sensitivity <span class="ot">&lt;-</span> <span class="fu">lapply</span>(species.data.list, calculate.sensitivity, <span class="at">bootstrap =</span> F) <span class="co">#calculate attribute scores and total sensitivity </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The resulting data.frame contains a row for each species scored, with columns containing the attribute scores and a total sensitivity score.</p>
+</section>
 <section id="calculating-uncertainty" class="level4">
 <h4 class="anchored" data-anchor-id="calculating-uncertainty">Calculating Uncertainty</h4>
 <p>Uncertainty was quantified using the tally-based scoring system described above. Uncertainty was calculated by resampling the tallies with replacement across the four bins, and recalculating the weighted average attribute score, then the total sensitivity. Following the original CVA, uncertainty is represented as the proportion or percent of bootstrapped total sensitivity scores that match the expert-derived total scores. For the default number of iterations (10,000), this function takes just under a minute (~45 seconds) per species on a standard workstation.</p>
