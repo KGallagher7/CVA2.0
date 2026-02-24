@@ -20,41 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -412,12 +377,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#a-note-on-sensitivity-vs-adaptability" id="toc-a-note-on-sensitivity-vs-adaptability" class="nav-link" data-scroll-target="#a-note-on-sensitivity-vs-adaptability">A Note on Sensitivity vs Adaptability</a></li>
   </ul></li>
   <li><a href="#expert-scoring" id="toc-expert-scoring" class="nav-link" data-scroll-target="#expert-scoring">Expert Scoring</a></li>
-  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a>
-  <ul class="collapse">
-  <li><a href="#attribute-scores" id="toc-attribute-scores" class="nav-link" data-scroll-target="#attribute-scores">Attribute Scores</a></li>
-  <li><a href="#total-sensitivity-scores" id="toc-total-sensitivity-scores" class="nav-link" data-scroll-target="#total-sensitivity-scores">Total Sensitivity Scores</a></li>
-  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow">Workflow</a></li>
-  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/KGallagher7/CVA2.0/edit/main/content/sensitivity.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/blob/main/content/sensitivity.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/KGallagher7/CVA2.0/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -474,114 +433,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Experts across NOAA, research, and industry were asked to score how species life history traits may make them sensitive to climate change, following the original methods in <a href="http://www.st.nmfs.noaa.gov/Assets/ecosystems/climate/documents/TM%20OSF3.pdf">Morrison et al 2015</a>. Experts were provided basic life history information relevant to the sensitivity attributes. The species profiles from the original analysis were updated and reviewed for consistency by 2 NOAA scientists. Experts were asked to score species both within and outside their field of expertise. Each species was scored by five experts, with at least two scorers per species considered experts on that species guild.</p>
 <p>Briefly, experts assign a score based on four scoring bins (low, moderate, high, and very high) for each attribute using their expert judgement and life history information. Each expert had five tallies to distribute across the four bins to help quantify certainty. If an expert was certain about a score, they could put all five tallies in a single bin. Conversely, if they were uncertain, the tallies could be distributed across multiple bins. Certainty was quantified using a bootstrap analysis by resampling tallies with replacement and recalculating the attribute and sensitivity scores.</p>
 <p>Experts were asked to score species independently, and then met for three virtual discussion workshops to discuss scores with other experts. They were then given the chance to finalize their scores based on these discussions. We asked experts to <strong>not</strong> consider the scores from the original analysis to reduce bias in the results.</p>
-</section>
-<section id="analysis" class="level2">
-<h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
-<p>Scores were collected using the Fish Stock Climate Vulnerability Assessment Portal, and exported as a csv. Scores were calculated for each attribute and these scores were used to calculate a final exposure score for the species. Unlike exposure, and similar to the original analysis, a single value is produced for each species.</p>
-<section id="attribute-scores" class="level3">
-<h3 class="anchored" data-anchor-id="attribute-scores">Attribute Scores</h3>
-<p>Attribute scores were calculated using a weighted average following Equation 1 in Morrison et al 2015. Briefly, the number of tallies in each of the four bins is multiplied by a weight, summed, and divided by the total number of tallies (which would be 5 scorers per species x 5 tallies per scorer = 25). The weights that correspond to each bin are:</p>
-<table class="caption-top table">
-<caption>Bin Weights</caption>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Bin</th>
-<th style="text-align: center;">Weight</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">Low</td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">Medium</td>
-<td style="text-align: center;">2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">High</td>
-<td style="text-align: center;">3</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">Very High</td>
-<td style="text-align: center;">4</td>
-</tr>
-</tbody>
-</table>
-<p>The function <code>attribute.score</code> performs the weighted average. This function is based on code provided by the Tyler Loughran and the Atlantic Highly Migratory Species Management Division, Office of Sustainable Fisheries. The workflow is outlined below.</p>
-</section>
-<section id="total-sensitivity-scores" class="level3">
-<h3 class="anchored" data-anchor-id="total-sensitivity-scores">Total Sensitivity Scores</h3>
-<p>Following the original CVA methods, total sensitivity is calculated with a logic rule. This is the same logic rule used to calculate total exposure from individual variable exposure scores:</p>
-<table class="caption-top table">
-<caption>Logic Rule used to Calculate Total Species Sensitivity</caption>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Overall Score</th>
-<th style="text-align: center;">Numeric Score</th>
-<th style="text-align: center;">Logic Rule</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">Low</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">All other scores</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">Medium</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">2 or more attributes &gt;= 2.5</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">High</td>
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">2 or more attributes &gt;= 3.0</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">Very High</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">3 or more attributes &gt;= 3.5</td>
-</tr>
-</tbody>
-</table>
-<p>The total sensitivity score is calculated using the <code>logic.rule</code> function.</p>
-</section>
-<section id="workflow" class="level3">
-<h3 class="anchored" data-anchor-id="workflow">Workflow</h3>
-<section id="calculating-scores" class="level4">
-<h4 class="anchored" data-anchor-id="calculating-scores">Calculating Scores</h4>
-<p>A single function, <code>calculate.sensitivity</code>, combines both the attribute score calculation done by <code>attribute.score</code> and the total sensitivity score calculation done by <code>logic.rule</code> in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center and built to use <code>lapply</code> functionality to move through all species quickly.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">'expert_scores.csv'</span>) <span class="co">#raw sensitivity data from FSCVA Portal</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>species.data.list <span class="ot">&lt;-</span> <span class="fu">split</span>(data, data<span class="sc">$</span>Stock.Name) <span class="co">#generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>species.sensitivity <span class="ot">&lt;-</span> <span class="fu">lapply</span>(species.data.list, calculate.sensitivity, <span class="at">bootstrap =</span> F) <span class="co">#calculate attribute scores and total sensitivity </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>The resulting data.frame contains a row for each species scored, with columns containing the attribute scores and a total sensitivity score.</p>
-</section>
-<section id="calculating-uncertainty" class="level4">
-<h4 class="anchored" data-anchor-id="calculating-uncertainty">Calculating Uncertainty</h4>
-<p>Uncertainty was quantified using the tally-based scoring system described above. Uncertainty was calculated by resampling the tallies with replacement across the four bins, and recalculating the weighted average attribute score, then the total sensitivity. Following the original CVA, uncertainty is represented as the proportion or percent of bootstrapped total sensitivity scores that match the expert-derived total scores. For the default number of iterations (10,000), this function takes just under a minute (~45 seconds) per species on a standard workstation.</p>
-<p>Both ‘attribute.score’ and ‘logic.rule’, and subsequently ‘calculate.sensitivity’ have the ability to also perform the bootstrap calculation.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">'expert_scores.csv'</span>) <span class="co">#raw sensitivity data from FSCVA Portal</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>species.data.list <span class="ot">&lt;-</span> <span class="fu">split</span>(data, data<span class="sc">$</span>Stock.Name) <span class="co">#generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sensitivity.bootstrap <span class="ot">&lt;-</span> <span class="fu">lapply</span>(species.data.list, calculate.sensitivity, <span class="at">bootstrap =</span> T, <span class="at">samples =</span> <span class="dv">10000</span>) <span class="co">#calculate sensitivity with bootstrapping </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>When <code>bootstrap = TRUE</code>, the resulting data.frame will have a number of rows equal to the number of <code>samples</code>, with each row representing one of the iterations. Columns will contain the attribute scores and total sensitivity score for that iteration.</p>
-<p>The function <code>bootstrap.certainty</code> calculates the final uncertainty value (AKA the proportion of bootstrap iterations that match the expert scores). This function will calculate the proportion of bootstrapped total sensitivity scores correspond to each possible score (1-4). If <code>match = TRUE</code>, then the corresponding proportion to the score derived from the expert tallies will be appended to the output from <code>calculate.sensitivity(bootstrap = TRUE)</code> as a column called <code>Certainty</code>. If <code>match = FALSE</code>, a vector containing the proportion of bootstrap scores that correspond to each possible total sensitivity score is returned.</p>
-<p>As such, the total workflow can be run with only 5 lines of code:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">'expert_scores.csv'</span>) <span class="co">#raw sensitivity data from FSCVA Portal</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>species.data.list <span class="ot">&lt;-</span> <span class="fu">split</span>(data, data<span class="sc">$</span>Stock.Name) <span class="co">#generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>species.sensitivity <span class="ot">&lt;-</span> <span class="fu">lapply</span>(species.data.list, calculate.sensitivity, <span class="at">bootstrap =</span> F) <span class="co">#calculate attribute scores and total sensitivity</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>sensitivity.bootstrap <span class="ot">&lt;-</span> <span class="fu">lapply</span>(species.data.list, calculate.sensitivity, <span class="at">bootstrap =</span> T, <span class="at">samples =</span> <span class="dv">10000</span>) <span class="co">#calculate sensitivity with bootstrapping </span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sensitivity.certainty <span class="ot">&lt;-</span> <span class="fu">lapply</span>(sensitivity.bootstrap, bootstrap.certainty, <span class="at">match =</span> T, <span class="at">sensitivity.dataframe =</span> species.sensitivity)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 
 
-</section>
-</section>
 </section>
 
 </main> <!-- /main -->
