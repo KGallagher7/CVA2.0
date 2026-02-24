@@ -33,7 +33,7 @@ The total sensitivity score is calculated using the `logic.rule` function.
 
 ### Workflow
 #### Calculating Scores
-A single function, `calculate.sensitivity`, combines both the attribute score calculation done by `attribute.score` and the total sensitivity score calculation done by `logic.rule` in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center and built to use `lapply` functionality to move through all species quickly. 
+A single function, `calculate.sensitivity`, combines both the attribute score calculation done by `attribute.score` and the total sensitivity score calculation done by `logic.rule` in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center. 
 
 ```{r}
 #| eval: false
@@ -57,12 +57,21 @@ When `bootstrap = TRUE`, the resulting data.frame will have a number of rows equ
 
 The function `bootstrap.certainty` calculates the final uncertainty value (AKA the proportion of bootstrap iterations that match the expert scores). This function will calculate the proportion of bootstrapped total sensitivity scores correspond to each possible score (1-4). If `match = TRUE`, then the corresponding proportion to the score derived from the expert tallies will be appended to the output from `calculate.sensitivity(bootstrap = TRUE)` as a column called `Certainty`. If `match = FALSE`, a vector containing the proportion of bootstrap scores that correspond to each possible total sensitivity score is returned.  
 
-As such, the total workflow can be run with only 5 lines of code: 
+The entire workflow can be run using `lapply` and `mapply` functionality on the entire raw dataset from the FSCVA portal using only 6 lines of code: 
 ```{r}
 #| eval: false
 data <-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal
 species.data.list <- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list
 species.sensitivity <- lapply(species.data.list, calculate.sensitivity, bootstrap = F) #calculate attribute scores and total sensitivity
 sensitivity.bootstrap <- lapply(species.data.list, calculate.sensitivity, bootstrap = T, samples = 10000) #calculate sensitivity with bootstrapping 
-sensitivity.certainty <- lapply(sensitivity.bootstrap, bootstrap.certainty, match = T, sensitivity.dataframe = species.sensitivity)
+sensitivity.certainty <- mapply(bootstrap.certainty, sensitivity.bootstrap, species.sensitivity, SIMPLIFY = F) #note the use of mapply rather than lapply here since both inputs are lists
+#since both input lists are use species.data.list, they will be in the same order
+sensitivityDF <- do.call(rbind, sensitivity.certainty) #this combines the list of vectors into a data.frame
+```
+
+The resulting data.frame shows the scores for each attribute, plus the total sensitivity and corresponding certainty: 
+```{r}
+#| echo: false
+sens <- read.csv('sensitivity1.0.csv')
+head(sens)
 ```
