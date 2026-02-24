@@ -66,7 +66,7 @@ The total sensitivity score is calculated using the `logic.rule` function.
 
 ### Workflow
 #### Calculating Scores
-A single function, `calculate.sensitivity`, combines both the attribute score calculation done by `attribute.score` and the total sensitivity score calculation done by `logic.rule` in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center. 
+A single function, `calculate.sensitivity`, combines both the attribute score calculation done by `attribute.score` and the total sensitivity score calculation done by `logic.rule` in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center and built to use `lapply` functionality to move through all species quickly. 
 
 ```{r}
 #| eval: false
