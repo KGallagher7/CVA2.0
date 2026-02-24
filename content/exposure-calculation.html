@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,9 +74,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-0d59ca884f2b610b219ea3d09d70ad34.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -557,7 +557,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>We calculate total exposure in two ways: 1) Applying the logic rule to all ecologically relevant environmental variables as defined by the feeding and habitat keys and 2) Only applying the logic rule to ecological variables that have relative weights in the final ensemble SDM greater than a set value (for the NE Shelf CVA2.0, we chose 10% or 0.1). This was done to account for possible unknown changes in variable importance under future climate change. The latter method (only counting the most important variables), assumes that these values will continue to be very important under future climate change scenarios. It is unclear if this will be the case, especially for variables such as pH where it is unclear how they will impact species. Calculating total exposure using all the ecologically relevant variables allows us and stakeholders to consider all variables regardless of their model importance.</p>
-<p>The functions <code>combineTimeseries</code> and <code>combineMaps</code> provide options for both methods with the option <code>countAll</code>. If set to TRUE, you will need to provide the relative weights and the threshold to use to count variables. Setting <code>countAll</code> to FALSE will automatically count all provided variables in <code>matExp</code> for <code>combineTimeseries</code> or <code>mapExp</code> for <code>combineMaps</code>, which are the outputs from <code>makeExposureTimeseries</code> and <code>makeExposureMaps</code>, respectively. It is important that, if you have not yet done so, that you subset <code>matExp</code> and <code>mapExp</code> to only the ecologically relevant variables before running the <code>combineTimeseries</code> and <code>combineMaps</code> functions. This can be done using the relative weights of the variables.</p>
+<p>The functions <code>combineTimeseries</code> and <code>combineMaps</code> provide options for both methods with the option <code>countAll</code>. Setting <code>countAll</code> to TRUE will automatically count all provided variables in <code>matExp</code> for <code>combineTimeseries</code> or <code>mapExp</code> for <code>combineMaps</code>, which are the outputs from <code>makeExposureTimeseries</code> and <code>makeExposureMaps</code>, respectively. If set to FALSE, you will need to provide the relative weights and the threshold to use to count variables in the logic rule. It is important that, if you have not yet done so, that you subset <code>matExp</code> and <code>mapExp</code> to only the ecologically relevant variables before running the <code>combineTimeseries</code> and <code>combineMaps</code> functions. This can be done using the relative weights of the variables.</p>
 <p>The function <code>combineWeights</code> estimates the relative variable importance across the models. Since every component model of the ensemble SDM estimates variable importance differently, all importance data is normalized to their respective sums such that they total 1. A weighted average is then performed across models using the weights of each component model in the ensemble. The result is a vector of values representing the relative importance of each of the ecologically relevant variables to the model.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cW <span class="ot">&lt;-</span> <span class="fu">combineWeights</span>(<span class="at">vars =</span> vars, <span class="at">ensWeights =</span> weights, <span class="at">impFlist =</span> iFlist, <span class="at">staticNames =</span> staticVars)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
