@@ -521,7 +521,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="workflow">Workflow</h3>
 <section id="calculating-scores" class="level4">
 <h4 class="anchored" data-anchor-id="calculating-scores">Calculating Scores</h4>
-<p>A single function, <code>calculate.sensitivity</code>, combines both the attribute score calculation done by <code>attribute.score</code> and the total sensitivity score calculation done by <code>logic.rule</code> in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center and built to use <code>lapply</code> functionality to move through all species quickly.</p>
+<p>A single function, <code>calculate.sensitivity</code>, combines both the attribute score calculation done by <code>attribute.score</code> and the total sensitivity score calculation done by <code>logic.rule</code> in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">'expert_scores.csv'</span>) <span class="co">#raw sensitivity data from FSCVA Portal</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>species.data.list <span class="ot">&lt;-</span> <span class="fu">split</span>(data, data<span class="sc">$</span>Stock.Name) <span class="co">#generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list</span></span>
@@ -540,13 +540,62 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>When <code>bootstrap = TRUE</code>, the resulting data.frame will have a number of rows equal to the number of <code>samples</code>, with each row representing one of the iterations. Columns will contain the attribute scores and total sensitivity score for that iteration.</p>
 <p>The function <code>bootstrap.certainty</code> calculates the final uncertainty value (AKA the proportion of bootstrap iterations that match the expert scores). This function will calculate the proportion of bootstrapped total sensitivity scores correspond to each possible score (1-4). If <code>match = TRUE</code>, then the corresponding proportion to the score derived from the expert tallies will be appended to the output from <code>calculate.sensitivity(bootstrap = TRUE)</code> as a column called <code>Certainty</code>. If <code>match = FALSE</code>, a vector containing the proportion of bootstrap scores that correspond to each possible total sensitivity score is returned.</p>
-<p>As such, the total workflow can be run with only 5 lines of code:</p>
+<p>The entire workflow can be run using <code>lapply</code> and <code>mapply</code> functionality on the entire raw dataset from the FSCVA portal using only 6 lines of code:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">'expert_scores.csv'</span>) <span class="co">#raw sensitivity data from FSCVA Portal</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>species.data.list <span class="ot">&lt;-</span> <span class="fu">split</span>(data, data<span class="sc">$</span>Stock.Name) <span class="co">#generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>species.sensitivity <span class="ot">&lt;-</span> <span class="fu">lapply</span>(species.data.list, calculate.sensitivity, <span class="at">bootstrap =</span> F) <span class="co">#calculate attribute scores and total sensitivity</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>sensitivity.bootstrap <span class="ot">&lt;-</span> <span class="fu">lapply</span>(species.data.list, calculate.sensitivity, <span class="at">bootstrap =</span> T, <span class="at">samples =</span> <span class="dv">10000</span>) <span class="co">#calculate sensitivity with bootstrapping </span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sensitivity.certainty <span class="ot">&lt;-</span> <span class="fu">lapply</span>(sensitivity.bootstrap, bootstrap.certainty, <span class="at">match =</span> T, <span class="at">sensitivity.dataframe =</span> species.sensitivity)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sensitivity.certainty <span class="ot">&lt;-</span> <span class="fu">mapply</span>(bootstrap.certainty, sensitivity.bootstrap, species.sensitivity, <span class="at">SIMPLIFY =</span> F) <span class="co">#note the use of mapply rather than lapply here since both inputs are lists</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#since both input lists are use species.data.list, they will be in the same order</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>sensitivityDF <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, sensitivity.certainty) <span class="co">#this combines the list of vectors into a data.frame</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The resulting data.frame shows the scores for each attribute, plus the total sensitivity and corresponding certainty:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                 X Adult.Mobility Complexity.in.Reproductive.Strategy
+1  Acadian redfish           2.72                                1.84
+2          Alewife           1.60                                3.25
+3  American conger           1.45                                2.15
+4     American eel           1.15                                2.05
+5 American lobster           1.90                                1.40
+6  American plaice           2.75                                1.45
+  Dispersal.of.Early.Life.Stages
+1                           2.04
+2                           2.80
+3                           1.35
+4                           1.10
+5                           1.80
+6                           1.45
+  Early.Life.History.Survival.and.Settlement.Requirements Habitat.Specificity
+1                                                    2.20                1.72
+2                                                    3.28                2.56
+3                                                    2.25                2.55
+4                                                    2.45                2.05
+5                                                    2.35                1.85
+6                                                    2.15                1.80
+  Other.Stressors Population.Growth.Rate Prey.Specificity
+1            1.92                   3.52             1.96
+2            2.68                   2.24             1.68
+3            2.24                   2.00             1.65
+4            2.45                   2.70             1.10
+5            2.70                   3.45             1.15
+6            1.25                   2.45             2.10
+  Sensitivity.to.Ocean.Acidification Sensitivity.to.Temperature Spawning.Cycle
+1                               1.12                       1.80           2.60
+2                               1.56                       2.16           3.16
+3                               1.25                       1.70           2.90
+4                               1.15                       1.40           2.50
+5                               3.85                       2.70           2.90
+6                               1.90                       1.65           2.40
+  Stock.Size.Status Total.Sensitivity Certainty
+1              1.84                 2    0.9998
+2              2.52                 3    1.0000
+3              2.40                 2    0.6946
+4              2.55                 2    0.7234
+5              2.20                 3    1.0000
+6              2.95                 2    0.9882</code></pre>
+</div>
 </div>
 
 
