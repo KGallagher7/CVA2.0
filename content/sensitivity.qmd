@@ -2,7 +2,7 @@
 title: Sensitivity
 ---
 
-##Overview
+## Overview
 Species sensitivity to change will be measured qualitatively as in the original CVA. Species experts will rank the impacts of different life history attributes on species sensitivity.  
 
 ### A Note on Sensitivity vs Adaptability 
@@ -64,7 +64,7 @@ Following the original CVA methods, total sensitivity is calculated with a logic
 
 The total sensitivity score is calculated using the `logic.rule` function.
 
-###Workflow
+### Workflow
 #### Calculating Scores
 A single function, `calculate.sensitivity`, combines both the attribute score calculation done by `attribute.score` and the total sensitivity score calculation done by `logic.rule` in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center. 
 
