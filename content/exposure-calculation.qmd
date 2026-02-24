@@ -76,7 +76,7 @@ To combine the species-specific exposures for each variable, we use the same log
 | Medium | 2  | 2 or more attributes >= 2.5   |  
 | High | 3 |  2 or more attributes >= 3.0  |
 | Very High | 4 | 3 or more attributes >= 3.5 |
-: Total Species-Specific Exposure Ranks
+: Logic Rule used to Calculate Total Species Exposure
 
 We calculate total exposure in two ways: 1) Applying the logic rule to all ecologically relevant environmental variables as defined by the feeding and habitat keys and 2) Only applying the logic rule to ecological variables that have relative weights in the final ensemble SDM greater than a set value (for the NE Shelf CVA2.0, we chose 10% or 0.1). This was done to account for possible unknown changes in variable importance under future climate change. The latter method (only counting the most important variables), assumes that these values will continue to be very important under future climate change scenarios. It is unclear if this will be the case, especially for variables such as pH where it is unclear how they will impact species. Calculating total exposure using all the ecologically relevant variables allows us and stakeholders to consider all variables regardless of their model importance. 
 
