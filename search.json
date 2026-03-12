@@ -1,66 +1,31 @@
 [
   {
-    "objectID": "content/exposure.html",
-    "href": "content/exposure.html",
-    "title": "Species Exposure",
+    "objectID": "content/publishing.html",
+    "href": "content/publishing.html",
+    "title": "Publishing",
     "section": "",
-    "text": "Species exposure is quantified using the decadal from the MOM6 model. In the CVA1.0, exposure to surface temperatures, salinities, and changes in ocean acidification were quantified using a z-score. This quantity describes how many standard deviations over the present mean conditions a value, in this case mean future conditions, are.\nFor the CVA2.0, we will use this same metric. Z-scores will be calculated across space and time using average monthly timesteps. Exposure values will be averaged across time and space each month to produce an exposure map and monthly timeseries for each variable, using predicted species distributions to perform weighted averages so that only expsoure within the species ranges are considered and habitat use by the species is taken into account.\nWe will calculate total exposure using the same logic rule implimented in the CVA 1.0 in two different ways: 1) counting all ecologicaly relevant variables and 2) only counting variables that have relative weights over 10% in the species distribution models. This will be done across both time and space to produce both a total timeseries and map of exposure for each species.",
-    "crumbs": [
-      "Methods",
-      "Species Exposure"
-    ]
+    "text": "To get your Quarto webpage to show up with the url\nyou have a few steps."
   },
   {
-    "objectID": "content/sensitivity_calculation.html",
-    "href": "content/sensitivity_calculation.html",
-    "title": "Sensitivity Calculation",
-    "section": "",
-    "text": "Sensitivity scores were collected using the Fish Stock Climate Vulnerability Assessment Portal, and exported as a csv. Scores were calculated for each attribute and these scores were used to calculate a final exposure score for the species. Unlike exposure, and similar to the original analysis, a single value is produced for each species.\n\n\nAttribute scores were calculated using a weighted average following Equation 1 in Morrison et al 2015. Briefly, the number of tallies in each of the four bins is multiplied by a weight, summed, and divided by the total number of tallies (which would be 5 scorers per species x 5 tallies per scorer = 25). The weights that correspond to each bin are:\n\nBin Weights\n\n\nBin\nWeight\n\n\n\n\nLow\n1\n\n\nMedium\n2\n\n\nHigh\n3\n\n\nVery High\n4\n\n\n\nThe function attribute.score performs the weighted average. This function is based on code provided by the Tyler Loughran and the Atlantic Highly Migratory Species Management Division, Office of Sustainable Fisheries. The workflow is outlined below.\n\n\n\nFollowing the original CVA methods, total sensitivity is calculated with a logic rule. This is the same logic rule used to calculate total exposure from individual variable exposure scores:\n\nLogic Rule used to Calculate Total Species Sensitivity\n\n\nOverall Score\nNumeric Score\nLogic Rule\n\n\n\n\nLow\n1\nAll other scores\n\n\nMedium\n2\n2 or more attributes &gt;= 2.5\n\n\nHigh\n3\n2 or more attributes &gt;= 3.0\n\n\nVery High\n4\n3 or more attributes &gt;= 3.5\n\n\n\nThe total sensitivity score is calculated using the logic.rule function.\n\n\n\n\n\nA single function, calculate.sensitivity, combines both the attribute score calculation done by attribute.score and the total sensitivity score calculation done by logic.rule in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center.\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\nspecies.sensitivity &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = F) #calculate attribute scores and total sensitivity \n\ncalculate.sensitivity returns a vector, containing the individual attribute scores and the total score. When used with lapply as in the example above, a list of vectors will be produced, with one vector per species in the provided species.data.list.\n\n\n\nUncertainty was quantified using the tally-based scoring system described above. Uncertainty was calculated by resampling the tallies with replacement across the four bins, and recalculating the weighted average attribute score, then the total sensitivity. Following the original CVA, uncertainty is represented as the proportion or percent of bootstrapped total sensitivity scores that match the expert-derived total scores. For the default number of iterations (10,000), this function takes just under a minute (~45 seconds) per species on a standard workstation.\nBoth attribute.score and logic.rule, and subsequently calculate.sensitivity have the ability to also perform the bootstrap calculation.\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\nsensitivity.bootstrap &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = T, samples = 10000) #calculate sensitivity with bootstrapping \n\nWhen bootstrap = TRUE, a data.frame, rather than a vector, is produced. This data.frame will have a number of rows equal to the number of samples, with each row representing one of the iterations. Columns will contain the attribute scores and total sensitivity score for that iteration. When used with lapply as in the example above, a list of data.frames will be produced, with one data.frame per species in the provided species.data.list.\nThe function bootstrap.certainty calculates the final uncertainty value (AKA the proportion of bootstrap iterations that match the expert scores). This function will calculate the proportion of bootstrapped total sensitivity scores correspond to the total sensitivity score (1-4). It adds a column called ‘Certainty’ to the vector generated by calculate.sensitivity(bootstrap = FALSE).\nThe entire workflow can be run using lapply and mapply functionality on the entire raw dataset from the FSCVA portal using only 6 lines of code:\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\nspecies.sensitivity &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = F) #calculate attribute scores and total sensitivity\nsensitivity.bootstrap &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = T, samples = 10000) #calculate sensitivity with bootstrapping \nsensitivity.certainty &lt;- mapply(bootstrap.certainty, sensitivity.bootstrap, species.sensitivity, SIMPLIFY = F) #note the use of mapply rather than lapply here since both inputs are lists\n#since both input lists are use species.data.list, they will be in the same order\nsensitivityDF &lt;- do.call(rbind, sensitivity.certainty) #this combines the list of vectors into a data.frame\n\nThe resulting data.frame shows the scores for each attribute, plus the total sensitivity and corresponding certainty:\n\n\n                 X Adult.Mobility Complexity.in.Reproductive.Strategy\n1  Acadian redfish           2.72                                1.84\n2          Alewife           1.60                                3.25\n3  American conger           1.45                                2.15\n4     American eel           1.15                                2.05\n5 American lobster           1.90                                1.40\n6  American plaice           2.75                                1.45\n  Dispersal.of.Early.Life.Stages\n1                           2.04\n2                           2.80\n3                           1.35\n4                           1.10\n5                           1.80\n6                           1.45\n  Early.Life.History.Survival.and.Settlement.Requirements Habitat.Specificity\n1                                                    2.20                1.72\n2                                                    3.28                2.56\n3                                                    2.25                2.55\n4                                                    2.45                2.05\n5                                                    2.35                1.85\n6                                                    2.15                1.80\n  Other.Stressors Population.Growth.Rate Prey.Specificity\n1            1.92                   3.52             1.96\n2            2.68                   2.24             1.68\n3            2.24                   2.00             1.65\n4            2.45                   2.70             1.10\n5            2.70                   3.45             1.15\n6            1.25                   2.45             2.10\n  Sensitivity.to.Ocean.Acidification Sensitivity.to.Temperature Spawning.Cycle\n1                               1.12                       1.80           2.60\n2                               1.56                       2.16           3.16\n3                               1.25                       1.70           2.90\n4                               1.15                       1.40           2.50\n5                               3.85                       2.70           2.90\n6                               1.90                       1.65           2.40\n  Stock.Size.Status Total.Sensitivity Certainty\n1              1.84                 2    0.9998\n2              2.52                 3    1.0000\n3              2.40                 2    0.6946\n4              2.55                 2    0.7234\n5              2.20                 3    1.0000\n6              2.95                 2    0.9882",
-    "crumbs": [
-      "R Package",
-      "Sensitivity Calculation"
-    ]
+    "objectID": "content/publishing.html#turn-on-github-pages-for-your-repo",
+    "href": "content/publishing.html#turn-on-github-pages-for-your-repo",
+    "title": "Publishing",
+    "section": "Turn on GitHub Pages for your repo",
+    "text": "Turn on GitHub Pages for your repo\n\nTurn on GitHub Pages under Settings &gt; Pages . You will set pages to be made from the gh-pages branch and the root directory.\nTurn on GitHub Actions under Settings &gt; Actions &gt; General\n\nThe GitHub Action will automatically recreate your website when you push to GitHub after you do the initial gh-pages set-up"
   },
   {
-    "objectID": "content/sensitivity_calculation.html#analysis",
-    "href": "content/sensitivity_calculation.html#analysis",
-    "title": "Sensitivity Calculation",
-    "section": "",
-    "text": "Sensitivity scores were collected using the Fish Stock Climate Vulnerability Assessment Portal, and exported as a csv. Scores were calculated for each attribute and these scores were used to calculate a final exposure score for the species. Unlike exposure, and similar to the original analysis, a single value is produced for each species.\n\n\nAttribute scores were calculated using a weighted average following Equation 1 in Morrison et al 2015. Briefly, the number of tallies in each of the four bins is multiplied by a weight, summed, and divided by the total number of tallies (which would be 5 scorers per species x 5 tallies per scorer = 25). The weights that correspond to each bin are:\n\nBin Weights\n\n\nBin\nWeight\n\n\n\n\nLow\n1\n\n\nMedium\n2\n\n\nHigh\n3\n\n\nVery High\n4\n\n\n\nThe function attribute.score performs the weighted average. This function is based on code provided by the Tyler Loughran and the Atlantic Highly Migratory Species Management Division, Office of Sustainable Fisheries. The workflow is outlined below.\n\n\n\nFollowing the original CVA methods, total sensitivity is calculated with a logic rule. This is the same logic rule used to calculate total exposure from individual variable exposure scores:\n\nLogic Rule used to Calculate Total Species Sensitivity\n\n\nOverall Score\nNumeric Score\nLogic Rule\n\n\n\n\nLow\n1\nAll other scores\n\n\nMedium\n2\n2 or more attributes &gt;= 2.5\n\n\nHigh\n3\n2 or more attributes &gt;= 3.0\n\n\nVery High\n4\n3 or more attributes &gt;= 3.5\n\n\n\nThe total sensitivity score is calculated using the logic.rule function.\n\n\n\n\n\nA single function, calculate.sensitivity, combines both the attribute score calculation done by attribute.score and the total sensitivity score calculation done by logic.rule in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center.\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\nspecies.sensitivity &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = F) #calculate attribute scores and total sensitivity \n\ncalculate.sensitivity returns a vector, containing the individual attribute scores and the total score. When used with lapply as in the example above, a list of vectors will be produced, with one vector per species in the provided species.data.list.\n\n\n\nUncertainty was quantified using the tally-based scoring system described above. Uncertainty was calculated by resampling the tallies with replacement across the four bins, and recalculating the weighted average attribute score, then the total sensitivity. Following the original CVA, uncertainty is represented as the proportion or percent of bootstrapped total sensitivity scores that match the expert-derived total scores. For the default number of iterations (10,000), this function takes just under a minute (~45 seconds) per species on a standard workstation.\nBoth attribute.score and logic.rule, and subsequently calculate.sensitivity have the ability to also perform the bootstrap calculation.\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\nsensitivity.bootstrap &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = T, samples = 10000) #calculate sensitivity with bootstrapping \n\nWhen bootstrap = TRUE, a data.frame, rather than a vector, is produced. This data.frame will have a number of rows equal to the number of samples, with each row representing one of the iterations. Columns will contain the attribute scores and total sensitivity score for that iteration. When used with lapply as in the example above, a list of data.frames will be produced, with one data.frame per species in the provided species.data.list.\nThe function bootstrap.certainty calculates the final uncertainty value (AKA the proportion of bootstrap iterations that match the expert scores). This function will calculate the proportion of bootstrapped total sensitivity scores correspond to the total sensitivity score (1-4). It adds a column called ‘Certainty’ to the vector generated by calculate.sensitivity(bootstrap = FALSE).\nThe entire workflow can be run using lapply and mapply functionality on the entire raw dataset from the FSCVA portal using only 6 lines of code:\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\nspecies.sensitivity &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = F) #calculate attribute scores and total sensitivity\nsensitivity.bootstrap &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = T, samples = 10000) #calculate sensitivity with bootstrapping \nsensitivity.certainty &lt;- mapply(bootstrap.certainty, sensitivity.bootstrap, species.sensitivity, SIMPLIFY = F) #note the use of mapply rather than lapply here since both inputs are lists\n#since both input lists are use species.data.list, they will be in the same order\nsensitivityDF &lt;- do.call(rbind, sensitivity.certainty) #this combines the list of vectors into a data.frame\n\nThe resulting data.frame shows the scores for each attribute, plus the total sensitivity and corresponding certainty:\n\n\n                 X Adult.Mobility Complexity.in.Reproductive.Strategy\n1  Acadian redfish           2.72                                1.84\n2          Alewife           1.60                                3.25\n3  American conger           1.45                                2.15\n4     American eel           1.15                                2.05\n5 American lobster           1.90                                1.40\n6  American plaice           2.75                                1.45\n  Dispersal.of.Early.Life.Stages\n1                           2.04\n2                           2.80\n3                           1.35\n4                           1.10\n5                           1.80\n6                           1.45\n  Early.Life.History.Survival.and.Settlement.Requirements Habitat.Specificity\n1                                                    2.20                1.72\n2                                                    3.28                2.56\n3                                                    2.25                2.55\n4                                                    2.45                2.05\n5                                                    2.35                1.85\n6                                                    2.15                1.80\n  Other.Stressors Population.Growth.Rate Prey.Specificity\n1            1.92                   3.52             1.96\n2            2.68                   2.24             1.68\n3            2.24                   2.00             1.65\n4            2.45                   2.70             1.10\n5            2.70                   3.45             1.15\n6            1.25                   2.45             2.10\n  Sensitivity.to.Ocean.Acidification Sensitivity.to.Temperature Spawning.Cycle\n1                               1.12                       1.80           2.60\n2                               1.56                       2.16           3.16\n3                               1.25                       1.70           2.90\n4                               1.15                       1.40           2.50\n5                               3.85                       2.70           2.90\n6                               1.90                       1.65           2.40\n  Stock.Size.Status Total.Sensitivity Certainty\n1              1.84                 2    0.9998\n2              2.52                 3    1.0000\n3              2.40                 2    0.6946\n4              2.55                 2    0.7234\n5              2.20                 3    1.0000\n6              2.95                 2    0.9882",
-    "crumbs": [
-      "R Package",
-      "Sensitivity Calculation"
-    ]
+    "objectID": "content/publishing.html#do-your-first-publish-to-gh-pages",
+    "href": "content/publishing.html#do-your-first-publish-to-gh-pages",
+    "title": "Publishing",
+    "section": "Do your first publish to gh-pages",
+    "text": "Do your first publish to gh-pages\nThe first time you publish to gh-pages, you need to do so locally.\n\nOn your local computer, open a terminal window and cd to your repo directory. Here is what that cd command looks like for me. You command will look different because your local repo will be somewhere else on your computer.\n\ncd ~/Documents/GitHub/NOAA-quarto-simple\n\nPublish to the gh-pages. In the terminal type\n\nquarto publish gh-pages\nThis is going to render your webpage and then push the _site contents to the gh-pages branch."
   },
   {
-    "objectID": "content/methods-overview.html",
-    "href": "content/methods-overview.html",
-    "title": "Methods Overview",
-    "section": "",
-    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
-    "crumbs": [
-      "Methods"
-    ]
-  },
-  {
-    "objectID": "content/methods-overview.html#overview",
-    "href": "content/methods-overview.html#overview",
-    "title": "Methods Overview",
-    "section": "",
-    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
-    "crumbs": [
-      "Methods"
-    ]
-  },
-  {
-    "objectID": "content/rpackage-overview.html",
-    "href": "content/rpackage-overview.html",
-    "title": "RPackage Overview",
-    "section": "",
-    "text": "An R package is undergoing active development to document the workflows and codes used to contruct the new Climate Vulnerability Assessment.\nThe package will have 4 major components:\n\nBuilding the ensemble species distribution models\nEstimating exposure\nSummarizing sensitivity from expert scores\nCalculating final vulnerability scores\n\nThe following pages provide a tutorial for the different portions of the package.",
-    "crumbs": [
-      "R Package"
-    ]
+    "objectID": "content/publishing.html#dont-like-using-gh-pages",
+    "href": "content/publishing.html#dont-like-using-gh-pages",
+    "title": "Publishing",
+    "section": "Don’t like using gh-pages?",
+    "text": "Don’t like using gh-pages?\nIn some cases, you don’t want your website on the gh-pages branch. For example, if you are creating releases and you want the website pages archived in that release, then you won’t want your website pages on the gh-pages branch.\nHere are the changes you need to make if you to avoid gh-pages branch.\n\nAt the top of _quarto.yml add the following:\n\nproject: \n  type: website\n  output-dir: docs\n\nOn GitHub under Settings &gt; Pages set pages to be made from the main branch and the docs directory.\nMake sure docs is not listed in .gitignore\nPublish the site the first time locally using quarto publish from the terminal\nChange the GitHub Action because you can’t use quarto publish gh-pages. You’ll need to push to the main branch yourself (in the GitHub Action)\n\non:\n  push:\n    branches: main\n\nname: Render and Publish\n\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    env:\n      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}\n\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v2 \n        \n      - name: Set up R (needed for Rmd)\n        uses: r-lib/actions/setup-r@v2\n\n      - name: Install packages (needed for Rmd)\n        run: Rscript -e 'install.packages(c(\"rmarkdown\", \"knitr\", \"jsonlite\"))'\n\n      - name: Set up Quarto\n        uses: quarto-dev/quarto-actions/setup@v2\n        with:\n          # To install LaTeX to build PDF book \n          # tinytex: true \n          # uncomment below and fill to pin a version\n          # version: 0.9.600\n      \n      - name: Render Quarto Project\n        uses: quarto-dev/quarto-actions/render@v2\n        with:\n          to: html\n\n      - name: Set up Git\n        run: |\n          git config --local user.email \"actions@github.com\"\n          git config --local user.name \"GitHub Actions\"\n\n      - name: Commit all changes and push\n        run: |\n          git add -A && git commit -m 'Build site' || echo \"No changes to commit\"\n          git push origin || echo \"No changes to commit\""
   },
   {
     "objectID": "content/acknowledgements.html",
@@ -71,93 +36,6 @@
     "crumbs": [
       "Acknowledgements"
     ]
-  },
-  {
-    "objectID": "content/vulnerability_directionality.html",
-    "href": "content/vulnerability_directionality.html",
-    "title": "Vulnerability & Directionality",
-    "section": "",
-    "text": "Vulnerability\nThe final vulnerability scores will be estimated using similar methods to Boyce et al 2022 and 2024 - a weighted average of sensitivity, exposure, and if used in this analysis, adaptive, scores based on variability across the study area. For attributes based on life history stages, such as sensitivity and/or adaptability, these will be uniform across the study region. These averages will occur across space.\nThe final product will be a map of species vulnerability across the study region. An overall vulnerability score may be generated based on habitat suitability.\n\n\nDirectionality\nIn the original CVA, in addition to ranking how sensitive species may be to future climate change, experts also estimated if species would be positively or negatively impacted by climate change. For the CVA2.0, we will use the species distribution models to estimate current area of preferred habitat. We will calculate change in habitat area over time from the decadal and long-term projections from MOM6. We may also calculate directionality via expert opinion and compare the two metrics.",
-    "crumbs": [
-      "Methods",
-      "Vulnerability & Directionality"
-    ]
-  },
-  {
-    "objectID": "content/exposure-calculation.html",
-    "href": "content/exposure-calculation.html",
-    "title": "Calculating Exposure",
-    "section": "",
-    "text": "Exposure is calculated from MOM6 forecast data using the same methods to calculate and rank raw exposure as the CVA1.0 on the MOM6 environmental data. We then use the predicted species distributions and the relative importance of covariates in the ensemble models to calculate variable-specific and total exposure for each species.",
-    "crumbs": [
-      "R Package",
-      "Calculating Exposure"
-    ]
-  },
-  {
-    "objectID": "content/exposure-calculation.html#overview",
-    "href": "content/exposure-calculation.html#overview",
-    "title": "Calculating Exposure",
-    "section": "",
-    "text": "Exposure is calculated from MOM6 forecast data using the same methods to calculate and rank raw exposure as the CVA1.0 on the MOM6 environmental data. We then use the predicted species distributions and the relative importance of covariates in the ensemble models to calculate variable-specific and total exposure for each species.",
-    "crumbs": [
-      "R Package",
-      "Calculating Exposure"
-    ]
-  },
-  {
-    "objectID": "content/exposure-calculation.html#calculating-and-ranking-raw-exposure",
-    "href": "content/exposure-calculation.html#calculating-and-ranking-raw-exposure",
-    "title": "Calculating Exposure",
-    "section": "Calculating and Ranking Raw Exposure",
-    "text": "Calculating and Ranking Raw Exposure\nAs in the CVA1.0, raw exposure for each environmental variable is calculated using a z-score, which is the difference in mean conditions in a future and present timeseries divided by present day standard deviations.\nThe function calcExposure will take the output from pull_hind and/or pull_forecast (a list of rasterStacks) and calculate monthly raw exposure for each environmental variable in the list:\n\nexposure &lt;- calcExposure(presentRasts, futureRasts)\n\nWhere presentRasts and futureRasts are lists of rasterStacks with the same length. These are the raw timeseries over the desired time periods. Remember that pull_hind and pull_forecast pull the complete timeseries for the desired MOM6 run, so you will need to subset their outputs accordingly if desired. calcExposure will produce a list of rasterStacks with the same length as the provided lists. Each rasterStack will have 12 layers, one for each month. \nThe next step is to rank the raw exposure. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0:\n\nRaw Exposure Ranks\n\n\nScore\nRaw Exposure\nRank\n\n\n\n\nLow\n&lt; 0.5\n1\n\n\nMedium\n0.5 - 1.5\n2\n\n\nHigh\n1.5 - 2\n3\n\n\nVery High\n&gt; 2\n4\n\n\n\nThe function rankExposure performs the ranking. It also provides the option to multiply raw exposure values for certain by -1 (aka flip). This option was included because the direction of change and the meaning of that change may differ across environmental variables. For example, an increase in surface temperatures would have a positive exposure, whereas a decrease in pH would have a negative exposure; both changes are considered bad for the environment, but the signs differ due to how these variables are quantified. The flip and noFlipList options provide the option to flip the signs of raw exposure for all variables except those listed in noFlipList.\n\nexpRanked &lt;- rankExposure(exposure, flip = T, noflipList = c('bottomT', 'surfaceT', 'bottomArg', 'MLD'))\n\n\n\n\nBottom Temperature Ranked Exposure comparing 2019-2019 and 2025-2035",
-    "crumbs": [
-      "R Package",
-      "Calculating Exposure"
-    ]
-  },
-  {
-    "objectID": "content/exposure-calculation.html#creating-species-specific-exposure-time-series-and-maps-for-each-variable",
-    "href": "content/exposure-calculation.html#creating-species-specific-exposure-time-series-and-maps-for-each-variable",
-    "title": "Calculating Exposure",
-    "section": "Creating Species-Specific Exposure Time Series and Maps for Each Variable",
-    "text": "Creating Species-Specific Exposure Time Series and Maps for Each Variable\nOnce raw exposure is ranked, species-specific exposure for each environmental variable can be calculated using the functions makeExposureTimeseries and makeExposureMaps. These functions are nearly identical and only require the ranked exposure values and the mean ensemble species distribution model (SDM) predictions. Ranked exposure values are averaged across space within each month in makeExposureTimeseries and averaged across months in each model grid cell in makeExposureMaps, using the SDM results as weights to account for species distributions and habitat use. The results are a time series of average ranked species-specific exposure within each month and a raster of average species-specific exposure across time for each environmental variable.\n\n#map\nmapExp &lt;- makeExposureMaps(rankExp = expRanked, sdmRast = avgHSM)\n\n#timeseries\nvecExp &lt;- makeExposureTimeseries(rankExp = expRanked, sdmRast = avgHSM)\n\nThe ensemble SDM results produced by make_predictions should be converted into a monthly average prior to using makeExposureTimeseries and makeExposureMaps. It is also recommended that you remove low SDM values after averaging. In the NE Shelf CVA2.0, we removed all SDM values less than 0.1 (representing areas with less than a 10% likelihood of finding the species). Not removing these low values resulted in higher than expected exposure results in areas where the species is rare.\nThe output from makeExposureTimeseries is a matrix with 12 columns (1 for each month) and a number of rows equal to the number of environmental variables in expRanked. makeExposureMaps produces a rasterStack, with each layer representing one of the environmental variables. Values should range from 1 to 4.\nThe wrapper function makeVariableAverages is provided and can be run in parallel using the furrr package, similar to the SDM wrapper functions. Like those wrapper functions, your directory must be set up according to the Installation and Setup Guide provided for them to function. makeVariableAverages also generates the monthly average SDM results, and removes low values for you.\n\nplan(multisession, workers = 6)\nchecks &lt;- future_pmap(list(..1 = args$spp, ..2 = args$ensName, ..3 = args$pStart, ..4 = args$pEnd, ..5 = args$fStart, ..6 = args$fEnd), ~ makeVariableAverages(spp = ..1, ensName = ..2, pStart = ..3, pEnd = ..4, fStart = ..5, fEnd = ..6), .progress = T,  .options = furrr_options(seed = 2025))\nplan(sequential)\n\nLike the SDM wrapper functions, args is a dataframe where each row is a set of arguments to be passed to the function. Here, the arguments include the species name (spp), ensemble name to help locate the appropriate ensemble model (ensName), and start and end years for the present and future timeseries (pStart/pEnd/fStart/fEnd) to load in the correct exposure values, as well as save the results from makeExposureTimeseries and makeExposureMaps appropriately. These are not memory or time-intensive calculations, so it is not necessary to run them in parallel - it is just helpful if you have a lot of species to work through.\nBelow are example variable-specific exposures for Atlantic cod: \n\n\n\nVariable-specific exposures across space",
-    "crumbs": [
-      "R Package",
-      "Calculating Exposure"
-    ]
-  },
-  {
-    "objectID": "content/exposure-calculation.html#calculating-total-exposure-for-each-species",
-    "href": "content/exposure-calculation.html#calculating-total-exposure-for-each-species",
-    "title": "Calculating Exposure",
-    "section": "Calculating Total Exposure for Each Species",
-    "text": "Calculating Total Exposure for Each Species\nOnce you have the species-specific exposure calculated for each variable, they must be combined to estimate total species-specific exposure. These will be the final spatially and temporally explicit values that are combined with species sensitivity to estimate vulnerability.\nTo combine the species-specific exposures for each variable, we use the same logic rule as the CVA1.0:\n\nLogic Rule used to Calculate Total Species Exposure\n\n\nOverall Score\nNumeric Score\nLogic Rule\n\n\n\n\nLow\n1\nAll other scores\n\n\nMedium\n2\n2 or more attributes &gt;= 2.5\n\n\nHigh\n3\n2 or more attributes &gt;= 3.0\n\n\nVery High\n4\n3 or more attributes &gt;= 3.5\n\n\n\nWe calculate total exposure in two ways: 1) Applying the logic rule to all ecologically relevant environmental variables as defined by the feeding and habitat keys and 2) Only applying the logic rule to ecological variables that have relative weights in the final ensemble SDM greater than a set value (for the NE Shelf CVA2.0, we chose 10% or 0.1). This was done to account for possible unknown changes in variable importance under future climate change. The latter method (only counting the most important variables), assumes that these values will continue to be very important under future climate change scenarios. It is unclear if this will be the case, especially for variables such as pH where it is unclear how they will impact species. Calculating total exposure using all the ecologically relevant variables allows us and stakeholders to consider all variables regardless of their model importance.\nThe functions combineTimeseries and combineMaps provide options for both methods with the option countAll. Setting countAll to TRUE will automatically count all provided variables in matExp for combineTimeseries or mapExp for combineMaps, which are the outputs from makeExposureTimeseries and makeExposureMaps, respectively. If set to FALSE, you will need to provide the relative weights and the threshold to use to count variables in the logic rule. It is important that, if you have not yet done so, that you subset matExp and mapExp to only the ecologically relevant variables before running the combineTimeseries and combineMaps functions. This can be done using the relative weights of the variables.\nThe function combineWeights estimates the relative variable importance across the models. Since every component model of the ensemble SDM estimates variable importance differently, all importance data is normalized to their respective sums such that they total 1. A weighted average is then performed across models using the weights of each component model in the ensemble. The result is a vector of values representing the relative importance of each of the ecologically relevant variables to the model.\n\ncW &lt;- combineWeights(vars = vars, ensWeights = weights, impFlist = iFlist, staticNames = staticVars)\n\nWhere vars is a vector of character strings including the ecologically relevant variables, ensWeights is the weights of each component model of the ensemble model generated by make_sdm, impFlist is a vector of character strings including the file paths to the model variable importance files made by sdm_importance, and staticNames are the names of any static environmental variables to be excluded.\nThe names of the vector resulting from combineWeights can be used to subset the outputs from makeExposureTimeseries and makeExposureMaps, since these output contain all possible environmental variables from MOM6, before running combineTimeseries and combineMaps.\n\n#subset timeseries matrix by rownames\n  i &lt;- rownames(vecExp) %in% names(cW)\n  vecSub &lt;- vecExp[i,]\n\n#timeseries\n  totalTA &lt;- combineTimeseries(matExp = vecSub, weights = cW, wThreshold = 0, countAll = T) #counting all variables\n  totalTS &lt;- combineTimeseries(matExp = vecSub, weights = cW, wThreshold = 0.1, countAll = F) #counting only ecologically relevant variables\n\n#subset mapExp by rownames\n  i &lt;- names(mapExp) %in% names(cW)\n  mapSub &lt;- raster::subset(mapExp, which(i == T))\n#maps\n  totalM &lt;- combineMaps(mapExp = mapSub, weights = cW, wThreshold = 0, countAll = T)\n  totalMS &lt;- combineMaps(mapExp = mapSub, weights = cW, wThreshold = 0.1, countAll = F)\n\nBelow are examples of total exposure using both methods for Atlantic cod: \n\n\n\nTotal Exposure using only important variables across time\n\n\n\n\n\nTotal Exposure using all ecologically-relevant variables across space\n\n\n\n\n\nTotal Exposure using only important variables across space",
-    "crumbs": [
-      "R Package",
-      "Calculating Exposure"
-    ]
-  },
-  {
-    "objectID": "content/code.html",
-    "href": "content/code.html",
-    "title": "Rendering with Code",
-    "section": "",
-    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326"
-  },
-  {
-    "objectID": "content/code.html#modify-the-github-action",
-    "href": "content/code.html#modify-the-github-action",
-    "title": "Rendering with Code",
-    "section": "Modify the GitHub Action",
-    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it."
-  },
-  {
-    "objectID": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
-    "href": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
-    "title": "Rendering with Code",
-    "section": "Render locally and publish to gh-pages branch",
-    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
   },
   {
     "objectID": "content/install-setup.html",
@@ -191,6 +69,145 @@
       "R Package",
       "Installation & Setup"
     ]
+  },
+  {
+    "objectID": "content/rpackage-overview.html",
+    "href": "content/rpackage-overview.html",
+    "title": "RPackage Overview",
+    "section": "",
+    "text": "An R package is undergoing active development to document the workflows and codes used to contruct the new Climate Vulnerability Assessment.\nThe package will have 4 major components:\n\nBuilding the ensemble species distribution models\nEstimating exposure\nSummarizing sensitivity from expert scores\nCalculating final vulnerability scores\n\nThe following pages provide a tutorial for the different portions of the package.",
+    "crumbs": [
+      "R Package"
+    ]
+  },
+  {
+    "objectID": "content/add-content.html",
+    "href": "content/add-content.html",
+    "title": "Customize",
+    "section": "",
+    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
+  },
+  {
+    "objectID": "content/add-content.html#edit-and-add-your-pages",
+    "href": "content/add-content.html#edit-and-add-your-pages",
+    "title": "Customize",
+    "section": "",
+    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
+  },
+  {
+    "objectID": "content/add-content.html#add-your-pages-the-project",
+    "href": "content/add-content.html#add-your-pages-the-project",
+    "title": "Customize",
+    "section": "Add your pages the project",
+    "text": "Add your pages the project\n\nAdd the files to _quarto.yml"
+  },
+  {
+    "objectID": "content/code.html",
+    "href": "content/code.html",
+    "title": "Rendering with Code",
+    "section": "",
+    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326"
+  },
+  {
+    "objectID": "content/code.html#modify-the-github-action",
+    "href": "content/code.html#modify-the-github-action",
+    "title": "Rendering with Code",
+    "section": "Modify the GitHub Action",
+    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it."
+  },
+  {
+    "objectID": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
+    "href": "content/code.html#render-locally-and-publish-to-gh-pages-branch",
+    "title": "Rendering with Code",
+    "section": "Render locally and publish to gh-pages branch",
+    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
+  },
+  {
+    "objectID": "content/data.html",
+    "href": "content/data.html",
+    "title": "Data",
+    "section": "",
+    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
+    "crumbs": [
+      "Methods",
+      "Data"
+    ]
+  },
+  {
+    "objectID": "content/data.html#fisheries-data",
+    "href": "content/data.html#fisheries-data",
+    "title": "Data",
+    "section": "",
+    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
+    "crumbs": [
+      "Methods",
+      "Data"
+    ]
+  },
+  {
+    "objectID": "content/data.html#environmental-data",
+    "href": "content/data.html#environmental-data",
+    "title": "Data",
+    "section": "Environmental Data",
+    "text": "Environmental Data\nWe will be using species distribution modeling to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the Changing Fisheries and Ecosystem Initiative and includes both a physical ocean model and a coupled biogeochemical model.\n\nFor the CVA2.0\nWe are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.\nCovariates used to build the species distribution models include:\n\nSea Surface Temperature & Salinity\nBottom Temperature & Salinity\nSurface pH\nBottom Aragonite Solubility\nMixed Layer Depth\nDiazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)\nSmall, medium, and large zooplankton biomass (integrated in the top 100 m)\nDownward particulate organic carbon (POC) flux\nWater column net primary productivity (NPP)\n\nCovariates will be normalized to long term (1993 - 2019) averages and matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.",
+    "crumbs": [
+      "Methods",
+      "Data"
+    ]
+  },
+  {
+    "objectID": "content/sdm-methods.html",
+    "href": "content/sdm-methods.html",
+    "title": "Species Distribution Modeling",
+    "section": "",
+    "text": "The first step in the CVA2.0 is the construction of species distribution models (SDMs). SDMs are statistical models that describe the relationships between species presence or abundance and environmental attributes or covariates. There are many different types of SDMs that use different data types and statistical methods. There is an abundance of scientific literature that both describe and compare different model types. We will provide a brief overview below and describe the methods selected for the CVA2.0.",
+    "crumbs": [
+      "Methods",
+      "Species Distribution Modeling"
+    ]
+  },
+  {
+    "objectID": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
+    "href": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
+    "title": "Species Distribution Modeling",
+    "section": "Presence/Absence vs Abundance Data",
+    "text": "Presence/Absence vs Abundance Data\nSpecies distribution models can be built with primarily two different kinds of species data - presence/absence or abundance data. Presence/absence data describes when a species was present or absent, usually in binary with 0s representing absences and 1s representing presences. SDMs built with presence/absence data predict how likely it is that a species will be found there - often called habitat suitability - but does not consider how many individuals will be present.\nAbundance data on the other hand uses count or species density estimates. SDMS built with abundance data can predict the abundance or density of species in a given area or at a given time, but must deal with often irregular data.\n\nIn the CVA2.0…\nFor the CVA2.0, we use presence/absence data from a variety of sources. Using presence/absence data will allow us to combine multiple datasets across fisheries independent and dependent surveys.",
+    "crumbs": [
+      "Methods",
+      "Species Distribution Modeling"
+    ]
+  },
+  {
+    "objectID": "content/sdm-methods.html#statistical-modeling",
+    "href": "content/sdm-methods.html#statistical-modeling",
+    "title": "Species Distribution Modeling",
+    "section": "Statistical Modeling",
+    "text": "Statistical Modeling\nThere are many statistical models that we could have chosen for our SDMs. Options included generalized linear models (GLMs), generalized additive models (GAMs), uni (single) or multi-variate state-space models, machine learning methods, decision tree methods, and more! Many models have been used to describe species distributions along the Northeast Shelf. Each model type has pros and cons, and different models use different assumptions, statistical methods, etc to define habitat preferences.\nTo account for some of these differences between models, model ensembles can be generated by combining different model outputs together. Ensembles are usually built by averaging the outputs of different component models. Weighted averages can also be used to weight the averages based on model performance.\n\nIn the CVA2.0…\nWe use an ensemble modeling approach for the CVA2.0, following the work of the Alaska Fisheries Science Center (AFSC)’s Groundfish program, recently implimented an ensemble modeling framework for their Essential Fish Habitat work. Here, we use the following models:\n\nGeneralized Additive Model (GAM) using methods in EFHSDM\nMAXimum ENTropy (MAXENT) using methods in EFHSDM\nRandom Forest with Spatial Interpolation (RFSI)\nBoosted Regression Trees (BRTs) using gbm and following methods from Braun et al 2023\nSpatio-temporal Generalized Linear Mixed Models (GLMMs) with sdmTMB\n\nAll of these models accept presence/absence data; can be made spatially and temporally explicit, which was important for our analysis; and combine more “traditional” SDM methods such as GAM and MAXENT included in the AFSC’s ensemble with machine learning/decision tree-based models such as RFSI and BRTs. sdmTMB models are similar to other SDM methods common in fisheries work like VAST and tinyVAST. In addition, these or similar models have been used on the Northeast Shelf in previously published works.\nWe will generate our ensemble model by performing a weighted average on our components’ outputs. Weights will be calculated using the same methods as the AFSC. However, we will use Area under the Curve (AUC) rather than root mean squared error (RMSE) because AUC is a better accuracy metric for presence/absence models than RMSE.",
+    "crumbs": [
+      "Methods",
+      "Species Distribution Modeling"
+    ]
+  },
+  {
+    "objectID": "content/rmarkdown.html",
+    "href": "content/rmarkdown.html",
+    "title": "R Markdown",
+    "section": "",
+    "text": "You can include R Markdown files in your project."
+  },
+  {
+    "objectID": "content/rmarkdown.html#r-markdown",
+    "href": "content/rmarkdown.html#r-markdown",
+    "title": "R Markdown",
+    "section": "R Markdown",
+    "text": "R Markdown\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\n\nsummary(cars)\n\n     speed           dist       \n Min.   : 4.0   Min.   :  2.00  \n 1st Qu.:12.0   1st Qu.: 26.00  \n Median :15.0   Median : 36.00  \n Mean   :15.4   Mean   : 42.98  \n 3rd Qu.:19.0   3rd Qu.: 56.00  \n Max.   :25.0   Max.   :120.00"
+  },
+  {
+    "objectID": "content/rmarkdown.html#including-plots",
+    "href": "content/rmarkdown.html#including-plots",
+    "title": "R Markdown",
+    "section": "Including Plots",
+    "text": "Including Plots\nYou can also embed plots, for example:\n\n\n\n\n\n\n\n\n\nNote that the echo = FALSE parameter was added to the code chunk to prevent printing of the R code that generated the plot."
   },
   {
     "objectID": "index.html",
@@ -254,58 +271,184 @@
     "text": "Examples\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
   },
   {
-    "objectID": "content/data.html",
-    "href": "content/data.html",
-    "title": "Data",
+    "objectID": "content/methods-overview.html",
+    "href": "content/methods-overview.html",
+    "title": "Methods Overview",
     "section": "",
-    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
+    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
     "crumbs": [
-      "Methods",
-      "Data"
+      "Methods"
     ]
   },
   {
-    "objectID": "content/data.html#fisheries-data",
-    "href": "content/data.html#fisheries-data",
-    "title": "Data",
+    "objectID": "content/methods-overview.html#overview",
+    "href": "content/methods-overview.html#overview",
+    "title": "Methods Overview",
     "section": "",
-    "text": "We utilized two different data types for this work - fisheries independent and dependent data.\n\n\nFisheries independent data comes from sources outside of the fishing industry. These often come in the form of regular surveys run by federal or state-level management bodies. Traditionally, these surveys occur in the spring and fall. For the CVA2.0 in the Northeast, we used the following surveys:\n\nNOAA Northeast Ecosystems Surveys\nNortheast Area Monitoring and Assessment Program Nearshore Trawl\nMaine-New Hampshire Inshore Trawl Survey\nMassachusetts Division of Marine Fisheries Bottom Trawl Survey\nLong Island Sound Trawl Survey\nNew York Nearshore Trawl Survey\nNew Jersey Ocean Stock Assessment Survey\nDelaware Trawl Surveys\n\n\n\n\nFisheries dependent data is data collected by commercial and recreational fishers. In the United States, commercial fisheries data is collected by fisheries observers in the National Observer Program, Gillnet Observer Program, and Pelagic Observer Program. These are trained individuals who accompany fishing boats on their trips to collect data on the species caught. Data from recreational fisheries is collected using post-effort in person or phone surveys at different docks via the logbook and Large Pelagics Survey programs.\n\n\n\nFisheries independent and dependent data are collected using different methods - they could fish for different lengths of time, at different speeds, or use different equipment. This is especially true for fisheries dependent data, which may used specialized equipment depending on the species being targeted. Therefore, we cannot compare the number of individuals caught across these methods. As a result, we will only examine whether species are present or absent and will not model the number, or abundance, of species. While different fishing methods could impact the ability to catch a particular species, thus impacting our results, we believe that this approach will account for most differences and will assume that all datasets are sampling for long enough periods of time and appropriate equipment to sample all species.",
+    "text": "The CVA2.0 will take a semi-quantiative approach, using both quantitative and qualitative methods.\n\n\nSpecies distributions will be quantified using ensemble species distribution models, forced by environmental covariates from the MOM6 hindcast (1993 - 2019) and driven by fisheries dependent and independent datasets. These species distribution models will then be projected into the future using the MOM6 decadal and long-term forecasts to quantify changes in species distribution.\nWe will be able to use these same decadal and long-term (to 2100) forecasts to quantify changes in important environmental covariates over time, to determine drivers of change.\n\n\n\nSpecies sensitivity will be estimated following similar methods to the original CVA. We will perform a literature review to update our understanding of important life history attributes and solict expert feedback on the most important life history attributes.",
     "crumbs": [
-      "Methods",
-      "Data"
+      "Methods"
     ]
   },
   {
-    "objectID": "content/data.html#environmental-data",
-    "href": "content/data.html#environmental-data",
-    "title": "Data",
-    "section": "Environmental Data",
-    "text": "Environmental Data\nWe will be using species distribution modeling to quantify the relationships between species presence and their environment. We are using the Modular Ocean Model (MOM) 6 hindcast data to drive these models. The MOM6 is developed by the Changing Fisheries and Ecosystem Initiative and includes both a physical ocean model and a coupled biogeochemical model.\n\nFor the CVA2.0\nWe are using the hindcast timeseries from 1993-2019 from the MOM6 for the Northwest Atlantic to build the species distribution models. We will then project these models into the future using the decadal and long-term projections from the MOM6.\nCovariates used to build the species distribution models include:\n\nSea Surface Temperature & Salinity\nBottom Temperature & Salinity\nSurface pH\nBottom Aragonite Solubility\nMixed Layer Depth\nDiazotroph, small, medium, and large phytoplankton primary productivity (integrated in the top 100 m)\nSmall, medium, and large zooplankton biomass (integrated in the top 100 m)\nDownward particulate organic carbon (POC) flux\nWater column net primary productivity (NPP)\n\nCovariates will be normalized to long term (1993 - 2019) averages and matched to species based on their habitat and prey preferences. For example, the species distribution model for summer flounder will be built using bottom temperature and salinity, bottom aragonite solubility, downward POC flux, and NPP.",
+    "objectID": "content/sensitivity.html",
+    "href": "content/sensitivity.html",
+    "title": "Sensitivity",
+    "section": "",
+    "text": "Species sensitivity to change will be measured qualitatively as in the original CVA. Species experts will rank the impacts of different life history attributes on species sensitivity.\n\n\nThe Boyce et al 2022 and 2024 papers seperated species sensitivity and adaptability attributes. In the original CVA, sensitivity and adaptive attributes were grouped together, as removing one or the other significantly changed the results. Furthermore, Morrison et al 2015 considered sensitivity and adaptivity inverses of each other (ie higher sensitivity would mean that a species is less adaptive) and decided to group them.\n##Sensitivity Attributes The sensitivity attributes used in the CVA2.0 were similar to those used in the Northeast US for the original. A handful were updated to reflect new insights into the impacts of climate change on species life histories since the original analysis.\nThe following sensitivity attributes were used in the CVA2.0 analysis for the Northeast US. Updated attributes are bolded.\n\nJuvenile Habitat Requirements\nPrey Specificity\nRelationship to Calcified Organisms\nComplexity in Reproductive Strategy\nHistorical Variability in Temmperature\nEgg and Larval Survival and Settlement Requirements\nStock Size/Status\nOther Stressors\nPopulation Growth Rate\nDispersal of Early Life Stages\nAdult Mobility\nSpawning Cycle\n\nFull text of the attributes will be made available once finalized.",
     "crumbs": [
       "Methods",
-      "Data"
+      "Sensitivity"
     ]
   },
   {
-    "objectID": "content/add-content.html",
-    "href": "content/add-content.html",
-    "title": "Customize",
+    "objectID": "content/sensitivity.html#overview",
+    "href": "content/sensitivity.html#overview",
+    "title": "Sensitivity",
     "section": "",
-    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
+    "text": "Species sensitivity to change will be measured qualitatively as in the original CVA. Species experts will rank the impacts of different life history attributes on species sensitivity.\n\n\nThe Boyce et al 2022 and 2024 papers seperated species sensitivity and adaptability attributes. In the original CVA, sensitivity and adaptive attributes were grouped together, as removing one or the other significantly changed the results. Furthermore, Morrison et al 2015 considered sensitivity and adaptivity inverses of each other (ie higher sensitivity would mean that a species is less adaptive) and decided to group them.\n##Sensitivity Attributes The sensitivity attributes used in the CVA2.0 were similar to those used in the Northeast US for the original. A handful were updated to reflect new insights into the impacts of climate change on species life histories since the original analysis.\nThe following sensitivity attributes were used in the CVA2.0 analysis for the Northeast US. Updated attributes are bolded.\n\nJuvenile Habitat Requirements\nPrey Specificity\nRelationship to Calcified Organisms\nComplexity in Reproductive Strategy\nHistorical Variability in Temmperature\nEgg and Larval Survival and Settlement Requirements\nStock Size/Status\nOther Stressors\nPopulation Growth Rate\nDispersal of Early Life Stages\nAdult Mobility\nSpawning Cycle\n\nFull text of the attributes will be made available once finalized.",
+    "crumbs": [
+      "Methods",
+      "Sensitivity"
+    ]
   },
   {
-    "objectID": "content/add-content.html#edit-and-add-your-pages",
-    "href": "content/add-content.html#edit-and-add-your-pages",
-    "title": "Customize",
-    "section": "",
-    "text": "Edit the qmd or md files in the content folder. qmd files can include code (R, Python, Julia) and lots of Quarto markdown bells and whistles (like call-outs, cross-references, auto-citations and much more).\nEach page should start with\n---\ntitle: your title\n---\nand the first header will be the 2nd level, so ##. Note, there are situations where you leave off\n---\ntitle: your title\n---\nand start the qmd file with a level header #, but if using the default title yaml (in the --- fence) is a good habit since it makes it easy for Quarto convert your qmd file to other formats (like into a presentation)."
+    "objectID": "content/sensitivity.html#expert-scoring",
+    "href": "content/sensitivity.html#expert-scoring",
+    "title": "Sensitivity",
+    "section": "Expert Scoring",
+    "text": "Expert Scoring\nExperts across NOAA, research, and industry were asked to score how species life history traits may make them sensitive to climate change, following the original methods in Morrison et al 2015. Experts were provided basic life history information relevant to the sensitivity attributes. The species profiles from the original analysis were updated and reviewed for consistency by 2 NOAA scientists. Experts were asked to score species both within and outside their field of expertise. Each species was scored by five experts, with at least two scorers per species considered experts on that species guild.\nBriefly, experts assign a score based on four scoring bins (low, moderate, high, and very high) for each attribute using their expert judgement and life history information. Each expert had five tallies to distribute across the four bins to help quantify certainty. If an expert was certain about a score, they could put all five tallies in a single bin. Conversely, if they were uncertain, the tallies could be distributed across multiple bins. Certainty was quantified using a bootstrap analysis by resampling tallies with replacement and recalculating the attribute and sensitivity scores.\nExperts were asked to score species independently, and then met for three virtual discussion workshops to discuss scores with other experts. They were then given the chance to finalize their scores based on these discussions. We asked experts to not consider the scores from the original analysis to reduce bias in the results.",
+    "crumbs": [
+      "Methods",
+      "Sensitivity"
+    ]
   },
   {
-    "objectID": "content/add-content.html#add-your-pages-the-project",
-    "href": "content/add-content.html#add-your-pages-the-project",
-    "title": "Customize",
-    "section": "Add your pages the project",
-    "text": "Add your pages the project\n\nAdd the files to _quarto.yml"
+    "objectID": "content/rendering.html",
+    "href": "content/rendering.html",
+    "title": "Rendering",
+    "section": "",
+    "text": "The repo includes a GitHub Action that will render (build) the website automatically when you make changes to the files. It will be pushed to the gh-pages branch.\nBut when you are developing your content, you will want to render it locally."
+  },
+  {
+    "objectID": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
+    "href": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
+    "title": "Rendering",
+    "section": "Step 1. Make sure you have a recent RStudio",
+    "text": "Step 1. Make sure you have a recent RStudio\nHave you updated RStudio since about August 2022? No? Then update to a newer version of RStudio. In general, you want to keep RStudio updated and it is required to have a recent version to use Quarto."
+  },
+  {
+    "objectID": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
+    "href": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
+    "title": "Rendering",
+    "section": "Step 2. Clone and create RStudio project",
+    "text": "Step 2. Clone and create RStudio project\nFirst, clone the repo onto your local computer. How? You can click File &gt; New Project and then select “Version Control”. Paste in the url of the repository. That will clone the repo on to your local computer. When you make changes, you will need to push those up."
+  },
+  {
+    "objectID": "content/rendering.html#step-3.-render-within-rstudio",
+    "href": "content/rendering.html#step-3.-render-within-rstudio",
+    "title": "Rendering",
+    "section": "Step 3. Render within RStudio",
+    "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”."
+  },
+  {
+    "objectID": "content/exposure.html",
+    "href": "content/exposure.html",
+    "title": "Species Exposure",
+    "section": "",
+    "text": "Species exposure is quantified using the decadal from the MOM6 model. In the CVA1.0, exposure to surface temperatures, salinities, and changes in ocean acidification were quantified using a z-score. This quantity describes how many standard deviations over the present mean conditions a value, in this case mean future conditions, are.\nFor the CVA2.0, we will use this same metric. Z-scores will be calculated across space and time using average monthly timesteps. Exposure values will be averaged across time and space each month to produce an exposure map and monthly timeseries for each variable, using predicted species distributions to perform weighted averages so that only expsoure within the species ranges are considered and habitat use by the species is taken into account.\nWe will calculate total exposure using the same logic rule implimented in the CVA 1.0 in two different ways: 1) counting all ecologicaly relevant variables and 2) only counting variables that have relative weights over 10% in the species distribution models. This will be done across both time and space to produce both a total timeseries and map of exposure for each species.",
+    "crumbs": [
+      "Methods",
+      "Species Exposure"
+    ]
+  },
+  {
+    "objectID": "content/vulnerability_directionality.html",
+    "href": "content/vulnerability_directionality.html",
+    "title": "Vulnerability & Directionality",
+    "section": "",
+    "text": "Vulnerability\nThe final vulnerability scores will be estimated using similar methods to Boyce et al 2022 and 2024 - a weighted average of sensitivity, exposure, and if used in this analysis, adaptive, scores based on variability across the study area. For attributes based on life history stages, such as sensitivity and/or adaptability, these will be uniform across the study region. These averages will occur across space.\nThe final product will be a map of species vulnerability across the study region. An overall vulnerability score may be generated based on habitat suitability.\n\n\nDirectionality\nIn the original CVA, in addition to ranking how sensitive species may be to future climate change, experts also estimated if species would be positively or negatively impacted by climate change. For the CVA2.0, we will use the species distribution models to estimate current area of preferred habitat. We will calculate change in habitat area over time from the decadal and long-term projections from MOM6. We may also calculate directionality via expert opinion and compare the two metrics.",
+    "crumbs": [
+      "Methods",
+      "Vulnerability & Directionality"
+    ]
+  },
+  {
+    "objectID": "content/sensitivity_calculation.html",
+    "href": "content/sensitivity_calculation.html",
+    "title": "Sensitivity Calculation",
+    "section": "",
+    "text": "Sensitivity scores were collected using the Fish Stock Climate Vulnerability Assessment Portal, and exported as a csv. Scores were calculated for each attribute and these scores were used to calculate a final exposure score for the species. Unlike exposure, and similar to the original analysis, a single value is produced for each species.\n\n\nAttribute scores were calculated using a weighted average following Equation 1 in Morrison et al 2015. Briefly, the number of tallies in each of the four bins is multiplied by a weight, summed, and divided by the total number of tallies (which would be 5 scorers per species x 5 tallies per scorer = 25). The weights that correspond to each bin are:\n\nBin Weights\n\n\nBin\nWeight\n\n\n\n\nLow\n1\n\n\nMedium\n2\n\n\nHigh\n3\n\n\nVery High\n4\n\n\n\nThe function attribute.score performs the weighted average. This function is based on code provided by the Tyler Loughran and the Atlantic Highly Migratory Species Management Division, Office of Sustainable Fisheries. The workflow is outlined below. Individual attribute scores are also accompanied by a data quality score, which are provided by expert scorers for each species and attribute to help identify data gaps. This is calculated using the data.quality.score function.\n\n\n\nFollowing the original CVA methods, total sensitivity is calculated with a logic rule. This is the same logic rule used to calculate total exposure from individual variable exposure scores:\n\nLogic Rule used to Calculate Total Species Sensitivity\n\n\nOverall Score\nNumeric Score\nLogic Rule\n\n\n\n\nLow\n1\nAll other scores\n\n\nMedium\n2\n2 or more attributes &gt;= 2.5\n\n\nHigh\n3\n2 or more attributes &gt;= 3.0\n\n\nVery High\n4\n3 or more attributes &gt;= 3.5\n\n\n\nThe total sensitivity score is calculated using the logic.rule function. Certainty was calculated by resampling the tallies with replacement across the four bins, and recalculating the weighted average attribute score, then the total sensitivity. Following the original CVA, certainty is represented as the proportion or percent of bootstrapped total sensitivity scores that match the expert-derived total scores. The certainty associated with the total sensitivity score is calculated with the bootstrap.certainty function.\n\n\n\n\n\nA single function, calculate.sensitivity, combines both the attribute score calculation done by attribute.score and the total sensitivity score calculation done by logic.rule in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center.\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\nspecies.sensitivity &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = F) #calculate attribute scores and total sensitivity \n\ncalculate.sensitivity returns a vector, containing the individual attribute scores and the total score. When used with lapply as in the example above, a list of vectors will be produced, with one vector per species in the provided species.data.list.\n\n\n\nThe function data.quality.score calculates the mean data quality score for each attribute and species. It produces a vector similar to calculate.sensitivity, with an entry for each attribute, and works with the lapply family of functions.\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\ndata.quality &lt;- lapply(species.data.list, data.quality.score) #calculate data quality scores\n\n\n\n\nCertainty was quantified using the bootstrapping methods described above. For the default number of iterations (10,000), this function takes just under a minute (~45 seconds) per species on a standard workstation.\nBoth attribute.score and logic.rule, and subsequently calculate.sensitivity have the ability to also perform the bootstrap calculation.\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\nsensitivity.bootstrap &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = T, samples = 10000) #calculate sensitivity with bootstrapping \n\nWhen bootstrap = TRUE, a data.frame, rather than a vector, is produced. This data.frame will have a number of rows equal to the number of samples, with each row representing one of the iterations. Columns will contain the attribute scores and total sensitivity score for that iteration. When used with lapply as in the example above, a list of data.frames will be produced, with one data.frame per species in the provided species.data.list.\nThe function bootstrap.certainty calculates the final certainty value (AKA the proportion of bootstrap iterations that match the expert scores). This function will calculate the proportion of bootstrapped total sensitivity scores correspond to the total sensitivity score (1-4). It adds a column called ‘Certainty’ to the vector generated by calculate.sensitivity(bootstrap = FALSE).\nThe entire workflow can be run using lapply and mapply functionality on the entire raw dataset from the FSCVA portal using only a few lines of code:\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\n#create list of data.frames for each species/stock\nspecies.data.list &lt;- split(data, data$Stock.Name)\nspecies.sensitivity &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = F) #calculate sensitivity w/o bootstrap\nsensitivity.bootstrap &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = T) #calculate sensitivity with bootstrap to calculate certainty later\n\n#get certainty\nsensitivity.certainty &lt;- mapply(bootstrap.certainty, sensitivity.bootstrap, species.sensitivity, SIMPLIFY = F)\nsensitivityDF &lt;- do.call(rbind, sensitivity.certainty) #convert list of vectors to a data.frame\nwrite.csv(sensitivityDF, './sensitivity.csv') #save results\n\n## make data.quality spreadsheet \ndq &lt;- lapply(species.data.list, data.quality.score) #calculate mean data quality scores\nattributeDQ &lt;- do.call(rbind, dq) #convert list of vectors to a data.frame\nwrite.csv(attributeDQ, './data_quality.csv') #save results\n\nThe resulting sensitivity data.frame shows the scores for each attribute, plus the total sensitivity and corresponding certainty:\n\n\n                 X Adult.Mobility Complexity.in.Reproductive.Strategy\n1  Acadian redfish           2.72                                1.84\n2          Alewife           1.60                                3.25\n3  American conger           1.45                                2.15\n4     American eel           1.15                                2.05\n5 American lobster           1.90                                1.40\n6  American plaice           2.75                                1.45\n  Dispersal.of.Early.Life.Stages\n1                           2.04\n2                           2.80\n3                           1.35\n4                           1.10\n5                           1.80\n6                           1.45\n  Early.Life.History.Survival.and.Settlement.Requirements Habitat.Specificity\n1                                                    2.20                1.72\n2                                                    3.28                2.56\n3                                                    2.25                2.55\n4                                                    2.45                2.05\n5                                                    2.35                1.85\n6                                                    2.15                1.80\n  Other.Stressors Population.Growth.Rate Prey.Specificity\n1            1.92                   3.52             1.96\n2            2.68                   2.24             1.68\n3            2.24                   2.00             1.65\n4            2.45                   2.70             1.10\n5            2.70                   3.45             1.15\n6            1.25                   2.45             2.10\n  Sensitivity.to.Ocean.Acidification Sensitivity.to.Temperature Spawning.Cycle\n1                               1.12                       1.80           2.60\n2                               1.56                       2.16           3.16\n3                               1.25                       1.70           2.90\n4                               1.15                       1.40           2.50\n5                               3.85                       2.70           2.90\n6                               1.90                       1.65           2.40\n  Stock.Size.Status Total.Sensitivity Certainty\n1              1.84                 2    0.9998\n2              2.52                 3    1.0000\n3              2.40                 2    0.6946\n4              2.55                 2    0.7234\n5              2.20                 3    1.0000\n6              2.95                 2    0.9882\n\n\nNot shown here, but the data quality data frame has a similar layout, with a row for each species and a column for each attribute. There is no total sensitivity or certainty column.",
+    "crumbs": [
+      "R Package",
+      "Sensitivity Calculation"
+    ]
+  },
+  {
+    "objectID": "content/sensitivity_calculation.html#analysis",
+    "href": "content/sensitivity_calculation.html#analysis",
+    "title": "Sensitivity Calculation",
+    "section": "",
+    "text": "Sensitivity scores were collected using the Fish Stock Climate Vulnerability Assessment Portal, and exported as a csv. Scores were calculated for each attribute and these scores were used to calculate a final exposure score for the species. Unlike exposure, and similar to the original analysis, a single value is produced for each species.\n\n\nAttribute scores were calculated using a weighted average following Equation 1 in Morrison et al 2015. Briefly, the number of tallies in each of the four bins is multiplied by a weight, summed, and divided by the total number of tallies (which would be 5 scorers per species x 5 tallies per scorer = 25). The weights that correspond to each bin are:\n\nBin Weights\n\n\nBin\nWeight\n\n\n\n\nLow\n1\n\n\nMedium\n2\n\n\nHigh\n3\n\n\nVery High\n4\n\n\n\nThe function attribute.score performs the weighted average. This function is based on code provided by the Tyler Loughran and the Atlantic Highly Migratory Species Management Division, Office of Sustainable Fisheries. The workflow is outlined below. Individual attribute scores are also accompanied by a data quality score, which are provided by expert scorers for each species and attribute to help identify data gaps. This is calculated using the data.quality.score function.\n\n\n\nFollowing the original CVA methods, total sensitivity is calculated with a logic rule. This is the same logic rule used to calculate total exposure from individual variable exposure scores:\n\nLogic Rule used to Calculate Total Species Sensitivity\n\n\nOverall Score\nNumeric Score\nLogic Rule\n\n\n\n\nLow\n1\nAll other scores\n\n\nMedium\n2\n2 or more attributes &gt;= 2.5\n\n\nHigh\n3\n2 or more attributes &gt;= 3.0\n\n\nVery High\n4\n3 or more attributes &gt;= 3.5\n\n\n\nThe total sensitivity score is calculated using the logic.rule function. Certainty was calculated by resampling the tallies with replacement across the four bins, and recalculating the weighted average attribute score, then the total sensitivity. Following the original CVA, certainty is represented as the proportion or percent of bootstrapped total sensitivity scores that match the expert-derived total scores. The certainty associated with the total sensitivity score is calculated with the bootstrap.certainty function.\n\n\n\n\n\nA single function, calculate.sensitivity, combines both the attribute score calculation done by attribute.score and the total sensitivity score calculation done by logic.rule in a single function. This function is modeled on provided code from the Southeast Fisheries Science Center.\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\nspecies.sensitivity &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = F) #calculate attribute scores and total sensitivity \n\ncalculate.sensitivity returns a vector, containing the individual attribute scores and the total score. When used with lapply as in the example above, a list of vectors will be produced, with one vector per species in the provided species.data.list.\n\n\n\nThe function data.quality.score calculates the mean data quality score for each attribute and species. It produces a vector similar to calculate.sensitivity, with an entry for each attribute, and works with the lapply family of functions.\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\ndata.quality &lt;- lapply(species.data.list, data.quality.score) #calculate data quality scores\n\n\n\n\nCertainty was quantified using the bootstrapping methods described above. For the default number of iterations (10,000), this function takes just under a minute (~45 seconds) per species on a standard workstation.\nBoth attribute.score and logic.rule, and subsequently calculate.sensitivity have the ability to also perform the bootstrap calculation.\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\nspecies.data.list &lt;- split(data, data$Stock.Name) #generate a list of data.frames, where each species has its own dedicated data frame of scores from all scorers in the list\nsensitivity.bootstrap &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = T, samples = 10000) #calculate sensitivity with bootstrapping \n\nWhen bootstrap = TRUE, a data.frame, rather than a vector, is produced. This data.frame will have a number of rows equal to the number of samples, with each row representing one of the iterations. Columns will contain the attribute scores and total sensitivity score for that iteration. When used with lapply as in the example above, a list of data.frames will be produced, with one data.frame per species in the provided species.data.list.\nThe function bootstrap.certainty calculates the final certainty value (AKA the proportion of bootstrap iterations that match the expert scores). This function will calculate the proportion of bootstrapped total sensitivity scores correspond to the total sensitivity score (1-4). It adds a column called ‘Certainty’ to the vector generated by calculate.sensitivity(bootstrap = FALSE).\nThe entire workflow can be run using lapply and mapply functionality on the entire raw dataset from the FSCVA portal using only a few lines of code:\n\ndata &lt;-read.csv('expert_scores.csv') #raw sensitivity data from FSCVA Portal\n#create list of data.frames for each species/stock\nspecies.data.list &lt;- split(data, data$Stock.Name)\nspecies.sensitivity &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = F) #calculate sensitivity w/o bootstrap\nsensitivity.bootstrap &lt;- lapply(species.data.list, calculate.sensitivity, bootstrap = T) #calculate sensitivity with bootstrap to calculate certainty later\n\n#get certainty\nsensitivity.certainty &lt;- mapply(bootstrap.certainty, sensitivity.bootstrap, species.sensitivity, SIMPLIFY = F)\nsensitivityDF &lt;- do.call(rbind, sensitivity.certainty) #convert list of vectors to a data.frame\nwrite.csv(sensitivityDF, './sensitivity.csv') #save results\n\n## make data.quality spreadsheet \ndq &lt;- lapply(species.data.list, data.quality.score) #calculate mean data quality scores\nattributeDQ &lt;- do.call(rbind, dq) #convert list of vectors to a data.frame\nwrite.csv(attributeDQ, './data_quality.csv') #save results\n\nThe resulting sensitivity data.frame shows the scores for each attribute, plus the total sensitivity and corresponding certainty:\n\n\n                 X Adult.Mobility Complexity.in.Reproductive.Strategy\n1  Acadian redfish           2.72                                1.84\n2          Alewife           1.60                                3.25\n3  American conger           1.45                                2.15\n4     American eel           1.15                                2.05\n5 American lobster           1.90                                1.40\n6  American plaice           2.75                                1.45\n  Dispersal.of.Early.Life.Stages\n1                           2.04\n2                           2.80\n3                           1.35\n4                           1.10\n5                           1.80\n6                           1.45\n  Early.Life.History.Survival.and.Settlement.Requirements Habitat.Specificity\n1                                                    2.20                1.72\n2                                                    3.28                2.56\n3                                                    2.25                2.55\n4                                                    2.45                2.05\n5                                                    2.35                1.85\n6                                                    2.15                1.80\n  Other.Stressors Population.Growth.Rate Prey.Specificity\n1            1.92                   3.52             1.96\n2            2.68                   2.24             1.68\n3            2.24                   2.00             1.65\n4            2.45                   2.70             1.10\n5            2.70                   3.45             1.15\n6            1.25                   2.45             2.10\n  Sensitivity.to.Ocean.Acidification Sensitivity.to.Temperature Spawning.Cycle\n1                               1.12                       1.80           2.60\n2                               1.56                       2.16           3.16\n3                               1.25                       1.70           2.90\n4                               1.15                       1.40           2.50\n5                               3.85                       2.70           2.90\n6                               1.90                       1.65           2.40\n  Stock.Size.Status Total.Sensitivity Certainty\n1              1.84                 2    0.9998\n2              2.52                 3    1.0000\n3              2.40                 2    0.6946\n4              2.55                 2    0.7234\n5              2.20                 3    1.0000\n6              2.95                 2    0.9882\n\n\nNot shown here, but the data quality data frame has a similar layout, with a row for each species and a column for each attribute. There is no total sensitivity or certainty column.",
+    "crumbs": [
+      "R Package",
+      "Sensitivity Calculation"
+    ]
+  },
+  {
+    "objectID": "content/exposure-calculation.html",
+    "href": "content/exposure-calculation.html",
+    "title": "Calculating Exposure",
+    "section": "",
+    "text": "Exposure is calculated from MOM6 forecast data using the same methods to calculate and rank raw exposure as the CVA1.0 on the MOM6 environmental data. We then use the predicted species distributions and the relative importance of covariates in the ensemble models to calculate variable-specific and total exposure for each species.",
+    "crumbs": [
+      "R Package",
+      "Calculating Exposure"
+    ]
+  },
+  {
+    "objectID": "content/exposure-calculation.html#overview",
+    "href": "content/exposure-calculation.html#overview",
+    "title": "Calculating Exposure",
+    "section": "",
+    "text": "Exposure is calculated from MOM6 forecast data using the same methods to calculate and rank raw exposure as the CVA1.0 on the MOM6 environmental data. We then use the predicted species distributions and the relative importance of covariates in the ensemble models to calculate variable-specific and total exposure for each species.",
+    "crumbs": [
+      "R Package",
+      "Calculating Exposure"
+    ]
+  },
+  {
+    "objectID": "content/exposure-calculation.html#calculating-and-ranking-raw-exposure",
+    "href": "content/exposure-calculation.html#calculating-and-ranking-raw-exposure",
+    "title": "Calculating Exposure",
+    "section": "Calculating and Ranking Raw Exposure",
+    "text": "Calculating and Ranking Raw Exposure\nAs in the CVA1.0, raw exposure for each environmental variable is calculated using a z-score, which is the difference in mean conditions in a future and present timeseries divided by present day standard deviations.\nThe function calcExposure will take the output from pull_hind and/or pull_forecast (a list of rasterStacks) and calculate monthly raw exposure for each environmental variable in the list:\n\nexposure &lt;- calcExposure(presentRasts, futureRasts)\n\nWhere presentRasts and futureRasts are lists of rasterStacks with the same length. These are the raw timeseries over the desired time periods. Remember that pull_hind and pull_forecast pull the complete timeseries for the desired MOM6 run, so you will need to subset their outputs accordingly if desired. calcExposure will produce a list of rasterStacks with the same length as the provided lists. Each rasterStack will have 12 layers, one for each month. \nThe next step is to rank the raw exposure. Since the CVA is designed to help determine which species are at risk to the greatest exposure, these ranks are based on this goal, rather than the distribution of the data themselves. We use the same ranks as the CVA1.0:\n\nRaw Exposure Ranks\n\n\nScore\nRaw Exposure\nRank\n\n\n\n\nLow\n&lt; 0.5\n1\n\n\nMedium\n0.5 - 1.5\n2\n\n\nHigh\n1.5 - 2\n3\n\n\nVery High\n&gt; 2\n4\n\n\n\nThe function rankExposure performs the ranking. It also provides the option to multiply raw exposure values for certain by -1 (aka flip). This option was included because the direction of change and the meaning of that change may differ across environmental variables. For example, an increase in surface temperatures would have a positive exposure, whereas a decrease in pH would have a negative exposure; both changes are considered bad for the environment, but the signs differ due to how these variables are quantified. The flip and noFlipList options provide the option to flip the signs of raw exposure for all variables except those listed in noFlipList.\n\nexpRanked &lt;- rankExposure(exposure, flip = T, noflipList = c('bottomT', 'surfaceT', 'bottomArg', 'MLD'))\n\n\n\n\nBottom Temperature Ranked Exposure comparing 2019-2019 and 2025-2035",
+    "crumbs": [
+      "R Package",
+      "Calculating Exposure"
+    ]
+  },
+  {
+    "objectID": "content/exposure-calculation.html#creating-species-specific-exposure-time-series-and-maps-for-each-variable",
+    "href": "content/exposure-calculation.html#creating-species-specific-exposure-time-series-and-maps-for-each-variable",
+    "title": "Calculating Exposure",
+    "section": "Creating Species-Specific Exposure Time Series and Maps for Each Variable",
+    "text": "Creating Species-Specific Exposure Time Series and Maps for Each Variable\nOnce raw exposure is ranked, species-specific exposure for each environmental variable can be calculated using the functions makeExposureTimeseries and makeExposureMaps. These functions are nearly identical and only require the ranked exposure values and the mean ensemble species distribution model (SDM) predictions. Ranked exposure values are averaged across space within each month in makeExposureTimeseries and averaged across months in each model grid cell in makeExposureMaps, using the SDM results as weights to account for species distributions and habitat use. The results are a time series of average ranked species-specific exposure within each month and a raster of average species-specific exposure across time for each environmental variable.\n\n#map\nmapExp &lt;- makeExposureMaps(rankExp = expRanked, sdmRast = avgHSM)\n\n#timeseries\nvecExp &lt;- makeExposureTimeseries(rankExp = expRanked, sdmRast = avgHSM)\n\nThe ensemble SDM results produced by make_predictions should be converted into a monthly average prior to using makeExposureTimeseries and makeExposureMaps. It is also recommended that you remove low SDM values after averaging. In the NE Shelf CVA2.0, we removed all SDM values less than 0.1 (representing areas with less than a 10% likelihood of finding the species). Not removing these low values resulted in higher than expected exposure results in areas where the species is rare.\nThe output from makeExposureTimeseries is a matrix with 12 columns (1 for each month) and a number of rows equal to the number of environmental variables in expRanked. makeExposureMaps produces a rasterStack, with each layer representing one of the environmental variables. Values should range from 1 to 4.\nThe wrapper function makeVariableAverages is provided and can be run in parallel using the furrr package, similar to the SDM wrapper functions. Like those wrapper functions, your directory must be set up according to the Installation and Setup Guide provided for them to function. makeVariableAverages also generates the monthly average SDM results, and removes low values for you.\n\nplan(multisession, workers = 6)\nchecks &lt;- future_pmap(list(..1 = args$spp, ..2 = args$ensName, ..3 = args$pStart, ..4 = args$pEnd, ..5 = args$fStart, ..6 = args$fEnd), ~ makeVariableAverages(spp = ..1, ensName = ..2, pStart = ..3, pEnd = ..4, fStart = ..5, fEnd = ..6), .progress = T,  .options = furrr_options(seed = 2025))\nplan(sequential)\n\nLike the SDM wrapper functions, args is a dataframe where each row is a set of arguments to be passed to the function. Here, the arguments include the species name (spp), ensemble name to help locate the appropriate ensemble model (ensName), and start and end years for the present and future timeseries (pStart/pEnd/fStart/fEnd) to load in the correct exposure values, as well as save the results from makeExposureTimeseries and makeExposureMaps appropriately. These are not memory or time-intensive calculations, so it is not necessary to run them in parallel - it is just helpful if you have a lot of species to work through.\nBelow are example variable-specific exposures for Atlantic cod: \n\n\n\nVariable-specific exposures across space",
+    "crumbs": [
+      "R Package",
+      "Calculating Exposure"
+    ]
+  },
+  {
+    "objectID": "content/exposure-calculation.html#calculating-total-exposure-for-each-species",
+    "href": "content/exposure-calculation.html#calculating-total-exposure-for-each-species",
+    "title": "Calculating Exposure",
+    "section": "Calculating Total Exposure for Each Species",
+    "text": "Calculating Total Exposure for Each Species\nOnce you have the species-specific exposure calculated for each variable, they must be combined to estimate total species-specific exposure. These will be the final spatially and temporally explicit values that are combined with species sensitivity to estimate vulnerability.\nTo combine the species-specific exposures for each variable, we use the same logic rule as the CVA1.0:\n\nLogic Rule used to Calculate Total Species Exposure\n\n\nOverall Score\nNumeric Score\nLogic Rule\n\n\n\n\nLow\n1\nAll other scores\n\n\nMedium\n2\n2 or more attributes &gt;= 2.5\n\n\nHigh\n3\n2 or more attributes &gt;= 3.0\n\n\nVery High\n4\n3 or more attributes &gt;= 3.5\n\n\n\nWe calculate total exposure in two ways: 1) Applying the logic rule to all ecologically relevant environmental variables as defined by the feeding and habitat keys and 2) Only applying the logic rule to ecological variables that have relative weights in the final ensemble SDM greater than a set value (for the NE Shelf CVA2.0, we chose 10% or 0.1). This was done to account for possible unknown changes in variable importance under future climate change. The latter method (only counting the most important variables), assumes that these values will continue to be very important under future climate change scenarios. It is unclear if this will be the case, especially for variables such as pH where it is unclear how they will impact species. Calculating total exposure using all the ecologically relevant variables allows us and stakeholders to consider all variables regardless of their model importance.\nThe functions combineTimeseries and combineMaps provide options for both methods with the option countAll. Setting countAll to TRUE will automatically count all provided variables in matExp for combineTimeseries or mapExp for combineMaps, which are the outputs from makeExposureTimeseries and makeExposureMaps, respectively. If set to FALSE, you will need to provide the relative weights and the threshold to use to count variables in the logic rule. It is important that, if you have not yet done so, that you subset matExp and mapExp to only the ecologically relevant variables before running the combineTimeseries and combineMaps functions. This can be done using the relative weights of the variables.\nThe function combineWeights estimates the relative variable importance across the models. Since every component model of the ensemble SDM estimates variable importance differently, all importance data is normalized to their respective sums such that they total 1. A weighted average is then performed across models using the weights of each component model in the ensemble. The result is a vector of values representing the relative importance of each of the ecologically relevant variables to the model.\n\ncW &lt;- combineWeights(vars = vars, ensWeights = weights, impFlist = iFlist, staticNames = staticVars)\n\nWhere vars is a vector of character strings including the ecologically relevant variables, ensWeights is the weights of each component model of the ensemble model generated by make_sdm, impFlist is a vector of character strings including the file paths to the model variable importance files made by sdm_importance, and staticNames are the names of any static environmental variables to be excluded.\nThe names of the vector resulting from combineWeights can be used to subset the outputs from makeExposureTimeseries and makeExposureMaps, since these output contain all possible environmental variables from MOM6, before running combineTimeseries and combineMaps.\n\n#subset timeseries matrix by rownames\n  i &lt;- rownames(vecExp) %in% names(cW)\n  vecSub &lt;- vecExp[i,]\n\n#timeseries\n  totalTA &lt;- combineTimeseries(matExp = vecSub, weights = cW, wThreshold = 0, countAll = T) #counting all variables\n  totalTS &lt;- combineTimeseries(matExp = vecSub, weights = cW, wThreshold = 0.1, countAll = F) #counting only ecologically relevant variables\n\n#subset mapExp by rownames\n  i &lt;- names(mapExp) %in% names(cW)\n  mapSub &lt;- raster::subset(mapExp, which(i == T))\n#maps\n  totalM &lt;- combineMaps(mapExp = mapSub, weights = cW, wThreshold = 0, countAll = T)\n  totalMS &lt;- combineMaps(mapExp = mapSub, weights = cW, wThreshold = 0.1, countAll = F)\n\nBelow are examples of total exposure using both methods for Atlantic cod: \n\n\n\nTotal Exposure using only important variables across time\n\n\n\n\n\nTotal Exposure using all ecologically-relevant variables across space\n\n\n\n\n\nTotal Exposure using only important variables across space",
+    "crumbs": [
+      "R Package",
+      "Calculating Exposure"
+    ]
   },
   {
     "objectID": "content/ensemble-sdms.html",
@@ -361,148 +504,5 @@
       "R Package",
       "Building & Predicting Ensemble Species Distribution Models"
     ]
-  },
-  {
-    "objectID": "content/rendering.html",
-    "href": "content/rendering.html",
-    "title": "Rendering",
-    "section": "",
-    "text": "The repo includes a GitHub Action that will render (build) the website automatically when you make changes to the files. It will be pushed to the gh-pages branch.\nBut when you are developing your content, you will want to render it locally."
-  },
-  {
-    "objectID": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
-    "href": "content/rendering.html#step-1.-make-sure-you-have-a-recent-rstudio",
-    "title": "Rendering",
-    "section": "Step 1. Make sure you have a recent RStudio",
-    "text": "Step 1. Make sure you have a recent RStudio\nHave you updated RStudio since about August 2022? No? Then update to a newer version of RStudio. In general, you want to keep RStudio updated and it is required to have a recent version to use Quarto."
-  },
-  {
-    "objectID": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
-    "href": "content/rendering.html#step-2.-clone-and-create-rstudio-project",
-    "title": "Rendering",
-    "section": "Step 2. Clone and create RStudio project",
-    "text": "Step 2. Clone and create RStudio project\nFirst, clone the repo onto your local computer. How? You can click File &gt; New Project and then select “Version Control”. Paste in the url of the repository. That will clone the repo on to your local computer. When you make changes, you will need to push those up."
-  },
-  {
-    "objectID": "content/rendering.html#step-3.-render-within-rstudio",
-    "href": "content/rendering.html#step-3.-render-within-rstudio",
-    "title": "Rendering",
-    "section": "Step 3. Render within RStudio",
-    "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”."
-  },
-  {
-    "objectID": "content/sdm-methods.html",
-    "href": "content/sdm-methods.html",
-    "title": "Species Distribution Modeling",
-    "section": "",
-    "text": "The first step in the CVA2.0 is the construction of species distribution models (SDMs). SDMs are statistical models that describe the relationships between species presence or abundance and environmental attributes or covariates. There are many different types of SDMs that use different data types and statistical methods. There is an abundance of scientific literature that both describe and compare different model types. We will provide a brief overview below and describe the methods selected for the CVA2.0.",
-    "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
-    ]
-  },
-  {
-    "objectID": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
-    "href": "content/sdm-methods.html#presenceabsence-vs-abundance-data",
-    "title": "Species Distribution Modeling",
-    "section": "Presence/Absence vs Abundance Data",
-    "text": "Presence/Absence vs Abundance Data\nSpecies distribution models can be built with primarily two different kinds of species data - presence/absence or abundance data. Presence/absence data describes when a species was present or absent, usually in binary with 0s representing absences and 1s representing presences. SDMs built with presence/absence data predict how likely it is that a species will be found there - often called habitat suitability - but does not consider how many individuals will be present.\nAbundance data on the other hand uses count or species density estimates. SDMS built with abundance data can predict the abundance or density of species in a given area or at a given time, but must deal with often irregular data.\n\nIn the CVA2.0…\nFor the CVA2.0, we use presence/absence data from a variety of sources. Using presence/absence data will allow us to combine multiple datasets across fisheries independent and dependent surveys.",
-    "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
-    ]
-  },
-  {
-    "objectID": "content/sdm-methods.html#statistical-modeling",
-    "href": "content/sdm-methods.html#statistical-modeling",
-    "title": "Species Distribution Modeling",
-    "section": "Statistical Modeling",
-    "text": "Statistical Modeling\nThere are many statistical models that we could have chosen for our SDMs. Options included generalized linear models (GLMs), generalized additive models (GAMs), uni (single) or multi-variate state-space models, machine learning methods, decision tree methods, and more! Many models have been used to describe species distributions along the Northeast Shelf. Each model type has pros and cons, and different models use different assumptions, statistical methods, etc to define habitat preferences.\nTo account for some of these differences between models, model ensembles can be generated by combining different model outputs together. Ensembles are usually built by averaging the outputs of different component models. Weighted averages can also be used to weight the averages based on model performance.\n\nIn the CVA2.0…\nWe use an ensemble modeling approach for the CVA2.0, following the work of the Alaska Fisheries Science Center (AFSC)’s Groundfish program, recently implimented an ensemble modeling framework for their Essential Fish Habitat work. Here, we use the following models:\n\nGeneralized Additive Model (GAM) using methods in EFHSDM\nMAXimum ENTropy (MAXENT) using methods in EFHSDM\nRandom Forest with Spatial Interpolation (RFSI)\nBoosted Regression Trees (BRTs) using gbm and following methods from Braun et al 2023\nSpatio-temporal Generalized Linear Mixed Models (GLMMs) with sdmTMB\n\nAll of these models accept presence/absence data; can be made spatially and temporally explicit, which was important for our analysis; and combine more “traditional” SDM methods such as GAM and MAXENT included in the AFSC’s ensemble with machine learning/decision tree-based models such as RFSI and BRTs. sdmTMB models are similar to other SDM methods common in fisheries work like VAST and tinyVAST. In addition, these or similar models have been used on the Northeast Shelf in previously published works.\nWe will generate our ensemble model by performing a weighted average on our components’ outputs. Weights will be calculated using the same methods as the AFSC. However, we will use Area under the Curve (AUC) rather than root mean squared error (RMSE) because AUC is a better accuracy metric for presence/absence models than RMSE.",
-    "crumbs": [
-      "Methods",
-      "Species Distribution Modeling"
-    ]
-  },
-  {
-    "objectID": "content/sensitivity.html",
-    "href": "content/sensitivity.html",
-    "title": "Sensitivity",
-    "section": "",
-    "text": "Species sensitivity to change will be measured qualitatively as in the original CVA. Species experts will rank the impacts of different life history attributes on species sensitivity.\n\n\nThe Boyce et al 2022 and 2024 papers seperated species sensitivity and adaptability attributes. In the original CVA, sensitivity and adaptive attributes were grouped together, as removing one or the other significantly changed the results. Furthermore, Morrison et al 2015 considered sensitivity and adaptivity inverses of each other (ie higher sensitivity would mean that a species is less adaptive) and decided to group them.\n##Sensitivity Attributes The sensitivity attributes used in the CVA2.0 were similar to those used in the Northeast US for the original. A handful were updated to reflect new insights into the impacts of climate change on species life histories since the original analysis.\nThe following sensitivity attributes were used in the CVA2.0 analysis for the Northeast US. Updated attributes are bolded.\n\nJuvenile Habitat Requirements\nPrey Specificity\nRelationship to Calcified Organisms\nComplexity in Reproductive Strategy\nHistorical Variability in Temmperature\nEgg and Larval Survival and Settlement Requirements\nStock Size/Status\nOther Stressors\nPopulation Growth Rate\nDispersal of Early Life Stages\nAdult Mobility\nSpawning Cycle\n\nFull text of the attributes will be made available once finalized.",
-    "crumbs": [
-      "Methods",
-      "Sensitivity"
-    ]
-  },
-  {
-    "objectID": "content/sensitivity.html#overview",
-    "href": "content/sensitivity.html#overview",
-    "title": "Sensitivity",
-    "section": "",
-    "text": "Species sensitivity to change will be measured qualitatively as in the original CVA. Species experts will rank the impacts of different life history attributes on species sensitivity.\n\n\nThe Boyce et al 2022 and 2024 papers seperated species sensitivity and adaptability attributes. In the original CVA, sensitivity and adaptive attributes were grouped together, as removing one or the other significantly changed the results. Furthermore, Morrison et al 2015 considered sensitivity and adaptivity inverses of each other (ie higher sensitivity would mean that a species is less adaptive) and decided to group them.\n##Sensitivity Attributes The sensitivity attributes used in the CVA2.0 were similar to those used in the Northeast US for the original. A handful were updated to reflect new insights into the impacts of climate change on species life histories since the original analysis.\nThe following sensitivity attributes were used in the CVA2.0 analysis for the Northeast US. Updated attributes are bolded.\n\nJuvenile Habitat Requirements\nPrey Specificity\nRelationship to Calcified Organisms\nComplexity in Reproductive Strategy\nHistorical Variability in Temmperature\nEgg and Larval Survival and Settlement Requirements\nStock Size/Status\nOther Stressors\nPopulation Growth Rate\nDispersal of Early Life Stages\nAdult Mobility\nSpawning Cycle\n\nFull text of the attributes will be made available once finalized.",
-    "crumbs": [
-      "Methods",
-      "Sensitivity"
-    ]
-  },
-  {
-    "objectID": "content/sensitivity.html#expert-scoring",
-    "href": "content/sensitivity.html#expert-scoring",
-    "title": "Sensitivity",
-    "section": "Expert Scoring",
-    "text": "Expert Scoring\nExperts across NOAA, research, and industry were asked to score how species life history traits may make them sensitive to climate change, following the original methods in Morrison et al 2015. Experts were provided basic life history information relevant to the sensitivity attributes. The species profiles from the original analysis were updated and reviewed for consistency by 2 NOAA scientists. Experts were asked to score species both within and outside their field of expertise. Each species was scored by five experts, with at least two scorers per species considered experts on that species guild.\nBriefly, experts assign a score based on four scoring bins (low, moderate, high, and very high) for each attribute using their expert judgement and life history information. Each expert had five tallies to distribute across the four bins to help quantify certainty. If an expert was certain about a score, they could put all five tallies in a single bin. Conversely, if they were uncertain, the tallies could be distributed across multiple bins. Certainty was quantified using a bootstrap analysis by resampling tallies with replacement and recalculating the attribute and sensitivity scores.\nExperts were asked to score species independently, and then met for three virtual discussion workshops to discuss scores with other experts. They were then given the chance to finalize their scores based on these discussions. We asked experts to not consider the scores from the original analysis to reduce bias in the results.",
-    "crumbs": [
-      "Methods",
-      "Sensitivity"
-    ]
-  },
-  {
-    "objectID": "content/publishing.html",
-    "href": "content/publishing.html",
-    "title": "Publishing",
-    "section": "",
-    "text": "To get your Quarto webpage to show up with the url\nyou have a few steps."
-  },
-  {
-    "objectID": "content/publishing.html#turn-on-github-pages-for-your-repo",
-    "href": "content/publishing.html#turn-on-github-pages-for-your-repo",
-    "title": "Publishing",
-    "section": "Turn on GitHub Pages for your repo",
-    "text": "Turn on GitHub Pages for your repo\n\nTurn on GitHub Pages under Settings &gt; Pages . You will set pages to be made from the gh-pages branch and the root directory.\nTurn on GitHub Actions under Settings &gt; Actions &gt; General\n\nThe GitHub Action will automatically recreate your website when you push to GitHub after you do the initial gh-pages set-up"
-  },
-  {
-    "objectID": "content/publishing.html#do-your-first-publish-to-gh-pages",
-    "href": "content/publishing.html#do-your-first-publish-to-gh-pages",
-    "title": "Publishing",
-    "section": "Do your first publish to gh-pages",
-    "text": "Do your first publish to gh-pages\nThe first time you publish to gh-pages, you need to do so locally.\n\nOn your local computer, open a terminal window and cd to your repo directory. Here is what that cd command looks like for me. You command will look different because your local repo will be somewhere else on your computer.\n\ncd ~/Documents/GitHub/NOAA-quarto-simple\n\nPublish to the gh-pages. In the terminal type\n\nquarto publish gh-pages\nThis is going to render your webpage and then push the _site contents to the gh-pages branch."
-  },
-  {
-    "objectID": "content/publishing.html#dont-like-using-gh-pages",
-    "href": "content/publishing.html#dont-like-using-gh-pages",
-    "title": "Publishing",
-    "section": "Don’t like using gh-pages?",
-    "text": "Don’t like using gh-pages?\nIn some cases, you don’t want your website on the gh-pages branch. For example, if you are creating releases and you want the website pages archived in that release, then you won’t want your website pages on the gh-pages branch.\nHere are the changes you need to make if you to avoid gh-pages branch.\n\nAt the top of _quarto.yml add the following:\n\nproject: \n  type: website\n  output-dir: docs\n\nOn GitHub under Settings &gt; Pages set pages to be made from the main branch and the docs directory.\nMake sure docs is not listed in .gitignore\nPublish the site the first time locally using quarto publish from the terminal\nChange the GitHub Action because you can’t use quarto publish gh-pages. You’ll need to push to the main branch yourself (in the GitHub Action)\n\non:\n  push:\n    branches: main\n\nname: Render and Publish\n\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    env:\n      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}\n\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v2 \n        \n      - name: Set up R (needed for Rmd)\n        uses: r-lib/actions/setup-r@v2\n\n      - name: Install packages (needed for Rmd)\n        run: Rscript -e 'install.packages(c(\"rmarkdown\", \"knitr\", \"jsonlite\"))'\n\n      - name: Set up Quarto\n        uses: quarto-dev/quarto-actions/setup@v2\n        with:\n          # To install LaTeX to build PDF book \n          # tinytex: true \n          # uncomment below and fill to pin a version\n          # version: 0.9.600\n      \n      - name: Render Quarto Project\n        uses: quarto-dev/quarto-actions/render@v2\n        with:\n          to: html\n\n      - name: Set up Git\n        run: |\n          git config --local user.email \"actions@github.com\"\n          git config --local user.name \"GitHub Actions\"\n\n      - name: Commit all changes and push\n        run: |\n          git add -A && git commit -m 'Build site' || echo \"No changes to commit\"\n          git push origin || echo \"No changes to commit\""
-  },
-  {
-    "objectID": "content/rmarkdown.html",
-    "href": "content/rmarkdown.html",
-    "title": "R Markdown",
-    "section": "",
-    "text": "You can include R Markdown files in your project."
-  },
-  {
-    "objectID": "content/rmarkdown.html#r-markdown",
-    "href": "content/rmarkdown.html#r-markdown",
-    "title": "R Markdown",
-    "section": "R Markdown",
-    "text": "R Markdown\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\n\nsummary(cars)\n\n     speed           dist       \n Min.   : 4.0   Min.   :  2.00  \n 1st Qu.:12.0   1st Qu.: 26.00  \n Median :15.0   Median : 36.00  \n Mean   :15.4   Mean   : 42.98  \n 3rd Qu.:19.0   3rd Qu.: 56.00  \n Max.   :25.0   Max.   :120.00"
-  },
-  {
-    "objectID": "content/rmarkdown.html#including-plots",
-    "href": "content/rmarkdown.html#including-plots",
-    "title": "R Markdown",
-    "section": "Including Plots",
-    "text": "Including Plots\nYou can also embed plots, for example:\n\n\n\n\n\n\n\n\n\nNote that the echo = FALSE parameter was added to the code chunk to prevent printing of the R code that generated the plot."
   }
 ]
